@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="CommonUtil" />
         <module name="Feginapi" />
         <module name="userservice" />
       </profile>
@@ -14,6 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="CommonUtil" options="-parameters" />
       <module name="Feginapi" options="-parameters" />
       <module name="scendHandMarket" options="-parameters" />
       <module name="userservice" options="-parameters" />

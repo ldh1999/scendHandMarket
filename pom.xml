@@ -11,6 +11,7 @@
     <modules>
         <module>Fegin-api</module>
         <module>user-service</module>
+        <module>CommonUtil</module>
     </modules>
 
     <parent>
