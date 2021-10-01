@@ -10,9 +10,33 @@ public class Result<T> {
         this.result = result;
     }
 
+    public void succcess(String message){
+        this.success = true;
+        this.message = message;
+    }
+
     public void error(){
         this.success = false;
         this.message = "error";
+    }
+
+    public void error(String message){
+        this.success = false;
+        this.message = message;
+    }
+
+    public static<T> Result<T> OK() {
+        Result<T> r = new Result<T>();
+        r.setSuccess(true);
+        r.setMessage("成功");
+        return r;
+    }
+
+    public static<T> Result<T> ERROR() {
+        Result<T> r = new Result<T>();
+        r.setSuccess(false);
+        r.setMessage("失败");
+        return r;
     }
 
     public boolean isSuccess() {

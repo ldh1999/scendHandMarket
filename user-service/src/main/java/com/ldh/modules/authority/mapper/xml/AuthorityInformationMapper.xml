@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ldh.modules.authority.mapper.AuthorityInformationMapper">
+
+    <select id="list" resultType="com.ldh.modules.authority.entity.AuthorityInformation">
+        select * from authority_information where 1=1
+        ${queryWrapper.customSqlSegment}
+    </select>
+    <select id="countUserName" resultType="integer">
+        select count(*) from authority_information
+        where 1=1
+         and authority_username = #{userName}
+    </select>
+</mapper>

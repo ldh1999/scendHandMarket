@@ -1,4 +1,4 @@
-package com.ldh.view.authority.entity;
+package com.ldh.modules.authority.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
