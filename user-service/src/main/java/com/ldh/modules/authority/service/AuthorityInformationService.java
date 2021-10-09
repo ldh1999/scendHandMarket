@@ -9,5 +9,7 @@ import com.ldh.modules.authority.entity.AuthorityInformation;
 public interface AuthorityInformationService extends IService<AuthorityInformation> {
     IPage<AuthorityInformation> list(AuthorityInformation authorityInformation, Page page, QueryWrapper queryWrapper);
 
-    int countUserName(String userName);
+    int countUserName(AuthorityInformation authorityInformation);
+
+    AuthorityInformation findByUserName(String username);
 }

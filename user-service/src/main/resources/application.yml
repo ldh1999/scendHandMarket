@@ -31,6 +31,10 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
 
+myConfig:
+  security:
+    tokenValiditySeconds: 5000
+
 
 
 

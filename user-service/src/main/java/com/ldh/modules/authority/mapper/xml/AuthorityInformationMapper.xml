@@ -9,6 +9,12 @@
     <select id="countUserName" resultType="integer">
         select count(*) from authority_information
         where 1=1
-         and authority_username = #{userName}
+         and authority_username = #{authorityUsername}
+         <if test="authorityId != null and authorityId != ''">
+             and authority_id != #{authorityId}
+         </if>
+    </select>
+    <select id="findByUserName" resultType="com.ldh.modules.authority.entity.AuthorityInformation">
+        select * from authority_information where 1=1 and authority_username = #{username}
     </select>
 </mapper>

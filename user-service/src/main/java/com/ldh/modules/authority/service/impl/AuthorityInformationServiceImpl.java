@@ -18,11 +18,16 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
 
     @Override
     public IPage<AuthorityInformation> list(AuthorityInformation authorityInformation, Page page, QueryWrapper queryWrapper) {
-        return authorityInformationMapper.list(authorityInformation,page,queryWrapper);
+        return authorityInformationMapper.list(page,authorityInformation,queryWrapper);
     }
 
     @Override
-    public int countUserName(String userName) {
-        return authorityInformationMapper.countUserName(userName);
+    public int countUserName(AuthorityInformation authorityInformation) {
+        return authorityInformationMapper.countUserName(authorityInformation);
+    }
+
+    @Override
+    public AuthorityInformation findByUserName(String username) {
+        return authorityInformationMapper.findByUserName(username);
     }
 }

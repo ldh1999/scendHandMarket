@@ -6,16 +6,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.authority.entity.AuthorityInformation;
 import com.ldh.modules.authority.service.AuthorityInformationService;
 import common.Result;
+import common.StringTo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Api(tags="用户模块")
-@Controller
 @RestController
 @RequestMapping("User/AuthorityInformation")
 public class AuthorityInformationController {
@@ -32,6 +31,11 @@ public class AuthorityInformationController {
                        @RequestParam(name="order", required = false) String order){
         Page<AuthorityInformation> page = new Page<>(pageNo, pageSize);
         QueryWrapper<AuthorityInformation> queryWrapper =  new QueryWrapper<>();
+        if(order.equals("desc")){
+            queryWrapper.orderByDesc(StringTo.humpToLine(column));
+        }else{
+            queryWrapper.orderByAsc(StringTo.humpToLine(column));
+        }
         Result<IPage<AuthorityInformation>> result = new Result<>();
         try{
             IPage<AuthorityInformation> ipage = authorityInformationService.list(authorityInformation,page,queryWrapper);
@@ -48,7 +52,7 @@ public class AuthorityInformationController {
     public Result<?> insert(@RequestBody AuthorityInformation authorityInformation){
         Result<?> result = new Result<>();
         try {
-            if (authorityInformationService.countUserName(authorityInformation.getAuthorityUsername())>0){
+            if (authorityInformationService.countUserName(authorityInformation)>0){
                 result.error("该用户已存在");
                 return result;
             }
@@ -61,5 +65,48 @@ public class AuthorityInformationController {
         return result;
     }
 
+    @ApiOperation(value="用户管理修改", notes="用户管理修改")
+    @RequestMapping(path = "/updateById", method = RequestMethod.POST)
+    public Result<?> updateById(@RequestBody AuthorityInformation authorityInformation){
+        Result<?> result = new Result<>();
+        try {
+            if (authorityInformationService.countUserName(authorityInformation)>0){
+                result.error("该用户已存在");
+                return result;
+            }
+            authorityInformationService.updateById(authorityInformation);
+            result.succcess("修改成功");
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error();
+        }
+        return result;
+    }
+    @ApiOperation(value="用户管理删除", notes="用户管理删除")
+    @RequestMapping(path = "/deleteById", method = RequestMethod.GET)
+    public Result<?> updateById(@RequestParam(value = "id", required = true)String id){
+
+        Result<?> result = new Result<>();
+        try{
+            authorityInformationService.removeById(id);
+            result.succcess("删除成功");
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("删除失败");
+        }
+        return result;
+    }
+    @ApiOperation(value="用户管理查找", notes="用户管理查找")
+    @RequestMapping(path = "/selectById", method = RequestMethod.GET)
+    public Result<?> selectById(@RequestParam(value = "id", required = true)String id){
+        Result<AuthorityInformation> result = new Result<>();
+        try{
+            result.setResult(authorityInformationService.getById(id));
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("操作失败");
+        }
+        return result;
+    }
 
 }

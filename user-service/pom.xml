@@ -16,6 +16,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.1.2.RELEASE</version>
         </dependency>
+        <!--mysql-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -26,11 +27,12 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.2.0</version>
         </dependency>
-
+        <!--spring cloud-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+        <!--nacos-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
@@ -40,11 +42,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <!--redis-->
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
         </dependency>
 
+        <!--调用fegin-->
         <dependency>
             <groupId>scendHandMarket</groupId>
             <artifactId>Fegin-api</artifactId>
@@ -56,9 +60,11 @@
             <artifactId>CommonUtil</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
-
-
+        <!--spting security-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

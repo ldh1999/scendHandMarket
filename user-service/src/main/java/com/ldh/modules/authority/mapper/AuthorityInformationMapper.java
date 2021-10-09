@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface AuthorityInformationMapper extends BaseMapper<AuthorityInformation> {
-    IPage<AuthorityInformation> list(AuthorityInformation authorityInformation, Page page, QueryWrapper queryWrapper);
-    int countUserName(String userName);
+    IPage<AuthorityInformation> list(Page page,AuthorityInformation authorityInformation, QueryWrapper queryWrapper);
+    int countUserName(AuthorityInformation authorityInformation);
+    AuthorityInformation findByUserName(String username);
 }
