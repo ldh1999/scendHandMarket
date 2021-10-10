@@ -4,9 +4,14 @@
     <select id="countByNo" resultType="integer">
         select count(*) from sys_dict
         where 1=1
-        and dict_no = #{dictNo}
-        <if test="id != null and id != ''">
-            and id != #{id}
+        and dict_no = #{dict.dictNo}
+        <if test="dict.id != null and dict.id != ''">
+            and id != #{dict.id}
         </if>
+    </select>
+
+    <select id="list" resultType="com.ldh.modules.sys.entity.SysDict">
+        select * from sys_dict where 1=1
+        ${queryWrapper.customSqlSegment}
     </select>
 </mapper>

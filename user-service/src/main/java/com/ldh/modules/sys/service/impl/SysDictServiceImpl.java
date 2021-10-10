@@ -1,5 +1,8 @@
 package com.ldh.modules.sys.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.sys.entity.SysDict;
 import com.ldh.modules.sys.mapper.SysDictMapper;
@@ -14,7 +17,12 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     private SysDictMapper sysDictMapper;
 
     @Override
-    public int countByNo(String no) {
-        return sysDictMapper.countByNo(no);
+    public int countByNo(SysDict dict) {
+        return sysDictMapper.countByNo(dict);
+    }
+
+    @Override
+    public IPage<SysDict> list(Page<SysDict> page, SysDict sysDict, QueryWrapper queryWrapper) {
+        return sysDictMapper.list(page, sysDict, queryWrapper);
     }
 }
