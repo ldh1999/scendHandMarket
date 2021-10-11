@@ -50,10 +50,9 @@ public class SysDictItemController {
     }
 
     @ApiOperation(value="字典项增加", notes="字典项增加")
-    @RequestMapping(path = "/add")
+    @RequestMapping(path = "/add", method = RequestMethod.POST)
     public Result<?> insert(@RequestBody SysDictItem sysDictItem){
         Result<SysDictItem> result = new Result<>();
-
         try{
             if (sysDictItemService.countByItemKey(sysDictItem)>0){
                 result.error("此key已存在");

@@ -16,4 +16,6 @@ public interface SysDictItemMapper extends BaseMapper<SysDictItem> {
                             @Param(value = "item") SysDictItem sysDictItem,
                             QueryWrapper queryWrapper,
                             @Param(value = "dictId") String dictId);
+
+    void deleteByDictId(String dictId);
 }

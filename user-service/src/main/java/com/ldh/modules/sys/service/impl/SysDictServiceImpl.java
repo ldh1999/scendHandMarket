@@ -5,16 +5,23 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.sys.entity.SysDict;
+import com.ldh.modules.sys.entity.SysDictItem;
+import com.ldh.modules.sys.mapper.SysDictItemMapper;
 import com.ldh.modules.sys.mapper.SysDictMapper;
 import com.ldh.modules.sys.service.SysDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLException;
 
 @Service
 public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDictService  {
 
     @Autowired
     private SysDictMapper sysDictMapper;
+    @Autowired
+    private SysDictItemMapper sysDictItemMapper;
 
     @Override
     public int countByNo(SysDict dict) {
@@ -24,5 +31,12 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     @Override
     public IPage<SysDict> list(Page<SysDict> page, SysDict sysDict, QueryWrapper queryWrapper) {
         return sysDictMapper.list(page, sysDict, queryWrapper);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {SQLException.class})
+    public void deleteByIdAnywhere(String id) {
+        this.removeById(id);
+        sysDictItemMapper.deleteByDictId(id);
     }
 }

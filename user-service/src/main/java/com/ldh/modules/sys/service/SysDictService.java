@@ -10,4 +10,6 @@ public interface SysDictService extends IService<SysDict> {
     int countByNo(SysDict dict);
 
     IPage<SysDict> list(Page<SysDict> page, SysDict sysDict, QueryWrapper queryWrapper);
+
+    void deleteByIdAnywhere(String id);
 }

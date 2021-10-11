@@ -74,7 +74,7 @@ public class SysDictController {
 
         Result<?> result = new Result<>();
         try{
-            sysDictService.removeById(id);
+            sysDictService.deleteByIdAnywhere(id);
             result.succcess("删除成功");
         }catch (Exception e){
             log.error(e.getMessage());
