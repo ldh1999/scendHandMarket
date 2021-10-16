@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.authority.entity.AuthorityInformation;
+import com.ldh.modules.authority.model.AuthorityInformationModel;
 import com.ldh.modules.authority.service.AuthorityInformationService;
 import common.Result;
 import common.StringTo;
@@ -36,9 +37,9 @@ public class AuthorityInformationController {
         }else{
             queryWrapper.orderByAsc(StringTo.humpToLine(column));
         }
-        Result<IPage<AuthorityInformation>> result = new Result<>();
+        Result<IPage<AuthorityInformationModel>> result = new Result<>();
         try{
-            IPage<AuthorityInformation> ipage = authorityInformationService.list(authorityInformation,page,queryWrapper);
+            IPage<AuthorityInformationModel> ipage = authorityInformationService.list(authorityInformation,page,queryWrapper);
             result.succcess(ipage);
         }catch (Exception e){
             log.error(e.getMessage());
@@ -83,7 +84,7 @@ public class AuthorityInformationController {
         return result;
     }
     @ApiOperation(value="用户管理删除", notes="用户管理删除")
-    @RequestMapping(path = "/deleteById", method = RequestMethod.GET)
+    @RequestMapping(path = "/deleteById", method = RequestMethod.DELETE)
     public Result<?> updateById(@RequestParam(value = "id", required = true)String id){
 
         Result<?> result = new Result<>();

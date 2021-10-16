@@ -7,7 +7,8 @@
         from sys_dict_item
         where 1=1
         and item_key = #{item.itemKey}
-        <if test="item.id != null || item.id != ''">
+        and sys_dict_id = #{item.sysDictId}
+        <if test="item.id != null and item.id != ''">
           and id != #{item.id}
         </if>
     </select>
@@ -23,4 +24,20 @@
         and sys_dict_id = #{dictId}
     </delete>
 
+    <select id="getItemValueBydictNoAndItemKey" resultType="string">
+        select sdi.item_value from sys_dict_item sdi
+        left join sys_dict sd on sdi.sys_dict_id = sd.id
+        where 1=1
+        and sdi.item_key = #{itemKey}
+        and sd.dict_no = #{dictNo}
+    </select>
+
+    <select id="getOptionByDictNo" resultType="common.OptionModel">
+        select sdi.item_key as 'key',
+               sdi.item_value as 'value',
+               sdi.item_value as 'title'
+        from sys_dict_item sdi
+        left join sys_dict sd on sd.id = sdi.sys_dict_id
+        where sd.dict_no = #{dictNo}
+    </select>
 </mapper>

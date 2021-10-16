@@ -2,8 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ldh.modules.authority.mapper.AuthorityInformationMapper">
 
-    <select id="list" resultType="com.ldh.modules.authority.entity.AuthorityInformation">
-        select * from authority_information where 1=1
+    <select id="list" resultType="com.ldh.modules.authority.model.AuthorityInformationModel">
+        select ai.*,
+               sdi.item_value as 'stsName'
+        from authority_information ai
+        LEFT JOIN sys_dict_item sdi on sdi.item_key = ai.sts
+        LEFT JOIN sys_dict sd on sdi.sys_dict_id = sd.id
+        where 1=1
+          and sd.dict_no = 'user_state'
+        <if test="authorityInformation.authorityUsername != null and authorityInformation.authorityUsername != ''">
+            and ai.authority_username like concat('%',#{authorityInformation.authorityUsername},'%')
+        </if>
+        <if test="authorityInformation.authorityName != null and authorityInformation.authorityName != ''">
+            and ai.authority_name like concat('%',#{authorityInformation.authorityName},'%')
+        </if>
         ${queryWrapper.customSqlSegment}
     </select>
     <select id="countUserName" resultType="integer">

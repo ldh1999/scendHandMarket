@@ -12,51 +12,17 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class AuthorityInformation implements Serializable {
+public class SysRole implements Serializable {
 
-    private static final long seriaVsersionUID=1L;
-    /**
-     * id
-     */
     @TableId(type = IdType.UUID)
-    private String authorityId;
+    private String id;
+    /**
+     * 权限名
+     */
+    private String roleName;
 
-    /**
-     * 用户名
-     */
-    private String authorityUsername;
-
-    /**
-     * 密码
-     */
-    private String authorityPassword;
-
-    /**
-     * 用户昵称
-     */
-    private String authorityName;
-
-    /**
-     * 真实名称
-     */
-    private String realName;
-
-    /**
-     * 性别
-     */
-    private String sex;
-    /**
-     * 年龄
-     */
-    private String age;
-    /**
-     * 手机号
-     */
-    private String phone;
     private String sts;
     private String remark;
-
-
 
     private String createBy;
 
@@ -72,5 +38,4 @@ public class AuthorityInformation implements Serializable {
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
-
 }

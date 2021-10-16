@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.authority.entity.AuthorityInformation;
 import com.ldh.modules.authority.mapper.AuthorityInformationMapper;
+import com.ldh.modules.authority.model.AuthorityInformationModel;
 import com.ldh.modules.authority.service.AuthorityInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
     private AuthorityInformationMapper authorityInformationMapper;
 
     @Override
-    public IPage<AuthorityInformation> list(AuthorityInformation authorityInformation, Page page, QueryWrapper queryWrapper) {
+    public IPage<AuthorityInformationModel> list(AuthorityInformation authorityInformation, Page page, QueryWrapper queryWrapper) {
         return authorityInformationMapper.list(page,authorityInformation,queryWrapper);
     }
 

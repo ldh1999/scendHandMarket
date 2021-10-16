@@ -5,8 +5,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.sys.entity.SysDictItem;
+import common.OptionModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface SysDictItemMapper extends BaseMapper<SysDictItem> {
@@ -18,4 +21,8 @@ public interface SysDictItemMapper extends BaseMapper<SysDictItem> {
                             @Param(value = "dictId") String dictId);
 
     void deleteByDictId(String dictId);
+
+    String getItemValueBydictNoAndItemKey(String dictNo, String itemKey);
+
+    List<OptionModel> getOptionByDictNo(String dictNo);
 }

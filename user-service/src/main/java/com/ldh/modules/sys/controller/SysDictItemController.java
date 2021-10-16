@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.sys.entity.SysDictItem;
 import com.ldh.modules.sys.service.SysDictItemService;
+import common.OptionModel;
 import common.Result;
 import common.StringTo;
 import io.swagger.annotations.Api;
@@ -12,6 +13,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @Api("字典项")
@@ -78,6 +81,35 @@ public class SysDictItemController {
         }catch (Exception e){
             log.error(e.getMessage());
             result.error("删除失败");
+        }
+        return result;
+    }
+
+    @ApiOperation(value="根据字典项和字典表查值", notes="根据字典项和字典表查值")
+    @RequestMapping(path = "/getDictItem", method = RequestMethod.GET)
+    public Result<?> getItemValueBydictNoAndItemKey(@RequestParam(value = "dictNo", required = true)String dictNo,
+                                                    @RequestParam(value = "itemKey", required = true)String itemKey){
+
+        Result<String> result = new Result<>();
+        try{
+            result.setResult(sysDictItemService.getItemValueBydictNoAndItemKey(dictNo, itemKey));
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("");
+        }
+        return result;
+    }
+    @ApiOperation(value="跟胡字典编码获取字典项item", notes="跟胡字典编码获取字典项item")
+    @RequestMapping(path = "/getOptionByDictNo", method = RequestMethod.GET)
+    public Result<?> getOptionByDictNo(@RequestParam(value = "dictNo", required = true)String dictNo){
+        Result<List<OptionModel>> result = new Result<>();
+        try{
+            result.setResult(sysDictItemService.getOptionByDictNo(dictNo));
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("error");
         }
         return result;
     }

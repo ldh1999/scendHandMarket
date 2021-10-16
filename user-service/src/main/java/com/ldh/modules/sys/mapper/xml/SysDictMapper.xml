@@ -12,6 +12,13 @@
 
     <select id="list" resultType="com.ldh.modules.sys.entity.SysDict">
         select * from sys_dict where 1=1
+        <if test="sysDict.dictName != null and sysDict.dictName != ''">
+            and dict_name like concat('%',#{sysDict.dictName},'%')
+        </if>
+        <if test="sysDict.dictNo != null and sysDict.dictNo != ''">
+            and dict_no like concat('%',#{sysDict.dictNo},'%')
+        </if>
         ${queryWrapper.customSqlSegment}
     </select>
+
 </mapper>
