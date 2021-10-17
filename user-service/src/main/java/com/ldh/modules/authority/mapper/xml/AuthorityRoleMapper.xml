@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ldh.modules.authority.mapper.AuthorityRoleMapper">
+    <select id="list" resultType="com.ldh.modules.authority.model.AuthorityRoleInformationModel">
+        select ari.*,
+               sr.role_name as 'sysRoleName',
+               sr.role_no as 'sysRoleNo'
+               from authority_role_information ari
+        LEFT JOIN sys_role sr on sr.id = ari.sys_role_id
+        where 1=1
+        <if test="authorityRoleInformation.authorityId != null and authorityRoleInformation.authorityId != ''">
+            and ari.authority_id = #{authorityRoleInformation.authorityId}
+        </if>
+        ${queryWrapper.customSqlSegment}
+    </select>
+
+    <select id="countAuthorityRoleByAuthorityId" resultType="integer">
+        select count(*)
+        from authority_role_information
+        where 1=1
+        and sys_role_id = #{sysRoleId}
+        and authority_id = #{authorityId}
+
+    </select>
+
+    <delete id="deleteBySysRole">
+        delete sri.*
+        from authority_role_information sri
+        where 1=1
+        and sri.sys_role_id = #{sysRoleId}
+    </delete>
 
 </mapper>

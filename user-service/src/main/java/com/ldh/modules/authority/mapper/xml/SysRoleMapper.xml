@@ -8,4 +8,44 @@
         </if>
         ${queryWrapper.customSqlSegment}
     </select>
+
+    <select id="getAllOption" resultType="common.OptionModel">
+        select sr.role_name as 'value',
+               sr.role_name as 'title',
+               sr.id as 'key'
+        from sys_role sr where 1=1
+    </select>
+
+    <select id="countByNo" resultType="integer">
+        select count(*)
+        from sys_role sr
+        where 1=1
+        and sr.role_no = #{sysRole.roleNo}
+        <if test="sysRole.id != null and sysRole.id != ''">
+            and sr.id != #{sysRole.id}
+        </if>
+    </select>
+
+    <select id="countRoleByUserIdAndRoleNo" resultType="integer">
+        select count(*)
+        from sys_role sr
+        LEFT JOIN authority_role_information ari on sr.id = ari.sys_role_id
+        where 1=1
+        and ari.authority_id = #{userId}
+        and sr.role_no = #{roleNo}
+    </select>
+
+    <select id="countRoleByUserIdAndRoleList" resultType="integer">
+        select count(*)
+        from sys_role sr
+        LEFT JOIN authority_role_information ari on sr.id = ari.sys_role_id
+        where 1=1
+          and ari.authority_id = #{userId}
+          and (
+        <foreach item="item" collection="roleNoList" open="" separator="OR">
+            sr.role_no = #{item}
+        </foreach>
+            )
+
+    </select>
 </mapper>

@@ -14,11 +14,11 @@ import java.util.Date;
 @Data
 public class AuthorityRoleInformation implements Serializable {
     @TableId(type = IdType.UUID)
-    public String id;
+    private String id;
     /** 用户id*/
-    public String authorityId;
+    private String authorityId;
     /**角色权限id */
-    public String sysRoleId;
+    private String sysRoleId;
     private String sts;
     private String remark;
 

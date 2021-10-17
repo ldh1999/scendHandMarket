@@ -20,6 +20,8 @@ public class SysRole implements Serializable {
      * 权限名
      */
     private String roleName;
+    /** 权限编码*/
+    private String roleNo;
 
     private String sts;
     private String remark;
