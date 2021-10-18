@@ -1,0 +1,17 @@
+server:
+  port: 8879
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+      discovery:
+        cluster-name: TJ
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://userservice
+          predicates:
+            - Header=gateway, userService
+            #- Path=/User/**
