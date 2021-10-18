@@ -15,7 +15,8 @@ public class FilterConfig {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Bean
+    //过滤器有点问题暂时关了
+   // @Bean
     public FilterRegistrationBean roleFilter(){
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(new RoleFilter(redisTemplate));

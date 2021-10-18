@@ -1,21 +1,16 @@
 package com.ldh.filter;
 
+import com.alibaba.fastjson.JSONObject;
 import common.Result;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Order(value = 1)
 public class RoleFilter implements Filter {
@@ -42,6 +37,8 @@ public class RoleFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
         String path = request.getRequestURI();
         boolean flag = EXURL.contains(path);
@@ -52,15 +49,16 @@ public class RoleFilter implements Filter {
             String token =(String) session.getAttribute("token");
             if(token == null){
                 result.error("请登录");
-                request.setAttribute("result",result);
+                JSONObject jsonObject = (JSONObject) JSONObject.toJSON(result);
+                response.getWriter().print(jsonObject.toString());
                 return;
             }
             if (redisTemplate.hasKey(token)){
                 filterChain.doFilter(servletRequest,servletResponse);
             }else {
                 result.error("token失效");
-
-                request.setAttribute("result",result);
+                JSONObject jsonObject = (JSONObject) JSONObject.toJSON(result);
+                response.getWriter().print(jsonObject.toString());
                 return;
             }
         }
