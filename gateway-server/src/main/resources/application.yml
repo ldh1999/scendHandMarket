@@ -15,3 +15,7 @@ spring:
           predicates:
             - Header=gateway, userService
             #- Path=/User/**
+        - id: inventory
+          uri: lb://inventoryservice
+          predicates:
+            - Header=gateway, inventoryService

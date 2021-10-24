@@ -10,6 +10,7 @@
         <module name="CommonUtil" />
         <module name="Feginapi" />
         <module name="gatewayserver" />
+        <module name="inventoryservice" />
         <module name="userservice" />
       </profile>
     </annotationProcessing>
@@ -19,6 +20,7 @@
       <module name="CommonUtil" options="-parameters" />
       <module name="Feginapi" options="-parameters" />
       <module name="gatewayserver" options="-parameters" />
+      <module name="inventoryservice" options="-parameters" />
       <module name="scendHandMarket" options="-parameters" />
       <module name="userservice" options="-parameters" />
     </option>

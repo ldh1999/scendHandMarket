@@ -13,6 +13,7 @@
         <module>user-service</module>
         <module>CommonUtil</module>
         <module>gateway-server</module>
+        <module>inventory-service</module>
     </modules>
 
     <parent>
