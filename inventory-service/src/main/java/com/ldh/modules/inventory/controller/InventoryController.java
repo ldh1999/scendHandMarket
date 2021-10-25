@@ -26,7 +26,7 @@ public class InventoryController {
     private InventoryService inventoryService;
 
 
-    @ApiOperation(value="商家列表", notes="商家列表")
+    @ApiOperation(value="商品列表", notes="商品列表")
     @RequestMapping(path = "/list", method = RequestMethod.GET)
     public Result<?> list(Inventory inventory,
                           @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,

@@ -20,4 +20,7 @@ public interface AuthorityRoleMapper extends BaseMapper<AuthorityRoleInformation
 
     @Transactional(rollbackFor = {SQLException.class})
     Integer deleteBySysRole(String sysRoleId);
+
+    Integer deleteByAuthorityId(String authorityId);
+
 }

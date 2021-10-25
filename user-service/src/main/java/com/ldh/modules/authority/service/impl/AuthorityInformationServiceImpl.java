@@ -5,17 +5,34 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.authority.entity.AuthorityInformation;
+import com.ldh.modules.authority.entity.AuthorityRoleInformation;
 import com.ldh.modules.authority.mapper.AuthorityInformationMapper;
+import com.ldh.modules.authority.mapper.AuthorityRoleMapper;
+import com.ldh.modules.authority.mapper.SysRoleMapper;
 import com.ldh.modules.authority.model.AuthorityInformationModel;
 import com.ldh.modules.authority.service.AuthorityInformationService;
+import com.ldh.modules.authority.service.AuthorityRoleService;
+import org.checkerframework.checker.units.qual.A;
+import org.junit.jupiter.api.MethodOrderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInformationMapper, AuthorityInformation> implements AuthorityInformationService {
 
     @Autowired
     private AuthorityInformationMapper authorityInformationMapper;
+
+    @Autowired
+    private AuthorityRoleMapper authorityRoleMapper;
+
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
+
+
 
     @Override
     public IPage<AuthorityInformationModel> list(AuthorityInformation authorityInformation, Page page, QueryWrapper queryWrapper) {
@@ -30,5 +47,23 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
     @Override
     public AuthorityInformation findByUserName(String username) {
         return authorityInformationMapper.findByUserName(username);
+    }
+
+    @Override
+    public void register(AuthorityInformation authorityInformation) {
+
+        Random random = new Random();
+        String userId = UUID.randomUUID().toString();
+        String authorityName = "游客:"+random.nextInt();
+        String roleId = sysRoleMapper.selectByRoleNo("user").getId();
+        authorityInformation.setAuthorityId(userId);
+        authorityInformation.setAuthorityName(authorityName);
+        AuthorityRoleInformation authorityRoleInformation= new AuthorityRoleInformation();
+        authorityRoleInformation.setAuthorityId(userId);
+        authorityRoleInformation.setSysRoleId(roleId);
+
+        this.save(authorityInformation);
+        authorityRoleMapper.insert(authorityRoleInformation);
+
     }
 }

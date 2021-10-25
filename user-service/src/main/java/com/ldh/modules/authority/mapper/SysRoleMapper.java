@@ -23,4 +23,6 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     Integer countRoleByUserIdAndRoleNo(String userId, String roleNo);
 
     Integer countRoleByUserIdAndRoleList(String userId, List<String> roleNoList);
+    /** 根据编号查找 */
+    SysRole selectByRoleNo(String roleNo);
 }

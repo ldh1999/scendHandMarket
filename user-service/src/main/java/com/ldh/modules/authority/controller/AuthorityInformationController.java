@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.authority.entity.AuthorityInformation;
 import com.ldh.modules.authority.model.AuthorityInformationModel;
 import com.ldh.modules.authority.service.AuthorityInformationService;
+import com.ldh.modules.authority.service.AuthorityRoleService;
 import common.Result;
 import common.StringTo;
 import io.swagger.annotations.Api;
@@ -22,6 +23,9 @@ public class AuthorityInformationController {
 
     @Autowired
     private AuthorityInformationService authorityInformationService;
+
+    @Autowired
+    private AuthorityRoleService authorityRoleService;
 
     @ApiOperation(value="用户管理列表", notes="用户管理列表")
     @RequestMapping(path = "/list", method = RequestMethod.GET)
@@ -90,6 +94,7 @@ public class AuthorityInformationController {
         Result<?> result = new Result<>();
         try{
             authorityInformationService.removeById(id);
+            authorityRoleService.deleteByAuthorityId(id);
             result.succcess("删除成功");
         }catch (Exception e){
             log.error(e.getMessage());

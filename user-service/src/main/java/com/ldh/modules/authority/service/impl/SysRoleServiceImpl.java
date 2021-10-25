@@ -74,8 +74,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return
      */
     @Override
-    public Result<?> scanManagerRoleByUserId(String userId) {
-        Result<?> result = new Result();
+    public Result<AuthorityInformation> scanManagerRoleByUserId(String userId) {
+        Result<AuthorityInformation> result = new Result();
         if(sysRoleMapper.countRoleByUserIdAndRoleList(userId, Arrays.asList("superAdmin", "admin"))>0){
             result.setSuccess(true);
         }else {

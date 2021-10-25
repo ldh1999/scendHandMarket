@@ -1,4 +1,4 @@
-package com.ldh.modules.authority.entity;
+package com.ldh.modules.inventory.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -6,58 +6,23 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class AuthorityInformation implements Serializable {
+@Slf4j
+public class InventoryCategory implements Serializable {
 
-    private static final long seriaVsersionUID=1L;
-    /**
-     * id
-     */
     @TableId(type = IdType.UUID)
-    private String authorityId;
-
-    /**
-     * 用户名
-     */
-    private String authorityUsername;
-
-    /**
-     * 密码
-     */
-    private String authorityPassword;
-
-    /**
-     * 用户昵称
-     */
-    private String authorityName;
-
-    /**
-     * 真实名称
-     */
-    private String realName;
-
-    /**
-     * 性别
-     */
-    private String sex;
-    /**
-     * 年龄
-     */
-    private String age;
-    /**
-     * 手机号
-     */
-    private String phone;
+    private String id;
+    /** 商品类别id */
+    private String cateName;
     private String sts;
-    private String remark;
-    /** 权限码 */
-    private String token;
 
+    private String remark;
 
     private String createBy;
 
@@ -73,5 +38,4 @@ public class AuthorityInformation implements Serializable {
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
-
 }

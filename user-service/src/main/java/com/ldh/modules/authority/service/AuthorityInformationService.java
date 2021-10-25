@@ -13,4 +13,6 @@ public interface AuthorityInformationService extends IService<AuthorityInformati
     int countUserName(AuthorityInformation authorityInformation);
 
     AuthorityInformation findByUserName(String username);
+
+    void register(AuthorityInformation authorityInformation);
 }

@@ -48,4 +48,8 @@
             )
 
     </select>
+
+    <select id="selectByRoleNo"  resultType="com.ldh.modules.authority.entity.SysRole">
+        select * from sys_role where 1=1 and role_no = #{roleNo}
+    </select>
 </mapper>

@@ -13,5 +13,5 @@ public interface AuthorityRoleService extends IService<AuthorityRoleInformation>
 
     Integer countAuthorityRoleByAuthorityId(String authorityId,String sysRoleId);
 
-
+    Integer deleteByAuthorityId(String authorityId);
 }

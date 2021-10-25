@@ -2,6 +2,7 @@ package com.ldh.modules.authority.controller;
 
 import com.alibaba.nacos.common.utils.UuidUtils;
 import com.ldh.modules.authority.entity.AuthorityInformation;
+import com.ldh.modules.authority.entity.SysUserEntity;
 import com.ldh.modules.authority.service.AuthorityInformationService;
 import com.ldh.modules.authority.service.SysRoleService;
 import common.Result;
@@ -36,7 +37,7 @@ public class SysUserController {
     Result<?> login(@RequestParam(name = "userName",required = true)String username,
                     @RequestParam(name = "passWord",required = true)String password,
                     HttpServletRequest request){
-        Result<?> result = new Result<>();
+        Result<AuthorityInformation> result = new Result<>();
 
         try{
             AuthorityInformation authorityInformation = authorityInformationService.findByUserName(username);
@@ -50,13 +51,33 @@ public class SysUserController {
                 HttpSession session = request.getSession();
                 String token = UuidUtils.generateUuid();
                 session.setAttribute("user", authorityInformation);
-                session.setAttribute("token", token);
+                session.setAttribute("token", authorityInformation);
                 redisTemplate.opsForValue().set(token, token,20, TimeUnit.MINUTES);
+                authorityInformation.setToken(token);
+                result.setResult(authorityInformation);
                 result.succcess("登陆成功");
             }
         }catch (Exception e){
             result.error("error");
             log.error(e.getMessage());
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "注册", notes = "注册")
+    @RequestMapping(path = "/register",method = RequestMethod.POST)
+    public Result<?> register(@RequestBody AuthorityInformation authorityInformation){
+        Result<?> result = new Result<>();
+        try {
+            if(authorityInformationService.countUserName(authorityInformation)>0){
+                result.error("改用户名已被占用");
+                return result;
+            }
+            authorityInformationService.register(authorityInformation);
+            result.succcess("注册成功");
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("error");
         }
         return result;
     }

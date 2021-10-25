@@ -26,4 +26,9 @@ public class AuthorityRoleServiceImpl extends ServiceImpl<AuthorityRoleMapper, A
     public Integer countAuthorityRoleByAuthorityId(String authorityId, String sysRoleId) {
         return authorityRoleMapper.countAuthorityRoleByAuthorityId(authorityId, sysRoleId);
     }
+
+    @Override
+    public Integer deleteByAuthorityId(String authorityId) {
+        return authorityRoleMapper.deleteByAuthorityId(authorityId);
+    }
 }

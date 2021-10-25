@@ -22,6 +22,7 @@ import javax.annotation.Resource;
 @Slf4j
 @EnableCaching
 @Configuration
+/*@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1800) //session+redis*/
 public class RedisConfig extends CachingConfigurerSupport {
 
 	@Resource

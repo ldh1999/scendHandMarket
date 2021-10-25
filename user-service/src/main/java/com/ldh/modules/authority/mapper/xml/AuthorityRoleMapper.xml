@@ -30,4 +30,8 @@
         and sri.sys_role_id = #{sysRoleId}
     </delete>
 
+    <delete id="deleteByAuthorityId">
+        delete from authority_role_information where authority_id = #{authorityId}
+    </delete>
+
 </mapper>

@@ -13,6 +13,7 @@ import java.util.List;
 public class SysUserEntity implements Serializable, UserDetails {
 
     private String userId;
+    private String token;
     private String username;
     private String password;
     private String sts;
