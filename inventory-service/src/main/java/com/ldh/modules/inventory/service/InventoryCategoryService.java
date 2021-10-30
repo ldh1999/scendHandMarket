@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.modules.inventory.entity.InventoryCategory;
-import com.ldh.modules.inventory.model.InventoryCategoryVO;
+import com.ldh.modules.inventory.model.InventoryCategoryModel;
 
 public interface InventoryCategoryService extends IService<InventoryCategory> {
-    IPage<InventoryCategoryVO> list(Page page, QueryWrapper queryWrapper, InventoryCategory inventoryCategory);
+    IPage<InventoryCategoryModel> list(Page page, QueryWrapper queryWrapper, InventoryCategory inventoryCategory);
 
 }

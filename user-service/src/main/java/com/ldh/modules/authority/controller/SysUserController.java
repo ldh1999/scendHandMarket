@@ -3,6 +3,7 @@ package com.ldh.modules.authority.controller;
 import com.alibaba.nacos.common.utils.UuidUtils;
 import com.ldh.modules.authority.entity.AuthorityInformation;
 import com.ldh.modules.authority.entity.SysUserEntity;
+import com.ldh.modules.authority.model.AuthorityInformationModel;
 import com.ldh.modules.authority.service.AuthorityInformationService;
 import com.ldh.modules.authority.service.SysRoleService;
 import common.Result;
@@ -40,7 +41,7 @@ public class SysUserController {
         Result<AuthorityInformation> result = new Result<>();
 
         try{
-            AuthorityInformation authorityInformation = authorityInformationService.findByUserName(username);
+            AuthorityInformationModel authorityInformation = authorityInformationService.findByUserName(username);
             if (authorityInformation == null){
                 result.error("用户不存在");
             }else if (!authorityInformation.getAuthorityPassword().equals(password)){
@@ -51,7 +52,6 @@ public class SysUserController {
                 HttpSession session = request.getSession();
                 String token = UuidUtils.generateUuid();
                 session.setAttribute("user", authorityInformation);
-                session.setAttribute("token", authorityInformation);
                 redisTemplate.opsForValue().set(token, token,20, TimeUnit.MINUTES);
                 authorityInformation.setToken(token);
                 result.setResult(authorityInformation);

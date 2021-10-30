@@ -6,5 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class InventoryCategoryVO extends InventoryCategory implements Serializable {
+public class InventoryCategoryModel extends InventoryCategory implements Serializable {
+
+    private String createRealName;
 }

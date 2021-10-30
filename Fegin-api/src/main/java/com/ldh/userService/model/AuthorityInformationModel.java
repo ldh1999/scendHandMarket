@@ -1,6 +1,6 @@
-package com.ldh.modules.authority.model;
+package com.ldh.userService.model;
 
-import com.ldh.modules.authority.entity.AuthorityInformation;
+import com.ldh.userService.pojo.AuthorityInformation;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Data
 public class AuthorityInformationModel extends AuthorityInformation implements Serializable {
 
-    private String stsName;
+    public String stsName;
 
     /** 权限码 */
     private String token;

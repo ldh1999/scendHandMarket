@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.inventory.entity.Inventory;
-import com.ldh.modules.inventory.model.InventoryVO;
+import com.ldh.modules.inventory.model.InventoryModel;
 import com.ldh.modules.inventory.service.InventoryService;
 import common.Result;
 import common.StringTo;
@@ -34,7 +34,7 @@ public class InventoryController {
                           @RequestParam(name="column", required = false) String column,
                           @RequestParam(name="order", required = false) String order){
         Result<IPage> result = new Result<>();
-        Page<InventoryVO> page = new Page<>(pageNo, pageSize);
+        Page<InventoryModel> page = new Page<>(pageNo, pageSize);
         QueryWrapper queryWrapper = new QueryWrapper();
         if(order.equals("desc")){
             queryWrapper.orderByDesc(StringTo.humpToLine(column));
@@ -42,12 +42,28 @@ public class InventoryController {
             queryWrapper.orderByAsc(StringTo.humpToLine(column));
         }
         try{
-            IPage<InventoryVO> iPage = inventoryService.list(page, queryWrapper, inventory);
+            IPage<InventoryModel> iPage = inventoryService.list(page, queryWrapper, inventory);
             result.setResult(iPage);
             result.setSuccess(true);
         }catch (Exception e){
             log.error(e.getMessage());
             result.error("error");
+        }
+        return result;
+    }
+
+    @ApiOperation(value="商品删除", notes="商品删除")
+    @RequestMapping(path = "/deleteById", method = RequestMethod.DELETE)
+    public Result<?> deleteById(@RequestParam(value = "id", required = true)String id){
+
+        Result<?> result = new Result<>();
+        try{
+            //TODO
+            inventoryService.removeById(id);
+            result.succcess("删除成功");
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("删除失败");
         }
         return result;
     }

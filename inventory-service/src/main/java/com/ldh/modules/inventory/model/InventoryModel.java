@@ -4,7 +4,7 @@ import com.ldh.modules.inventory.entity.Inventory;
 import lombok.Data;
 
 @Data
-public class InventoryVO extends Inventory {
+public class InventoryModel extends Inventory {
     /** 店铺名称 */
     private String merchantName;
 }

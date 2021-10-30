@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @Slf4j
 public class Inventory implements Serializable {
-    /***/
+    /** 商品id*/
     private String id;
     /** 商家id */
     private String merchantId;

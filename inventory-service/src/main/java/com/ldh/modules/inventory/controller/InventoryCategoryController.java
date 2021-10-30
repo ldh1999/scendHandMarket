@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.inventory.entity.InventoryCategory;
-import com.ldh.modules.inventory.model.InventoryCategoryVO;
-import com.ldh.modules.inventory.model.InventoryVO;
+import com.ldh.modules.inventory.model.InventoryCategoryModel;
 import com.ldh.modules.inventory.service.InventoryCategoryService;
+import com.ldh.util.RedisSessionUtil;
 import common.Result;
 import common.StringTo;
 import io.swagger.annotations.ApiOperation;
@@ -42,7 +42,7 @@ public class InventoryCategoryController {
             queryWrapper.orderByAsc(StringTo.humpToLine(column));
         }
         try{
-            IPage<InventoryCategoryVO> iPage = inventoryCategoryService.list(page, queryWrapper, inventoryCategory);
+            IPage<InventoryCategoryModel> iPage = inventoryCategoryService.list(page, queryWrapper, inventoryCategory);
             result.setResult(iPage);
             result.setSuccess(true);
         }catch (Exception e){
@@ -57,9 +57,8 @@ public class InventoryCategoryController {
     public Result<?> insert(@RequestBody InventoryCategory inventoryCategory, HttpServletRequest httpServletRequest){
         Result<?> result = new Result<>();
         try {
-
             HttpSession session = httpServletRequest.getSession();
-            AuthorityInformation authorityInformation = (AuthorityInformation) session.getAttribute("user");
+            AuthorityInformation authorityInformation = (AuthorityInformation)RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
             if (authorityInformation!=null){
                 inventoryCategory.setCreateBy(authorityInformation.getAuthorityId());
             }else {
@@ -68,12 +67,51 @@ public class InventoryCategoryController {
             inventoryCategoryService.save(inventoryCategory);
             result.succcess("增加成功");
         }catch (Exception e){
+            e.printStackTrace();
             log.error(e.getMessage());
             result.error();
         }
         return result;
     }
 
+    @ApiOperation(value="商品分类修改", notes="商品分类修改")
+    @RequestMapping(path = "/update", method = RequestMethod.POST)
+    public Result<?> update(@RequestBody InventoryCategory inventoryCategory, HttpServletRequest httpServletRequest){
+        Result<?> result = new Result<>();
+        try {
+            HttpSession session = httpServletRequest.getSession();
+            AuthorityInformation authorityInformation = (AuthorityInformation)RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
+            if (authorityInformation!=null){
+                inventoryCategory.setCreateBy(authorityInformation.getAuthorityId());
+            }else {
+                log.warn("该用户未登录");
+            }
+            inventoryCategoryService.updateById(inventoryCategory);
+            result.succcess("修改成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage());
+            result.error();
+        }
+        return result;
+    }
+
+
+    @ApiOperation(value="商品分类删除", notes="商品分类删除")
+    @RequestMapping(path = "/deleteById", method = RequestMethod.DELETE)
+    public Result<?> deleteById(@RequestParam(value = "id", required = true)String id){
+
+        Result<?> result = new Result<>();
+        try{
+            //TODO
+            inventoryCategoryService.removeById(id);
+            result.succcess("删除成功");
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("删除失败");
+        }
+        return result;
+    }
 
 
 }

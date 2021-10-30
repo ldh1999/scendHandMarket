@@ -12,7 +12,7 @@ public interface AuthorityInformationService extends IService<AuthorityInformati
 
     int countUserName(AuthorityInformation authorityInformation);
 
-    AuthorityInformation findByUserName(String username);
+    AuthorityInformationModel findByUserName(String username);
 
     void register(AuthorityInformation authorityInformation);
 }

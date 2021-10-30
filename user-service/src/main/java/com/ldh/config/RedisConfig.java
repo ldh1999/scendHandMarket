@@ -1,5 +1,7 @@
 package com.ldh.config;
 
+import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +11,7 @@ import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.*;
@@ -34,7 +37,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 	 * @param lettuceConnectionFactory
 	 * @return
 	 */
-	@Bean
+/*	@Bean
 	public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
 		log.info(" --- redis config init --- ");
 		// 设置序列化
@@ -53,6 +56,26 @@ public class RedisConfig extends CachingConfigurerSupport {
 		redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);// Hash value序列化
 		redisTemplate.afterPropertiesSet();
 		return redisTemplate;
+	}*/
+	@Bean
+	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+		RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+
+		FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
+		redisTemplate.setValueSerializer(fastJsonRedisSerializer);
+		redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
+
+		redisTemplate.setKeySerializer(new StringRedisSerializer());
+		redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+		redisTemplate.setConnectionFactory(redisConnectionFactory);
+		redisTemplate.setDefaultSerializer(new StringRedisSerializer());
+		redisTemplate.afterPropertiesSet();
+		return redisTemplate;
+	}
+
+	@Bean
+	RedisSerializer<Object> springSessionDefaultRedisSerializer() {
+		return new GenericFastJsonRedisSerializer();
 	}
 
 }

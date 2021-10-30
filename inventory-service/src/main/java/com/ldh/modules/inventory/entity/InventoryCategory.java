@@ -15,10 +15,10 @@ import java.util.Date;
 @Data
 @Slf4j
 public class InventoryCategory implements Serializable {
-
+    /** 商品类别id */
     @TableId(type = IdType.UUID)
     private String id;
-    /** 商品类别id */
+
     private String cateName;
     private String sts;
 

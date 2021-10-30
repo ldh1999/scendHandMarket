@@ -26,7 +26,7 @@
              and authority_id != #{authorityId}
          </if>
     </select>
-    <select id="findByUserName" resultType="com.ldh.modules.authority.entity.AuthorityInformation">
+    <select id="findByUserName" resultType="com.ldh.modules.authority.model.AuthorityInformationModel">
         select * from authority_information where 1=1 and authority_username = #{username}
     </select>
 </mapper>

@@ -5,11 +5,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.inventory.entity.InventoryCategory;
-import com.ldh.modules.inventory.model.InventoryCategoryVO;
+import com.ldh.modules.inventory.model.InventoryCategoryModel;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface InventoryCategoryMapper extends BaseMapper<InventoryCategory> {
 
-    IPage<InventoryCategoryVO> list(Page page, QueryWrapper queryWrapper, InventoryCategory inventoryCategory);
+    IPage<InventoryCategoryModel> list(Page page, QueryWrapper queryWrapper, @Param("inventoryCategory") InventoryCategory inventoryCategory);
 }

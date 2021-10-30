@@ -45,7 +45,7 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
     }
 
     @Override
-    public AuthorityInformation findByUserName(String username) {
+    public AuthorityInformationModel findByUserName(String username) {
         return authorityInformationMapper.findByUserName(username);
     }
 

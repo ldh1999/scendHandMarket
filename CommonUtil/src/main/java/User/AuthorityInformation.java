@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class AuthorityInformation implements Serializable {
 
-    private static final long seriaVsersionUID=1L;
+//    private static final long seriaVsersionUID=1L;
     /**
      * id
      */

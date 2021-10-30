@@ -15,5 +15,5 @@ public interface AuthorityInformationMapper extends BaseMapper<AuthorityInformat
 
     int countUserName(AuthorityInformation authorityInformation);
 
-    AuthorityInformation findByUserName(String username);
+    AuthorityInformationModel findByUserName(String username);
 }

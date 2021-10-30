@@ -6,6 +6,8 @@ logging:
 server:
   port: 9081
 spring:
+  session:
+    store-type: redis
   datasource:
     #url: jdbc:mysql://192.168.233.128:3306/cloud_user_information?useSSL=false
     url: jdbc:mysql://localhost/cloud_inventory?useSSL=false
@@ -26,6 +28,7 @@ spring:
       shutdown-timeout: 5000ms
     password:
     port: 6379
+    timeout: 3000ms
 
 mybatis-plus:
   mapper-locations: classpath*:com/ldh/modules/**/xml/*Mapper.xml
