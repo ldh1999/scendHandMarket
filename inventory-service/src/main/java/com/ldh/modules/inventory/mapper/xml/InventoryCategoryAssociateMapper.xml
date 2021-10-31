@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ldh.modules.inventory.mapper.InventoryCategoryAssociateMapper">
+
+    <select id="list" resultType="com.ldh.modules.inventory.model.InventoryCategoryAssociateModel">
+        select ica.* ,
+               ic.cate_name as 'cateName'
+        from inventory_category_associate ica
+        LEFT JOIN inventory_category ic on ic.id = ica.inventory_category_id
+        where 1=1
+        and ica.inventory_id = #{ inventoryCategoryAssociate.inventoryId }
+
+        ${queryWrapper.customSqlSegment}
+    </select>
+
+    <delete id="deleteByCategoryId">
+        delete from inventory_category_associate where 1=1 and inventory_category_id = #{categoryId}
+    </delete>
+
+    <delete id="deleteByInventoryId">
+        delete from inventory_category_associate where 1=1 and inventory_id = #{inventoryId}
+    </delete>
+</mapper>

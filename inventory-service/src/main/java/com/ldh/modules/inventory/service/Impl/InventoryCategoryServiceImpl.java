@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.inventory.entity.InventoryCategory;
+import com.ldh.modules.inventory.mapper.InventoryCategoryAssociateMapper;
 import com.ldh.modules.inventory.mapper.InventoryCategoryMapper;
 import com.ldh.modules.inventory.model.InventoryCategoryModel;
 import com.ldh.modules.inventory.service.InventoryCategoryService;
@@ -25,11 +26,13 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
     private InventoryCategoryMapper inventoryCategoryMapper;
 
     @Autowired
+    private InventoryCategoryAssociateMapper inventoryCategoryAssociateMapper;
+
+    @Autowired
     private AuthorityClient authorityClient;
 
     @Override
     public IPage<InventoryCategoryModel> list(Page page, QueryWrapper queryWrapper, InventoryCategory inventoryCategory) {
-
 
         IPage<InventoryCategoryModel> iPage = inventoryCategoryMapper.list(page, queryWrapper, inventoryCategory);
         List<InventoryCategoryModel> list = iPage.getRecords();
@@ -46,5 +49,12 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
         });
         iPage.setRecords(list);
         return iPage;
+    }
+
+    @Override
+    public void deleteAnyById(String id) {
+        this.removeById(id);
+        inventoryCategoryAssociateMapper.deleteByCategoryId(id);
+
     }
 }

@@ -3,7 +3,12 @@
 <mapper namespace="com.ldh.modules.inventory.mapper.InventoryMapper">
 
     <select id="list" resultType="com.ldh.modules.inventory.model.InventoryModel">
-        select * from inventory where 1=1
+        select *
+        from inventory
+        where 1=1
+        <if test="inventory.inventoryName != null and inventory.inventoryName != ''">
+            and inventory_name like concat('%',#{inventory.inventoryName},'%')
+        </if>
         ${queryWrapper.customSqlSegment}
     </select>
 </mapper>

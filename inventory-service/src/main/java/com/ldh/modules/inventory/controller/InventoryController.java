@@ -59,7 +59,7 @@ public class InventoryController {
         Result<?> result = new Result<>();
         try{
             //TODO
-            inventoryService.removeById(id);
+            inventoryService.deleteAnyById(id);
             result.succcess("删除成功");
         }catch (Exception e){
             log.error(e.getMessage());
