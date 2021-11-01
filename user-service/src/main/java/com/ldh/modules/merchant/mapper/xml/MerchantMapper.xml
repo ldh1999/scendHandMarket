@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ldh.modules.merchant.mapper.MerchantMapper">
-    <select id="list" resultType="com.ldh.modules.merchant.model.MerchantVO">
+    <select id="list" resultType="com.ldh.modules.merchant.model.MerchantModel">
         select m.*,
                sdi.item_value as 'stsName',
                ai.real_name as 'authorityRealName'
@@ -17,7 +17,7 @@
         ${queryWrapper.customSqlSegment}
     </select>
 
-    <select id="selectById" resultType="com.ldh.modules.merchant.model.MerchantVO">
+    <select id="selectById" resultType="com.ldh.modules.merchant.model.MerchantModel">
         select DISTINCT m.*,
                sdi.item_value as 'stsName',
                ai.real_name as 'authorityRealName'
@@ -28,5 +28,12 @@
         where 1=1
         and sd.dict_no = 'examine_sts'
         and m.merchant_id = #{id}
+    </select>
+
+    <select id="selectByUserId" resultType="com.ldh.modules.merchant.model.MerchantModel">
+        select m.*
+        from merchant m
+        where 1=1
+        and m.authority_id = #{userId}
     </select>
 </mapper>

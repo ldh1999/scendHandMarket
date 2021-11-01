@@ -33,9 +33,9 @@ public class SysUserController {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @ApiOperation(value = "登录", notes = "登录")
-    @RequestMapping(path = "/login",method = RequestMethod.GET)
-    Result<?> login(@RequestParam(name = "userName",required = true)String username,
+    @ApiOperation(value = "管理员登录", notes = "管理员登录")
+    @RequestMapping(path = "/loginManager",method = RequestMethod.GET)
+    Result<?> loginManager(@RequestParam(name = "userName",required = true)String username,
                     @RequestParam(name = "passWord",required = true)String password,
                     HttpServletRequest request){
         Result<AuthorityInformation> result = new Result<>();
@@ -52,7 +52,7 @@ public class SysUserController {
                 HttpSession session = request.getSession();
                 String token = UuidUtils.generateUuid();
                 session.setAttribute("user", authorityInformation);
-                redisTemplate.opsForValue().set(token, token,20, TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(authorityInformation.getAuthorityId(), token,20, TimeUnit.MINUTES);
                 authorityInformation.setToken(token);
                 result.setResult(authorityInformation);
                 result.succcess("登陆成功");
@@ -63,6 +63,39 @@ public class SysUserController {
         }
         return result;
     }
+
+
+    @ApiOperation(value = "普通用户登录", notes = "普通用户登录")
+    @RequestMapping(path = "/login",method = RequestMethod.GET)
+    Result<?> login(@RequestParam(name = "userName",required = true)String username,
+                   @RequestParam(name = "passWord",required = true)String password,
+                   HttpServletRequest request){
+
+        Result<AuthorityInformation> result = new Result<>();
+        AuthorityInformationModel authorityInformation = authorityInformationService.findByUserName(username);
+
+        try{
+            if (authorityInformation == null){
+                result.error("用户不存在");
+            }else if (!authorityInformation.getAuthorityPassword().equals(password)){
+                result.error("密码错误");
+            }else {
+                HttpSession session = request.getSession();
+                String token = UuidUtils.generateUuid();
+                session.setAttribute("user", authorityInformation);
+                redisTemplate.opsForValue().set(authorityInformation.getAuthorityId(), token,20, TimeUnit.MINUTES);
+                authorityInformation.setToken(token);
+                result.setResult(authorityInformation);
+                result.succcess("登陆成功");
+            }
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("error");
+        }
+        return result;
+
+    }
+
 
     @ApiOperation(value = "注册", notes = "注册")
     @RequestMapping(path = "/register",method = RequestMethod.POST)

@@ -1,11 +1,9 @@
 package com.ldh.modules.merchant.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ldh.modules.authority.entity.AuthorityInformation;
 import com.ldh.modules.merchant.entity.Merchant;
-import com.ldh.modules.merchant.model.MerchantVO;
+import com.ldh.modules.merchant.model.MerchantModel;
 import com.ldh.modules.merchant.service.MerchantService;
 import common.Result;
 import common.StringTo;
@@ -66,11 +64,40 @@ public class MerchantController {
     @ApiOperation(value="根据id查询", notes="根据id查询")
     @RequestMapping(path = "/selectById", method = RequestMethod.GET)
     public Result<?> selectById(@RequestParam(name = "id", required = true) String id){
-        Result<MerchantVO> result = new Result<>();
+        Result<MerchantModel> result = new Result<>();
         try {
-            MerchantVO merchantVO = merchantService.selectById(id);
+            MerchantModel merchantModel = merchantService.selectById(id);
             result.setSuccess(true);
-            result.setResult(merchantVO);
+            result.setResult(merchantModel);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error();
+        }
+        return result;
+    }
+
+    @ApiOperation(value="根据用户id查询", notes="根据用户id查询")
+    @RequestMapping(path = "/selectByUserId", method = RequestMethod.GET)
+    public Result<?> selectByUserId(@RequestParam(name = "id", required = true) String id){
+        Result<MerchantModel> result = new Result<>();
+        try {
+            MerchantModel merchantModel = merchantService.selectByUserId(id);
+            result.setSuccess(true);
+            result.setResult(merchantModel);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error();
+        }
+        return result;
+    }
+
+    @ApiOperation(value="增加", notes="增加")
+    @RequestMapping(path = "/add", method = RequestMethod.POST)
+    public Result<?> add(@RequestBody Merchant merchant){
+        Result<MerchantModel> result = new Result<>();
+        try {
+            merchantService.save(merchant);
+            result.setSuccess(true);
         }catch (Exception e){
             log.error(e.getMessage());
             result.error();

@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Slf4j
-public class MerchantVO extends Merchant {
+public class MerchantModel extends Merchant {
 
     private String stsName;
     private String authorityRealName;

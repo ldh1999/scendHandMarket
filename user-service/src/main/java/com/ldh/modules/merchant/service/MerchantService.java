@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.modules.merchant.entity.Merchant;
-import com.ldh.modules.merchant.model.MerchantVO;
+import com.ldh.modules.merchant.model.MerchantModel;
 
 public interface MerchantService extends IService<Merchant> {
-    IPage<MerchantVO> list(Page page, QueryWrapper queryWrapper, Merchant merchant);
+    IPage<MerchantModel> list(Page page, QueryWrapper queryWrapper, Merchant merchant);
 
-    MerchantVO selectById(String id);
+    MerchantModel selectById(String id);
+
+    MerchantModel selectByUserId(String userId);
 
 }

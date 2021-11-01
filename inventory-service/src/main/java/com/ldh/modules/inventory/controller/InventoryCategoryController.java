@@ -8,6 +8,7 @@ import com.ldh.modules.inventory.model.InventoryCategoryModel;
 import com.ldh.modules.inventory.service.InventoryCategoryAssociateService;
 import com.ldh.modules.inventory.service.InventoryCategoryService;
 import com.ldh.util.RedisSessionUtil;
+import common.OptionModel;
 import common.Result;
 import common.StringTo;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -109,6 +111,20 @@ public class InventoryCategoryController {
         }catch (Exception e){
             log.error(e.getMessage());
             result.error("删除失败");
+        }
+        return result;
+    }
+
+    @ApiOperation(value="获取所有商品分类", notes="获取所有商品分类")
+    @RequestMapping(path = "/getAllOption", method = RequestMethod.GET)
+    public Result<List<OptionModel>> getAllOption(){
+        Result<List<OptionModel>> result = new Result<>();
+        try{
+            result.setResult(inventoryCategoryService.getAllOption());
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("error");
         }
         return result;
     }

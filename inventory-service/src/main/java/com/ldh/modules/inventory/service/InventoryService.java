@@ -12,5 +12,6 @@ public interface InventoryService extends IService<Inventory> {
     IPage<InventoryModel> list(Page page, QueryWrapper queryWrapper, Inventory inventory);
 
     void deleteAnyById(String id);
+    
 
 }

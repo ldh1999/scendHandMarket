@@ -10,6 +10,7 @@ import com.ldh.modules.inventory.mapper.InventoryCategoryMapper;
 import com.ldh.modules.inventory.model.InventoryCategoryModel;
 import com.ldh.modules.inventory.service.InventoryCategoryService;
 import com.ldh.userService.client.AuthorityClient;
+import common.OptionModel;
 import common.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -56,5 +57,10 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
         this.removeById(id);
         inventoryCategoryAssociateMapper.deleteByCategoryId(id);
 
+    }
+
+    @Override
+    public List<OptionModel> getAllOption() {
+        return inventoryCategoryMapper.getAllOption();
     }
 }

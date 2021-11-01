@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.merchant.entity.Merchant;
 import com.ldh.modules.merchant.mapper.MerchantMapper;
-import com.ldh.modules.merchant.model.MerchantVO;
+import com.ldh.modules.merchant.model.MerchantModel;
 import com.ldh.modules.merchant.service.MerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,17 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
     private MerchantMapper merchantMapper;
 
     @Override
-    public IPage<MerchantVO> list(Page page, QueryWrapper queryWrapper, Merchant merchant) {
+    public IPage<MerchantModel> list(Page page, QueryWrapper queryWrapper, Merchant merchant) {
         return merchantMapper.list(page, queryWrapper, merchant);
     }
 
     @Override
-    public MerchantVO selectById(String id) {
+    public MerchantModel selectById(String id) {
         return merchantMapper.selectById(id);
+    }
+
+    @Override
+    public MerchantModel selectByUserId(String userId) {
+        return merchantMapper.selectByUserId(userId);
     }
 }
