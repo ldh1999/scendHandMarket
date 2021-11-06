@@ -11,4 +11,16 @@
         </if>
         ${queryWrapper.customSqlSegment}
     </select>
+
+    <select id="listToClient" resultType="com.ldh.modules.inventory.model.InventoryClientModel">
+        select i.*,
+               i.id as 'key',
+               i.inventory_name as 'title',
+               i.inventory_information as 'content'
+        from inventory i
+        where 1=1
+        <if test="inventory.merchantId != null and inventory.merchantId != ''">
+            and i.merchant_id = #{inventory.merchantId}
+        </if>
+    </select>
 </mapper>

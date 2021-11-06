@@ -4,13 +4,13 @@ logging:
   pattern:
     dateformat: MM-dd HH:mm:ss:SSS
 server:
-  port: 8081
+  port: 7091
 spring:
   session:
     store-type: redis
   datasource:
     #url: jdbc:mysql://192.168.233.128:3306/cloud_user_information?useSSL=false
-    url: jdbc:mysql://localhost/cloud_user_information?useSSL=false
+    url: jdbc:mysql://localhost/other_cloud?useSSL=false
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
@@ -39,11 +39,18 @@ myConfig:
   security:
     tokenValiditySeconds: 5000
 
+feign:
+  httpclient:
+    enabled: true
+    max-connections-per-route: 50
+    max-connections: 200
 ribbon:
   eager-load:
     enabled: true
     clients:
       -userservice
-      -otherResourceservice
+      -inventoryservice
+
+
 
 

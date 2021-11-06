@@ -42,10 +42,12 @@ public class InventoryController {
         Result<IPage> result = new Result<>();
         Page<InventoryModel> page = new Page<>(pageNo, pageSize);
         QueryWrapper queryWrapper = new QueryWrapper();
-        if(order.equals("desc")){
-            queryWrapper.orderByDesc(StringTo.humpToLine(column));
-        }else{
-            queryWrapper.orderByAsc(StringTo.humpToLine(column));
+        if (order!= null){
+            if(order.equals("desc")){
+                queryWrapper.orderByDesc(StringTo.humpToLine(column));
+            }else{
+                queryWrapper.orderByAsc(StringTo.humpToLine(column));
+            }
         }
         try{
             IPage<InventoryModel> iPage = inventoryService.list(page, queryWrapper, inventory);
@@ -90,6 +92,7 @@ public class InventoryController {
                         setInventoryId(inventoryVO.getMerchantId());
                 inventoryCategoryAssociateService.save(inventoryCategoryAssociate);
             });
+            result.succcess("添加成功");
         }catch (Exception e){
             log.error(e.getMessage());
             result.error();
@@ -97,4 +100,24 @@ public class InventoryController {
         }
         return result;
     }
+
+
+    @RequestMapping(path = "listToClient", method = RequestMethod.GET)
+    public Result<?> listToClient(Inventory inventory,
+                                  @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+                                  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize){
+
+        Result result = new Result();
+        Page page = new Page(pageNo,pageSize);
+        QueryWrapper<?> queryWrapper =  new QueryWrapper<>();
+        try{
+            result.setResult(inventoryService.listToClient(page, queryWrapper, inventory));
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("error");
+        }
+        return result;
+    }
+
 }

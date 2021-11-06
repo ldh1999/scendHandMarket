@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.inventory.entity.Inventory;
 import com.ldh.modules.inventory.mapper.InventoryCategoryAssociateMapper;
 import com.ldh.modules.inventory.mapper.InventoryMapper;
+import com.ldh.modules.inventory.model.InventoryClientModel;
 import com.ldh.modules.inventory.model.InventoryModel;
 import com.ldh.modules.inventory.service.InventoryService;
 import com.ldh.userService.client.MerchantClient;
@@ -44,5 +45,10 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     public void deleteAnyById(String id) {
         this.removeById(id);
         inventoryCategoryAssociateMapper.deleteByInventoryId(id);
+    }
+
+    @Override
+    public IPage<InventoryClientModel> listToClient(Page page, QueryWrapper queryWrapper, Inventory inventory) {
+        return inventoryMapper.listToClient(page, queryWrapper, inventory);
     }
 }

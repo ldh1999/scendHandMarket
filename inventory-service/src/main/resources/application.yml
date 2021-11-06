@@ -49,6 +49,7 @@ ribbon:
     enabled: true
     clients:
       -userservice
+      -otherResourceservice
 
 
 

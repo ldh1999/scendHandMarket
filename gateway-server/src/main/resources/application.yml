@@ -19,3 +19,7 @@ spring:
           uri: lb://inventoryservice
           predicates:
             - Header=gateway, inventoryService
+        - id: otherResourceservice
+          uri: lb://otherResourceservice
+          predicates:
+            - Header=gateway, otherResourceService

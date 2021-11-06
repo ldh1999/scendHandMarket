@@ -1,4 +1,4 @@
-package com.ldh.modules.inventory.entity;
+package com.ldh.modules.upload.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -14,20 +14,18 @@ import java.util.Date;
 
 @Data
 @Slf4j
-public class Inventory implements Serializable {
-    /** 商品id*/
+public class FileNote implements Serializable {
+
     @TableId(type = IdType.UUID)
     private String id;
-    /** 商家id */
-    private String merchantId;
-    /** 商品名称 */
-    private String inventoryName;
-    /** 商品信息 */
-    private String inventoryInformation;
-    /** 商品单价 */
-    private Float inventoryPrice;
-
-
+    /** 文件路径 */
+    private String filePath;
+    /** 文件组 */
+    private String fileGroup;
+    /** 文件名 */
+    private String fileName;
+    /** 对象id */
+    private String objectId;
     private String sts;
 
 

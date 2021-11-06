@@ -14,6 +14,7 @@
         <module>CommonUtil</module>
         <module>gateway-server</module>
         <module>inventory-service</module>
+        <module>otherResource-server</module>
     </modules>
 
     <parent>
