@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.inventory.entity.Inventory;
 import com.ldh.modules.inventory.entity.InventoryCategoryAssociate;
+import com.ldh.modules.inventory.model.InventoryCategoryAssociateModel;
 import com.ldh.modules.inventory.model.InventoryModel;
 import com.ldh.modules.inventory.model.InventoryVO;
 import com.ldh.modules.inventory.service.InventoryCategoryAssociateService;
@@ -18,7 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -80,7 +82,7 @@ public class InventoryController {
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     public Result<?> add(@RequestBody InventoryVO inventoryVO){
 
-        Result<?> result = new Result<>();
+        Result<Inventory> result = new Result<>();
         String[] category = inventoryVO.getInventoryCategory();
         Inventory inventory = inventoryVO;
 
@@ -89,10 +91,48 @@ public class InventoryController {
             Arrays.stream(category).forEach(e->{
                 InventoryCategoryAssociate inventoryCategoryAssociate = new InventoryCategoryAssociate();
                 inventoryCategoryAssociate.setInventoryCategoryId(e).
-                        setInventoryId(inventoryVO.getMerchantId());
+                        setInventoryId(inventoryVO.getId());
                 inventoryCategoryAssociateService.save(inventoryCategoryAssociate);
             });
             result.succcess("添加成功");
+            result.setResult(inventory);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        return result;
+    }
+
+    @ApiOperation(value="用户修改商品", notes="用户修改商品")
+    @RequestMapping(path = "/updateById", method = RequestMethod.POST)
+    public Result<?> updateById(@RequestBody InventoryVO inventoryVO){
+
+        Result<?> result = new Result<>();
+        String[] category = inventoryVO.getInventoryCategory();
+        Inventory inventory = inventoryVO;
+        try{
+            inventoryService.updateById(inventory);
+            List<InventoryCategoryAssociateModel> list = inventoryCategoryAssociateService.getByInventoryId(inventory.getId());
+            Map mapNew = Arrays.stream(category).collect(Collectors.toMap(String::toString,r->r));
+            list.stream().forEach(e->{
+                if (!mapNew.containsKey(e.getInventoryCategoryId())){
+                    inventoryCategoryAssociateService.removeById(e.getId());
+                }
+            });
+
+            Map mapOld = list.stream().collect(Collectors.toMap(InventoryCategoryAssociate::getInventoryCategoryId, r->r));
+            Arrays.stream(category).forEach(e->{
+                if (!mapOld.containsKey(e.toString())){
+                    InventoryCategoryAssociate inventoryCategoryAssociate = new InventoryCategoryAssociate();
+                    inventoryCategoryAssociate
+                            .setId(UUID.randomUUID().toString())
+                            .setInventoryCategoryId(e)
+                            .setInventoryId(inventory.getId());
+                    inventoryCategoryAssociateService.save(inventoryCategoryAssociate);
+                }
+            });
+            result.succcess("修改成功");
         }catch (Exception e){
             log.error(e.getMessage());
             result.error();
@@ -108,7 +148,7 @@ public class InventoryController {
                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize){
 
         Result result = new Result();
-        Page page = new Page(pageNo,pageSize);
+        Page<Inventory> page = new Page(pageNo,pageSize);
         QueryWrapper<?> queryWrapper =  new QueryWrapper<>();
         try{
             result.setResult(inventoryService.listToClient(page, queryWrapper, inventory));

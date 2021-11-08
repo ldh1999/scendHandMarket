@@ -20,4 +20,11 @@
     <delete id="deleteByInventoryId">
         delete from inventory_category_associate where 1=1 and inventory_id = #{inventoryId}
     </delete>
+
+    <select id="getByInventoryId" resultType="com.ldh.modules.inventory.model.InventoryCategoryAssociateModel">
+        select ica.*
+        from inventory_category_associate ica
+        where 1=1
+        and ica.inventory_id = #{id}
+    </select>
 </mapper>

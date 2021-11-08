@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -75,6 +76,20 @@ public class InventoryCategoryAssociateController {
             e.printStackTrace();
             log.error(e.getMessage());
             result.error();
+        }
+        return result;
+    }
+
+    @ApiOperation(value="根据商品id查找", notes="根据商品id查找")
+    @RequestMapping(path = "/getByInventoryId", method = RequestMethod.DELETE)
+    public Result<?> getByInventoryId(@RequestParam(value = "id", required = true)String id){
+
+        Result<List<?>> result = new Result<>();
+        try{
+            result.setResult(inventoryCategoryAssociateService.getByInventoryId(id));
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("error");
         }
         return result;
     }

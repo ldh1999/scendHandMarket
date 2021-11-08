@@ -11,6 +11,8 @@ import com.ldh.modules.inventory.service.InventoryCategoryAssociateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class InventoryCategoryAssociateServiceImpl extends ServiceImpl<InventoryCategoryAssociateMapper, InventoryCategoryAssociate> implements InventoryCategoryAssociateService {
 
@@ -31,5 +33,10 @@ public class InventoryCategoryAssociateServiceImpl extends ServiceImpl<Inventory
     @Override
     public Integer deleteByInventoryId(String inventoryId) {
         return inventoryCategoryAssociateMapper.deleteByInventoryId(inventoryId);
+    }
+
+    @Override
+    public List<InventoryCategoryAssociateModel> getByInventoryId(String id) {
+        return inventoryCategoryAssociateMapper.getByInventoryId(id);
     }
 }

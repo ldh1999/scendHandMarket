@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.modules.inventory.entity.InventoryCategoryAssociate;
 import com.ldh.modules.inventory.model.InventoryCategoryAssociateModel;
 
+import java.util.List;
+
 public interface InventoryCategoryAssociateService extends IService<InventoryCategoryAssociate> {
 
     IPage<InventoryCategoryAssociateModel> list(Page page, QueryWrapper queryWrapper, InventoryCategoryAssociate inventoryCategoryAssociate);
@@ -14,4 +16,6 @@ public interface InventoryCategoryAssociateService extends IService<InventoryCat
     Integer deleteByCategoryId(String categoryId);
 
     Integer deleteByInventoryId(String inventoryId);
+
+    List<InventoryCategoryAssociateModel> getByInventoryId(String id);
 }

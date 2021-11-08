@@ -13,14 +13,17 @@
     </select>
 
     <select id="listToClient" resultType="com.ldh.modules.inventory.model.InventoryClientModel">
-        select i.*,
+        select distinct i.*,
                i.id as 'key',
                i.inventory_name as 'title',
-               i.inventory_information as 'content'
+               i.inventory_information as 'content',
+               group_concat(ica.inventory_category_id) as 'inventoryCategory'
         from inventory i
+        LEFT JOIN inventory_category_associate ica on ica.inventory_id = i.id
         where 1=1
         <if test="inventory.merchantId != null and inventory.merchantId != ''">
             and i.merchant_id = #{inventory.merchantId}
         </if>
+        group by i.id
     </select>
 </mapper>

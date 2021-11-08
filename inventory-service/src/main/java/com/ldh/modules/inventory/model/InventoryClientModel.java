@@ -12,4 +12,5 @@ public class InventoryClientModel extends Inventory implements Serializable {
     private String key;
     private String content;
     private String srcPath;
+    private String inventoryCategory;
 }

@@ -9,6 +9,8 @@ import com.ldh.modules.inventory.model.InventoryCategoryAssociateModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface InventoryCategoryAssociateMapper extends BaseMapper<InventoryCategoryAssociate> {
 
@@ -17,4 +19,6 @@ public interface InventoryCategoryAssociateMapper extends BaseMapper<InventoryCa
     Integer deleteByCategoryId(String categoryId);
 
     Integer deleteByInventoryId(String inventoryId);
+
+    List<InventoryCategoryAssociateModel> getByInventoryId(String id);
 }
