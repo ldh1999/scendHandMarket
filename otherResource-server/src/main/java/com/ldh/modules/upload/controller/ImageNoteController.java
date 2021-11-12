@@ -2,7 +2,9 @@ package com.ldh.modules.upload.controller;
 
 import com.ldh.modules.upload.constant.FilePath;
 import com.ldh.modules.upload.entity.ImageNote;
+import com.ldh.modules.upload.model.FileNoteVO;
 import com.ldh.modules.upload.service.ImageNoteService;
+import common.InitUploadModel;
 import common.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.List;
 import java.util.Random;
 
 @RestController
@@ -37,7 +41,9 @@ public class ImageNoteController {
                                  HttpServletRequest request,
                                  HttpServletResponse response,
                                  @RequestParam(name = "imageGroup") String imageGroup,
-                                 @RequestParam(name = "objectId") String objectId){
+                                 @RequestParam(name = "objectId") String objectId,
+                                 @RequestParam(name = "sort",required = false) Integer sort
+    ){
 
         Result<?> result = new Result<>();
 
@@ -63,13 +69,51 @@ public class ImageNoteController {
             imageNote.setImgGroup(imageGroup)
                     .setImgName(fileName)
                     .setImgPath(saveDbPath)
-                    .setObjectId(objectId);
+                    .setObjectId(objectId)
+                    .setSort(sort);
             imageNoteService.save(imageNote);
             result.succcess("上传成功");
         }catch (Exception e){
             log.error(e.getMessage());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             result.error("上传失败");
+        }
+        return result;
+    }
+
+
+    @ApiOperation(value="ant图片展示", notes="ant图片展示")
+    @RequestMapping(path = "getFileListByObjectAndGroup", method = RequestMethod.GET)
+    public Result<?> getFileListByObjectAndGroup(FileNoteVO imageNoteVO, ServletRequest request){
+        Result<List<?>> result = new Result<>();
+        try {
+            ImageNote imageNote = new ImageNote();
+            imageNote.setObjectId(imageNoteVO.getObjectId())
+                    .setImgGroup(imageNoteVO.getImageGroup());
+            List<InitUploadModel> list = imageNoteService.getListByGroupAndObjectId(imageNote);
+            String url =  request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
+            list.stream().forEach(e->{
+                e.setUrl(url+e.getUrl());
+            });
+            result.setResult(list);
+            result.succcess("");
+        }catch (Exception e){
+            log.error(e.getMessage(),e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
+
+    @ApiOperation(value="引用删除", notes="引用删除")
+    @RequestMapping(path = "deletePById", method = RequestMethod.GET)
+    public Result<?> deleteById(@RequestParam(name = "uid", required = true)String uid){
+        Result<List<?>> result = new Result<>();
+        try{
+            imageNoteService.removeById(uid);
+            result.succcess("删除成功");
+        }catch (Exception e){
+            log.error(e.getMessage(),e);
+            result.error(e.getMessage());
         }
         return result;
     }

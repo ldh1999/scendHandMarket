@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ldh.modules.upload.mapper.ImageNoteMapper">
 
+    <select id="getListByGroupAndObjectId" resultType="common.InitUploadModel">
+        select inn.id as 'uid',
+               inn.img_name as 'name',
+               inn.img_path as 'url',
+               inn.sort
+        from image_note inn
+        where 1=1
+        and img_group = #{imageNote.imgGroup}
+        and object_id = #{imageNote.objectId}
+    </select>
 </mapper>

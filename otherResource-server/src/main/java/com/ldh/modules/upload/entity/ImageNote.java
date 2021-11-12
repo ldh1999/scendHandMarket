@@ -28,6 +28,8 @@ public class ImageNote implements Serializable {
     private String imgName;
     /** 对象id */
     private String objectId;
+    /** 排序 */
+    private Integer sort;
     private String sts;
 
 
