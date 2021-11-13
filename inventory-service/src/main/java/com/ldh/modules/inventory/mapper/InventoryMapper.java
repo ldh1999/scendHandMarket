@@ -15,5 +15,5 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
     IPage<InventoryModel> list(Page page, QueryWrapper queryWrapper, @Param("inventory") Inventory inventory);
 
     IPage<InventoryClientModel> listToClient(Page page, QueryWrapper queryWrapper, @Param("inventory") Inventory inventory);
-
+    
 }

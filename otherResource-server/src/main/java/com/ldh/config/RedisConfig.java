@@ -1,6 +1,5 @@
 package com.ldh.config;
 
-import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -30,7 +29,6 @@ public class RedisConfig extends CachingConfigurerSupport {
 	/**
 	 * RedisTemplate配置
 	 *
-	 * @param
 	 * @return
 	 */
 	/*@Bean
@@ -58,7 +56,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
 
-		FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
+		GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
 		redisTemplate.setValueSerializer(fastJsonRedisSerializer);
 		redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
 

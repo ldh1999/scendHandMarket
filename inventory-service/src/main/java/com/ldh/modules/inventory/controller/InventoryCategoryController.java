@@ -67,11 +67,12 @@ public class InventoryCategoryController {
                 log.warn("该用户未登录");
             }
             inventoryCategoryService.save(inventoryCategory);
+            inventoryCategoryService.setAllCategoryToRedis();
             result.succcess("增加成功");
         }catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage());
-            result.error();
+            result.error("该用户未登录");
         }
         return result;
     }
@@ -89,6 +90,7 @@ public class InventoryCategoryController {
                 log.warn("该用户未登录");
             }
             inventoryCategoryService.updateById(inventoryCategory);
+            inventoryCategoryService.setAllCategoryToRedis();
             result.succcess("修改成功");
         }catch (Exception e){
             e.printStackTrace();
@@ -107,6 +109,7 @@ public class InventoryCategoryController {
         try{
             //TODO
             inventoryCategoryService.deleteAnyById(id);
+            inventoryCategoryService.setAllCategoryToRedis();
             result.succcess("删除成功");
         }catch (Exception e){
             log.error(e.getMessage());

@@ -18,4 +18,6 @@ public interface InventoryCategoryMapper extends BaseMapper<InventoryCategory> {
     IPage<InventoryCategoryModel> list(Page page, QueryWrapper queryWrapper, @Param("inventoryCategory") InventoryCategory inventoryCategory);
 
     List<OptionModel> getAllOption();
+    
+    List<InventoryCategoryModel> getAllCategory();
 }

@@ -14,11 +14,13 @@ import common.OptionModel;
 import common.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryMapper, InventoryCategory> implements InventoryCategoryService {
@@ -28,6 +30,9 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
 
     @Autowired
     private InventoryCategoryAssociateMapper inventoryCategoryAssociateMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Autowired
     private AuthorityClient authorityClient;
@@ -62,5 +67,28 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
     @Override
     public List<OptionModel> getAllOption() {
         return inventoryCategoryMapper.getAllOption();
+    }
+
+
+    @Override
+    public boolean setAllCategoryToRedis() {
+        List<InventoryCategoryModel> list = inventoryCategoryMapper.getAllCategory();
+        try{
+            Map<String, Object> map = list.stream().collect(Collectors.toMap(InventoryCategoryModel::getId,r->r));
+            redisTemplate.opsForValue().set("allInventoryCategoryList", map);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public Map<String, InventoryCategoryModel> getAllCategoryToRedis() {
+
+        if (!redisTemplate.hasKey("allInventoryCategoryList")){
+            this.setAllCategoryToRedis();
+        }
+        return (Map<String, InventoryCategoryModel>) redisTemplate.opsForValue().get("allInventoryCategoryList");
     }
 }

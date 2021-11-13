@@ -4,6 +4,7 @@ import com.ldh.modules.upload.constant.FilePath;
 import com.ldh.modules.upload.entity.ImageNote;
 import com.ldh.modules.upload.model.FileNoteVO;
 import com.ldh.modules.upload.service.ImageNoteService;
+import com.ldh.otherResourceService.client.ImageNoteClient;
 import common.InitUploadModel;
 import common.Result;
 import io.swagger.annotations.Api;

@@ -19,5 +19,11 @@
       from inventory_category ic
       where 1=1
     </select>
+    
+    <select id="getAllCategory" resultType="com.ldh.modules.inventory.model.InventoryCategoryModel">
+        select ic.*
+        from inventory_category ic
+        where 1=1
+    </select>
 
 </mapper>

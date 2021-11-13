@@ -9,6 +9,7 @@ import com.ldh.modules.inventory.model.InventoryCategoryModel;
 import common.OptionModel;
 
 import java.util.List;
+import java.util.Map;
 
 public interface InventoryCategoryService extends IService<InventoryCategory> {
 
@@ -17,5 +18,9 @@ public interface InventoryCategoryService extends IService<InventoryCategory> {
     void deleteAnyById(String id);
 
     List<OptionModel> getAllOption();
+
+    boolean setAllCategoryToRedis();
+
+    Map<String, InventoryCategoryModel> getAllCategoryToRedis();
 
 }

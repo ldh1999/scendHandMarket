@@ -35,7 +35,6 @@ public class RedisConfig extends CachingConfigurerSupport {
 	/**
 	 * RedisTemplate配置
 	 *
-	 * @param lettuceConnectionFactory
 	 * @return
 	 */
 	/*@Bean
@@ -63,7 +62,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
 
-		FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
+		GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
 		redisTemplate.setValueSerializer(fastJsonRedisSerializer);
 		redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
 

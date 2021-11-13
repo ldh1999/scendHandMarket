@@ -1,11 +1,6 @@
 package com.ldh.config;
 
-import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -14,7 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.*;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import javax.annotation.Resource;
 
@@ -25,7 +21,6 @@ import javax.annotation.Resource;
 @Slf4j
 @EnableCaching
 @Configuration
-/*@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1800) //session+redis*/
 public class RedisConfig extends CachingConfigurerSupport {
 
 	@Resource
@@ -34,10 +29,9 @@ public class RedisConfig extends CachingConfigurerSupport {
 	/**
 	 * RedisTemplate配置
 	 *
-	 * @param lettuceConnectionFactory
 	 * @return
 	 */
-/*	@Bean
+	/*@Bean
 	public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
 		log.info(" --- redis config init --- ");
 		// 设置序列化
@@ -57,11 +51,12 @@ public class RedisConfig extends CachingConfigurerSupport {
 		redisTemplate.afterPropertiesSet();
 		return redisTemplate;
 	}*/
+
 	@Bean
 	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
 
-		FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
+		GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
 		redisTemplate.setValueSerializer(fastJsonRedisSerializer);
 		redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
 

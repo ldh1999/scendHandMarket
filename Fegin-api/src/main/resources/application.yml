@@ -1,0 +1,21 @@
+logging:
+  level:
+    com.ldh: debug
+feign:
+  httpclient:
+    enabled: true
+    max-connections-per-route: 50
+    max-connections: 200
+ribbon:
+  eager-load:
+    enabled: true
+    clients:
+      -userservice
+      -otherResourceservice
+      -inventoryservice
+
+
+
+
+
+
