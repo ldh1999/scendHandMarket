@@ -12,6 +12,8 @@ import com.ldh.modules.inventory.service.InventoryCategoryService;
 import com.ldh.modules.inventory.service.InventoryService;
 import com.ldh.otherResourceService.client.ImageNoteClient;
 import com.ldh.otherResourceService.model.FileNoteVO;
+import com.ldh.otherResourceService.model.ImageNoteVO;
+import common.InitUploadModel;
 import common.Result;
 import common.StringTo;
 import constant.UploadFileConstant;
@@ -159,8 +161,8 @@ public class InventoryController {
         Page<Inventory> page = new Page(pageNo, pageSize);
         QueryWrapper<?> queryWrapper = new QueryWrapper<>();
         try {
-            result.setResult(inventoryService.listToClient(page, queryWrapper, inventory));
-            List<InventoryClientModel> list = (List<InventoryClientModel>) result.getResult().getRecords();
+            IPage iPage = inventoryService.listToClient(page, queryWrapper, inventory);
+            List<InventoryClientModel> list = (List<InventoryClientModel>) iPage.getRecords();
             Map<String, InventoryCategoryModel> map = inventoryCategoryService.getAllCategoryToRedis();
             list.forEach(e -> {
                 if (e.getInventoryCategory() != null) {
@@ -174,13 +176,23 @@ public class InventoryController {
                     });
                     e.setInventoryCategoryName(stringBuilder.toString());
 
-                    FileNoteVO fileNoteVO = new FileNoteVO();
-                    fileNoteVO.setImageGroup(UploadFileConstant.INVENTORY_STATUE);
-                    fileNoteVO.setObjectId(e.getId());
-                    Result resultFegin = imageNoteClient.getFileListByObjectAndGroup(fileNoteVO);
-
+                    ImageNoteVO imageNoteVO = new ImageNoteVO();
+                    imageNoteVO
+                            .setImageGroup(UploadFileConstant.INVENTORY_STATUE)
+                            .setObjectId(e.getId());
+                    Result resultFegin = imageNoteClient.getFileListByObjectAndGroup(imageNoteVO);
+                    if (resultFegin.isSuccess()){
+                       List<LinkedHashMap> listImage = (List)resultFegin.getResult();
+                       e.setImageListUrl(new LinkedList<>());
+                       listImage.forEach(il->{
+                           Map<String, String> mapStr = il;
+                           e.getImageListUrl().add(mapStr.get("url"));
+                       });
+                    }
                 }
             });
+            iPage.setRecords(list);
+            result.setResult(iPage);
             result.setSuccess(true);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -188,5 +200,4 @@ public class InventoryController {
         }
         return result;
     }
-
 }

@@ -3,6 +3,7 @@ package com.ldh.modules.upload.controller;
 import com.ldh.modules.upload.constant.FilePath;
 import com.ldh.modules.upload.entity.ImageNote;
 import com.ldh.modules.upload.model.FileNoteVO;
+import com.ldh.modules.upload.model.ImageNoteVO;
 import com.ldh.modules.upload.service.ImageNoteService;
 import com.ldh.otherResourceService.client.ImageNoteClient;
 import common.InitUploadModel;
@@ -85,7 +86,7 @@ public class ImageNoteController {
 
     @ApiOperation(value="ant图片展示", notes="ant图片展示")
     @RequestMapping(path = "getFileListByObjectAndGroup", method = RequestMethod.GET)
-    public Result<?> getFileListByObjectAndGroup(FileNoteVO imageNoteVO, ServletRequest request){
+    public Result<?> getFileListByObjectAndGroup(ImageNoteVO imageNoteVO, ServletRequest request){
         Result<List<?>> result = new Result<>();
         try {
             ImageNote imageNote = new ImageNote();
