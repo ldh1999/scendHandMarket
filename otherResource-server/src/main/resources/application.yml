@@ -6,6 +6,15 @@ logging:
 server:
   port: 7091
 spring:
+  rabbitmq:
+    host: localhost # rabbitMQ的ip地址
+    port: 5672 # 端口
+    username: guest
+    password: guest
+    virtual-host: /
+    listener:
+      simple:
+        prefetch: 1
   session:
     store-type: redis
   datasource:

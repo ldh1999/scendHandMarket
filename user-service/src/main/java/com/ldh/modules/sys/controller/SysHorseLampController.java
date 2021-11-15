@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.sys.entity.SysDictItem;
 import com.ldh.modules.sys.entity.SysHorseLamp;
 import com.ldh.modules.sys.model.SysHorseLampModel;
+import com.ldh.modules.sys.model.SysHorseLampVO;
 import com.ldh.modules.sys.service.SysHorseLampService;
+import com.ldh.mq.UploadImageMQ;
 import common.Result;
 import common.StringTo;
 import io.swagger.annotations.Api;
@@ -14,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Api("走马灯")
@@ -24,6 +27,9 @@ public class SysHorseLampController {
 
     @Autowired
     private SysHorseLampService sysHorseLampService;
+
+    @Autowired
+    private UploadImageMQ uploadImageMQ;
 
 
     @ApiOperation(value="走马灯列表", notes="走马灯列表")
@@ -54,11 +60,12 @@ public class SysHorseLampController {
 
     @ApiOperation(value="添加走马灯", notes="添加走马灯")
     @RequestMapping(path = "/add", method = RequestMethod.POST)
-    public Result<?> add(@RequestBody SysHorseLamp sysHorseLamp){
+    public Result<?> add(SysHorseLampVO sysHorseLampVO){
         Result<?> result = new Result<>();
-
+        //uploadImageMQ.uploadImage(sysHorseLampVO.getFile());
+        uploadImageMQ.uploadImage(sysHorseLampVO);
         try{
-            sysHorseLampService.save(sysHorseLamp);
+            sysHorseLampService.save(sysHorseLampVO);
             result.succcess("增加成功");
         }catch (Exception e){
             log.error(e.toString());
