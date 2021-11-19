@@ -3,6 +3,7 @@ package com.ldh.modules.upload.service.Impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.upload.entity.ImageNote;
 import com.ldh.modules.upload.mapper.ImageNoteMapper;
+import com.ldh.modules.upload.model.ImageNoteModel;
 import com.ldh.modules.upload.service.ImageNoteService;
 import common.InitUploadModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,10 @@ public class ImageNoteServiceImpl extends ServiceImpl<ImageNoteMapper,ImageNote>
     @Override
     public List<InitUploadModel> getListByGroupAndObjectId(ImageNote imageNote) {
         return imageNoteMapper.getListByGroupAndObjectId(imageNote);
+    }
+
+    @Override
+    public List<ImageNoteModel> getByObjectIdAndImgGroup(String objectId, String imgGroup) {
+        return imageNoteMapper.getByObjectIdAndImgGroup(objectId, imgGroup);
     }
 }

@@ -12,6 +12,4 @@ import java.io.Serializable;
 @Slf4j
 public class SysHorseLampVO extends SysHorseLamp implements Serializable {
 
-    @JsonIgnore
-    private MultipartFile file;
 }

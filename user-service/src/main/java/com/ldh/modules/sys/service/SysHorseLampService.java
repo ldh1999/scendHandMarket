@@ -4,10 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.modules.sys.entity.SysHorseLamp;
+import com.ldh.modules.sys.model.SysHorseLampClientShowModel;
 import com.ldh.modules.sys.model.SysHorseLampModel;
+
+import java.util.List;
 
 public interface SysHorseLampService extends IService<SysHorseLamp> {
 
      Page<SysHorseLampModel> list(Page page, QueryWrapper queryWrapper, SysHorseLamp sysHorseLamp);
+
+     List<SysHorseLampClientShowModel> getHomeList();
 
 }

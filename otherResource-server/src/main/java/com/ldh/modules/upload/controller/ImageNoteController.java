@@ -3,6 +3,7 @@ package com.ldh.modules.upload.controller;
 import com.ldh.modules.upload.constant.FilePath;
 import com.ldh.modules.upload.entity.ImageNote;
 import com.ldh.modules.upload.model.FileNoteVO;
+import com.ldh.modules.upload.model.ImageNoteModel;
 import com.ldh.modules.upload.model.ImageNoteVO;
 import com.ldh.modules.upload.service.ImageNoteService;
 import com.ldh.otherResourceService.client.ImageNoteClient;
@@ -93,7 +94,7 @@ public class ImageNoteController {
             imageNote.setObjectId(imageNoteVO.getObjectId())
                     .setImgGroup(imageNoteVO.getImageGroup());
             List<InitUploadModel> list = imageNoteService.getListByGroupAndObjectId(imageNote);
-            String url =  request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
+            String url =  this.getNowUrl(request);
             list.stream().forEach(e->{
                 e.setUrl(url+e.getUrl());
             });
@@ -101,6 +102,28 @@ public class ImageNoteController {
             result.succcess("");
         }catch (Exception e){
             log.error(e.getMessage(),e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
+
+
+    @ApiOperation(value="根据object和type获取", notes="根据object和type获取")
+    @RequestMapping(path = "getByObjectIdAndImgGroup", method = RequestMethod.GET)
+    public Result<?> getByObjectIdAndImgGroup(@RequestParam(name = "objectId", required = true)String objectId,
+                                              @RequestParam(name = "imgGroup", required = true)String imgGroup,
+                                              ServletRequest request){
+        Result<List<ImageNoteModel>> result = new Result();
+        try{
+            List<ImageNoteModel> list = imageNoteService.getByObjectIdAndImgGroup(objectId, imgGroup);
+            final String url = this.getNowUrl(request);
+            list.stream().forEach(e->{
+                e.setImgPath(url+e.getImgPath());
+            });
+            result.setResult(list);
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
             result.error(e.getMessage());
         }
         return result;
@@ -121,6 +144,8 @@ public class ImageNoteController {
     }
 
 
-
+    private String getNowUrl(ServletRequest request){
+        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
+    }
 
 }

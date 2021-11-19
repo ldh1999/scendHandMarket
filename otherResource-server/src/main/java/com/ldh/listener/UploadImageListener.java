@@ -1,6 +1,6 @@
 package com.ldh.listener;
 
-import com.ldh.model.SysHorseLampDTO;
+import com.ldh.listenerModel.UpLoadImageListenerDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -19,8 +19,9 @@ public class UploadImageListener {
             exchange = @Exchange(name = "ldh.otherResource", type = ExchangeTypes.DIRECT),
             key = {"image"}
     ))
-    public void uploadImage(SysHorseLampDTO sysHorseLampDTO){
-        log.debug(sysHorseLampDTO.toString());
+    public void uploadImage(UpLoadImageListenerDTO upLoadImageListenerDTO){
+       // UpLoadImageListenerDTO upLoadImageListenerDTO = (UpLoadImageListenerDTO) object ;
+        log.debug(upLoadImageListenerDTO.toString());
     }
 
 }

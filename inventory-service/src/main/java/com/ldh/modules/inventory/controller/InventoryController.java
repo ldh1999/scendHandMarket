@@ -200,4 +200,19 @@ public class InventoryController {
         }
         return result;
     }
+
+    @ApiOperation(value = "根据id查商品", notes = "根据id查商品")
+    @RequestMapping(path = "/selectById", method = RequestMethod.GET)
+    public Result<?> selectById(@RequestParam(name = "id")String id) {
+        Result<Inventory> result = new Result<>();
+        try{
+            result.setResult(inventoryService.getById(id));
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
+
 }

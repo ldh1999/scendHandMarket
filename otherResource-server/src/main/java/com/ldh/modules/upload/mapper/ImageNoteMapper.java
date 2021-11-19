@@ -3,6 +3,7 @@ package com.ldh.modules.upload.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ldh.modules.upload.entity.ImageNote;
+import com.ldh.modules.upload.model.ImageNoteModel;
 import common.InitUploadModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,4 +14,6 @@ import java.util.List;
 public interface ImageNoteMapper extends BaseMapper<ImageNote> {
 
     List<InitUploadModel> getListByGroupAndObjectId(@Param("imageNote") ImageNote imageNote);
+
+    List<ImageNoteModel> getByObjectIdAndImgGroup(String objectId, String imgGroup);
 }

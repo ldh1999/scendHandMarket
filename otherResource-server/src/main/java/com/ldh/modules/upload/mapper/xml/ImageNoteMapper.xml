@@ -13,4 +13,12 @@
         and object_id = #{imageNote.objectId}
         ORDER BY inn.sort ASC
     </select>
+
+    <select id="getByObjectIdAndImgGroup" resultType="com.ldh.modules.upload.model.ImageNoteModel">
+        select inn.*
+        from image_note inn
+        where 1=1
+        and inn.img_group = #{imgGroup}
+        and inn.object_id = #{objectId}
+    </select>
 </mapper>

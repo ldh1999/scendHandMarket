@@ -4,9 +4,34 @@
 
 
     <select id="list" resultType="com.ldh.modules.sys.model.SysHorseLampModel">
-      select shl.*
-      from sys_horse_lamp shl
-      where 1=1
+        SELECT
+            shl.*,
+            sdi.item_value AS 'horseTypeName',
+            isf.intiate_sts_value AS 'stsName'
+        FROM
+            sys_horse_lamp shl
+                LEFT JOIN sys_dict_item sdi ON sdi.item_key = shl.horse_type
+                LEFT JOIN sys_dict sd ON sd.id = sdi.sys_dict_id
+                LEFT JOIN (
+                SELECT
+                    sdi.item_key AS 'intiate_sts_key',
+                    sdi.item_value AS 'intiate_sts_value'
+                FROM
+                    sys_dict sd
+                        LEFT JOIN sys_dict_item sdi ON sdi.sys_dict_id = sd.id
+                WHERE
+                    sd.dict_no = 'intiate_sts'
+            ) AS isf ON isf.intiate_sts_key = shl.sts
+        WHERE
+            1 = 1
+          AND sd.dict_no = 'object_type'
       ${queryWrapper.customSqlSegment}
+    </select>
+
+    <select id="homeClientList" resultType="com.ldh.modules.sys.model.SysHorseLampClientShowModel">
+        select shl.*
+        from sys_horse_lamp shl
+        where 1=1
+        and shl.sts != '0'
     </select>
 </mapper>
