@@ -3,6 +3,7 @@ package com.ldh.modules.upload.controller;
 import com.ldh.modules.upload.constant.FilePath;
 import com.ldh.modules.upload.entity.ImageNote;
 import com.ldh.modules.upload.model.FileNoteVO;
+import com.ldh.modules.upload.model.ImageGetVO;
 import com.ldh.modules.upload.model.ImageNoteModel;
 import com.ldh.modules.upload.model.ImageNoteVO;
 import com.ldh.modules.upload.service.ImageNoteService;
@@ -110,12 +111,14 @@ public class ImageNoteController {
 
     @ApiOperation(value="根据object和type获取", notes="根据object和type获取")
     @RequestMapping(path = "getByObjectIdAndImgGroup", method = RequestMethod.GET)
-    public Result<?> getByObjectIdAndImgGroup(@RequestParam(name = "objectId", required = true)String objectId,
-                                              @RequestParam(name = "imgGroup", required = true)String imgGroup,
+    public Result<?> getByObjectIdAndImgGroup(ImageGetVO imageGetVO,
                                               ServletRequest request){
         Result<List<ImageNoteModel>> result = new Result();
         try{
-            List<ImageNoteModel> list = imageNoteService.getByObjectIdAndImgGroup(objectId, imgGroup);
+            if (!imageGetVO.isNotNull()){
+                throw new Exception("");
+            }
+            List<ImageNoteModel> list = imageNoteService.getByObjectIdAndImgGroup(imageGetVO);
             final String url = this.getNowUrl(request);
             list.stream().forEach(e->{
                 e.setImgPath(url+e.getImgPath());

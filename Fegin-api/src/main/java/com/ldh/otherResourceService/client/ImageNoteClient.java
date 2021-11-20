@@ -1,6 +1,7 @@
 package com.ldh.otherResourceService.client;
 
 import com.ldh.otherResourceService.model.FileNoteVO;
+import com.ldh.otherResourceService.model.ImageGetVO;
 import com.ldh.otherResourceService.model.ImageNoteModel;
 import com.ldh.otherResourceService.model.ImageNoteVO;
 import common.Result;
@@ -19,6 +20,5 @@ public interface ImageNoteClient {
     Result<?> getFileListByObjectAndGroup(@SpringQueryMap ImageNoteVO imageNoteVO);
 
     @RequestMapping(path = "getByObjectIdAndImgGroup", method = RequestMethod.GET)
-    public Result<List<ImageNoteModel>> getByObjectIdAndImgGroup(@RequestParam(name = "objectId", required = true)String objectId,
-                                                                   @RequestParam(name = "imgGroup", required = true)String imgGroup);
+    public Result<List<ImageNoteModel>> getByObjectIdAndImgGroup(ImageGetVO imageGetVO);
 }

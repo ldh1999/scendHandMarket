@@ -16,6 +16,7 @@ import com.ldh.modules.sys.model.SysHorseLampModel;
 import com.ldh.modules.sys.service.SysDictItemService;
 import com.ldh.modules.sys.service.SysHorseLampService;
 import com.ldh.otherResourceService.client.ImageNoteClient;
+import com.ldh.otherResourceService.model.ImageGetVO;
 import com.ldh.otherResourceService.model.ImageNoteModel;
 import common.OptionModel;
 import common.Result;
@@ -73,7 +74,10 @@ public class SysHorseLampServiceImpl extends ServiceImpl<SysHorseLampMapper, Sys
                     e.setObjectName(inventory.getInventoryName());
                 }
             }
-            Result<List<ImageNoteModel>> result = imageNoteClient.getByObjectIdAndImgGroup(e.getId(), UploadFileConstant.HORSE_LAMP_MANAGER);
+            ImageGetVO imageGetVO = new ImageGetVO();
+            imageGetVO.setObjectId(e.getId())
+                    .setImgGroup(UploadFileConstant.HORSE_LAMP_MANAGER);
+            Result<List<ImageNoteModel>> result = imageNoteClient.getByObjectIdAndImgGroup(imageGetVO);
             if (result.isSuccess()) {
                 List<ImageNoteModel> imageNoteModelList = result.getResult();
                 if (imageNoteModelList.size() != 0){
@@ -89,7 +93,10 @@ public class SysHorseLampServiceImpl extends ServiceImpl<SysHorseLampMapper, Sys
     public List<SysHorseLampClientShowModel> getHomeList() {
         List<SysHorseLampClientShowModel> list = sysHorseLampMapper.homeClientList();
         list.stream().forEach(e->{
-            Result<List<ImageNoteModel>> result = imageNoteClient.getByObjectIdAndImgGroup(e.getId(), UploadFileConstant.HORSE_LAMP_MANAGER);
+            ImageGetVO imageGetVO = new ImageGetVO();
+            imageGetVO.setObjectId(e.getId())
+                    .setImgGroup(UploadFileConstant.HORSE_LAMP_MANAGER);
+            Result<List<ImageNoteModel>> result = imageNoteClient.getByObjectIdAndImgGroup(imageGetVO);
             if (result.isSuccess()) {
                 List<ImageNoteModel> imageNoteModelList = result.getResult();
                 if (imageNoteModelList.size() != 0){

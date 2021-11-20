@@ -26,4 +26,10 @@
         </if>
         group by i.id
     </select>
+
+    <select id="getRecommendList" resultType="com.ldh.modules.inventory.model.InventoryRecommendModel">
+        select *
+        from inventory
+        where 1=1
+    </select>
 </mapper>

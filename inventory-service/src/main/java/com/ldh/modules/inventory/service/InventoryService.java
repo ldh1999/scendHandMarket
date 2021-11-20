@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.modules.inventory.entity.Inventory;
 import com.ldh.modules.inventory.model.InventoryClientModel;
 import com.ldh.modules.inventory.model.InventoryModel;
+import com.ldh.modules.inventory.model.InventoryRecommendModel;
 import org.apache.ibatis.annotations.Param;
 
 public interface InventoryService extends IService<Inventory> {
@@ -16,6 +17,7 @@ public interface InventoryService extends IService<Inventory> {
     IPage<InventoryClientModel> listToClient(Page page, QueryWrapper queryWrapper, @Param("inventory") Inventory inventory);
 
     void deleteAnyById(String id);
-    
+
+    IPage<InventoryRecommendModel> getRecommendList(Page page);
 
 }

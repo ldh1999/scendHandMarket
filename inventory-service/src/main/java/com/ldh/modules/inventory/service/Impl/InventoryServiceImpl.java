@@ -9,6 +9,7 @@ import com.ldh.modules.inventory.mapper.InventoryCategoryAssociateMapper;
 import com.ldh.modules.inventory.mapper.InventoryMapper;
 import com.ldh.modules.inventory.model.InventoryClientModel;
 import com.ldh.modules.inventory.model.InventoryModel;
+import com.ldh.modules.inventory.model.InventoryRecommendModel;
 import com.ldh.modules.inventory.service.InventoryService;
 import com.ldh.userService.client.MerchantClient;
 import com.ldh.userService.pojo.Merchant;
@@ -54,5 +55,14 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Override
     public IPage<InventoryClientModel> listToClient(Page page, QueryWrapper queryWrapper, Inventory inventory) {
         return inventoryMapper.listToClient(page, queryWrapper, inventory);
+    }
+
+    @Override
+    public IPage<InventoryRecommendModel> getRecommendList(Page page) {
+        IPage<InventoryRecommendModel> iPage = inventoryMapper.getRecommendList(page);
+
+
+
+        return iPage;
     }
 }

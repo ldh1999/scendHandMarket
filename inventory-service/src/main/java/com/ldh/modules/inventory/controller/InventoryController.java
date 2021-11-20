@@ -72,6 +72,26 @@ public class InventoryController {
         return result;
     }
 
+    @ApiOperation(value = "商品推荐", notes = "商品推荐")
+    @RequestMapping(path = "/listClientToRecommend", method = RequestMethod.GET)
+    public Result<?> listClientToRecommend(Inventory inventory,
+                          @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                          @RequestParam(name = "pageSize", defaultValue = "12") Integer pageSize
+                          ) {
+        Result<IPage> result = new Result<>();
+        Page<Inventory> page = new Page<>(pageNo, pageSize);
+        //TODO
+        try {
+            IPage<InventoryRecommendModel> iPage = inventoryService.getRecommendList(page);
+            result.setResult(iPage);
+            result.setSuccess(true);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            result.error("error");
+        }
+        return result;
+    }
+
     @ApiOperation(value = "商品删除", notes = "商品删除")
     @RequestMapping(path = "/deleteById", method = RequestMethod.DELETE)
     public Result<?> deleteById(@RequestParam(value = "id", required = true) String id) {

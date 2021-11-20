@@ -18,7 +18,10 @@
         select inn.*
         from image_note inn
         where 1=1
-        and inn.img_group = #{imgGroup}
-        and inn.object_id = #{objectId}
+        and inn.img_group = #{imageGetVO.imgGroup}
+        and inn.object_id = #{imageGetVO.objectId}
+        <if test="imageGetVO.sort != null and imageGetVO.sort != ''">
+            order by inn.sort = #{imageGetVO.sort} asc
+        </if>
     </select>
 </mapper>

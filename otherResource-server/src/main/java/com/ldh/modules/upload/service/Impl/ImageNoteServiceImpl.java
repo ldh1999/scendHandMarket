@@ -3,6 +3,7 @@ package com.ldh.modules.upload.service.Impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.upload.entity.ImageNote;
 import com.ldh.modules.upload.mapper.ImageNoteMapper;
+import com.ldh.modules.upload.model.ImageGetVO;
 import com.ldh.modules.upload.model.ImageNoteModel;
 import com.ldh.modules.upload.service.ImageNoteService;
 import common.InitUploadModel;
@@ -23,7 +24,7 @@ public class ImageNoteServiceImpl extends ServiceImpl<ImageNoteMapper,ImageNote>
     }
 
     @Override
-    public List<ImageNoteModel> getByObjectIdAndImgGroup(String objectId, String imgGroup) {
-        return imageNoteMapper.getByObjectIdAndImgGroup(objectId, imgGroup);
+    public List<ImageNoteModel> getByObjectIdAndImgGroup(ImageGetVO imageGetVO) {
+        return imageNoteMapper.getByObjectIdAndImgGroup(imageGetVO);
     }
 }
