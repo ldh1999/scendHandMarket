@@ -8,8 +8,11 @@ import com.ldh.modules.merchant.entity.Merchant;
 import com.ldh.modules.merchant.mapper.MerchantMapper;
 import com.ldh.modules.merchant.model.MerchantModel;
 import com.ldh.modules.merchant.service.MerchantService;
+import com.ldh.userService.client.AuthorityClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> implements MerchantService {
@@ -17,9 +20,21 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
     @Autowired
     private MerchantMapper merchantMapper;
 
+    @Autowired
+    private AuthorityClient authorityClient;
+
     @Override
     public IPage<MerchantModel> list(Page page, QueryWrapper queryWrapper, Merchant merchant) {
-        return merchantMapper.list(page, queryWrapper, merchant);
+
+        IPage<MerchantModel> iPage = merchantMapper.list(page, queryWrapper, merchant);
+        List<MerchantModel> list = iPage.getRecords();
+        list.stream().forEach(e->{
+            if (e.getAuthorityId()!=null){
+                e.setAuthorityRealName(authorityClient.selectById(e.getAuthorityId()).getResult().getRealName());
+            }
+        });
+        iPage.setRecords(list);
+        return iPage;
     }
 
     @Override

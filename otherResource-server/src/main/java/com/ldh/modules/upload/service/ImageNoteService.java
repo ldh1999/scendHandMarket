@@ -3,6 +3,7 @@ package com.ldh.modules.upload.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.modules.upload.entity.ImageNote;
 import com.ldh.modules.upload.model.ImageGetVO;
+import com.ldh.modules.upload.model.ImageListGetVO;
 import com.ldh.modules.upload.model.ImageNoteModel;
 import common.InitUploadModel;
 import org.apache.ibatis.annotations.Param;
@@ -13,5 +14,7 @@ public interface ImageNoteService extends IService<ImageNote> {
 
     List<InitUploadModel> getListByGroupAndObjectId(@Param("imageNote") ImageNote imageNote);
     List<ImageNoteModel> getByObjectIdAndImgGroup(ImageGetVO imageGetVO);
+
+    List<ImageNoteModel> getByObjectIdAndImgGroupList(ImageListGetVO imageGetVO);
 
 }

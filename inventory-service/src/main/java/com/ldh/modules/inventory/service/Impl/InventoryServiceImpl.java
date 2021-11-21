@@ -11,8 +11,8 @@ import com.ldh.modules.inventory.model.InventoryClientModel;
 import com.ldh.modules.inventory.model.InventoryModel;
 import com.ldh.modules.inventory.model.InventoryRecommendModel;
 import com.ldh.modules.inventory.service.InventoryService;
-import com.ldh.userService.client.MerchantClient;
-import com.ldh.userService.pojo.Merchant;
+import com.ldh.inventoryService.client.MerchantClient;
+import com.ldh.inventoryService.pojo.Merchant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,18 +32,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     @Override
     public IPage<InventoryModel> list(Page page, QueryWrapper queryWrapper, Inventory inventory) {
-
-        IPage<InventoryModel> iPage = inventoryMapper.list(page, queryWrapper, inventory);
-        List<InventoryModel> list = iPage.getRecords();
-        list.stream().forEach(e->{
-            Merchant merchant = merchantClient.selectById(e.getId()).getResult();
-            if (merchant != null){
-                e.setMerchantName(merchant.getMerchantName());
-            }
-        });
-        iPage.setRecords(list);
-
-        return iPage;
+        return inventoryMapper.list(page, queryWrapper, inventory);
     }
 
     @Override

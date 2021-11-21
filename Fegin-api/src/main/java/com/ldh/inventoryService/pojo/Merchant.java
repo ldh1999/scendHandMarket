@@ -1,4 +1,4 @@
-package com.ldh.userService.pojo;
+package com.ldh.inventoryService.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

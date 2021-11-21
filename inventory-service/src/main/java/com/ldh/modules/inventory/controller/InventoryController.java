@@ -11,8 +11,12 @@ import com.ldh.modules.inventory.service.InventoryCategoryAssociateService;
 import com.ldh.modules.inventory.service.InventoryCategoryService;
 import com.ldh.modules.inventory.service.InventoryService;
 import com.ldh.otherResourceService.client.ImageNoteClient;
+import com.ldh.otherResourceService.client.ImageNoteGetClient;
 import com.ldh.otherResourceService.model.FileNoteVO;
+import com.ldh.otherResourceService.model.ImageListGetVO;
+import com.ldh.otherResourceService.model.ImageNoteModel;
 import com.ldh.otherResourceService.model.ImageNoteVO;
+import com.sun.corba.se.spi.ior.ObjectKey;
 import common.InitUploadModel;
 import common.Result;
 import common.StringTo;
@@ -42,6 +46,9 @@ public class InventoryController {
 
     @Autowired
     private ImageNoteClient imageNoteClient;
+
+    @Autowired
+    private ImageNoteGetClient imageNoteGetClient;
 
 
     @ApiOperation(value = "商品列表", notes = "商品列表")
@@ -83,6 +90,47 @@ public class InventoryController {
         //TODO
         try {
             IPage<InventoryRecommendModel> iPage = inventoryService.getRecommendList(page);
+            //获取全部推荐商品
+            List<InventoryRecommendModel> list = iPage.getRecords();
+            List<String> idList = new LinkedList<>();
+            //构建请求参数
+            list.stream().forEach(e->{
+                idList.add(e.getId());
+            });
+            ImageListGetVO imageListGetVO = new ImageListGetVO();
+            imageListGetVO
+                    .setImgGroup(UploadFileConstant.INVENTORY_STATUE)
+                    .setObjectId(idList);
+            Result<List<ImageNoteModel>> feginResult = imageNoteGetClient.getByObjectIdAndImgGroupList(imageListGetVO);
+            //获取请求返回list
+            List<ImageNoteModel> imageNoteModels = feginResult.getResult();
+            //构建针对id的对象map
+            Map<String, List<ImageNoteModel>> map = new HashMap<>();
+            imageNoteModels.stream().forEach(e->{
+                if (!map.containsKey(e.getObjectId())){
+                    List<ImageNoteModel> list1 = new LinkedList<>();
+                    list1.add(e);
+                    map.put(e.getObjectId(),list1);
+                }else {
+                    map.get(e.getObjectId()).add(e);
+                }
+            });
+            //将排序值最小的图片加入到list的firstimg中
+            list.stream().forEach(e->{
+                List<ImageNoteModel> modelList =  map.get(e.getId());
+                if (modelList != null){
+                    int min = 0;
+                    int current = 0;
+                    for (ImageNoteModel model : modelList){
+                        if (model.getSort() < min){
+                            current = min;
+                        }
+                        current++;
+                    }
+                    e.setImageFirstPath(modelList.get(min).getImgPath());
+                }
+            });
+            iPage.setRecords(list);
             result.setResult(iPage);
             result.setSuccess(true);
         } catch (Exception e) {

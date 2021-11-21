@@ -109,6 +109,21 @@ public class ImageNoteController {
     }
 
 
+    @ApiOperation(value="引用删除", notes="引用删除")
+    @RequestMapping(path = "deletePById", method = RequestMethod.GET)
+    public Result<?> deleteById(@RequestParam(name = "uid", required = true)String uid){
+        Result<List<?>> result = new Result<>();
+        try{
+            imageNoteService.removeById(uid);
+            result.succcess("删除成功");
+        }catch (Exception e){
+            log.error(e.getMessage(),e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
+
+    @Deprecated
     @ApiOperation(value="根据object和type获取", notes="根据object和type获取")
     @RequestMapping(path = "getByObjectIdAndImgGroup", method = RequestMethod.GET)
     public Result<?> getByObjectIdAndImgGroup(ImageGetVO imageGetVO,
@@ -127,20 +142,6 @@ public class ImageNoteController {
             result.setSuccess(true);
         }catch (Exception e){
             log.error(e.getMessage(), e);
-            result.error(e.getMessage());
-        }
-        return result;
-    }
-
-    @ApiOperation(value="引用删除", notes="引用删除")
-    @RequestMapping(path = "deletePById", method = RequestMethod.GET)
-    public Result<?> deleteById(@RequestParam(name = "uid", required = true)String uid){
-        Result<List<?>> result = new Result<>();
-        try{
-            imageNoteService.removeById(uid);
-            result.succcess("删除成功");
-        }catch (Exception e){
-            log.error(e.getMessage(),e);
             result.error(e.getMessage());
         }
         return result;

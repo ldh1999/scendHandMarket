@@ -5,9 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.inventoryService.client.InventoryClient;
+import com.ldh.inventoryService.client.MerchantClient;
+import com.ldh.inventoryService.model.MerchantModel;
 import com.ldh.inventoryService.pojo.Inventory;
-import com.ldh.modules.merchant.entity.Merchant;
-import com.ldh.modules.merchant.service.MerchantService;
+import com.ldh.inventoryService.pojo.Merchant;
 import com.ldh.modules.sys.entity.SysDictItem;
 import com.ldh.modules.sys.entity.SysHorseLamp;
 import com.ldh.modules.sys.mapper.SysHorseLampMapper;
@@ -25,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -41,14 +41,15 @@ public class SysHorseLampServiceImpl extends ServiceImpl<SysHorseLampMapper, Sys
     @Autowired
     private SysDictItemService sysDictItemService;
 
-    @Autowired
-    private MerchantService merchantService;
 
     @Autowired
     private InventoryClient inventoryClient;
 
     @Autowired
     private ImageNoteClient imageNoteClient;
+
+    @Autowired
+    private MerchantClient merchantClient;
 
     @Override
     public Page<SysHorseLampModel> list(Page page, QueryWrapper queryWrapper, SysHorseLamp sysHorseLamp) {
@@ -63,8 +64,11 @@ public class SysHorseLampServiceImpl extends ServiceImpl<SysHorseLampMapper, Sys
             }
             //指向商家
             if (e.getHorseType().equals("marchant_choose")){
-                Merchant merchant = merchantService.getById(e.getObjectId());
-                e.setObjectName(merchant.getMerchantName());
+                Result<MerchantModel> result = merchantClient.selectById(e.getObjectId());
+                if (result.isSuccess()){
+                    MerchantModel merchantModel = result.getResult();
+                    e.setObjectName(merchantModel.getMerchantName());
+                }
             }
             //指向商品
             if (e.getHorseType().equals("inventory_choose")){

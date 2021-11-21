@@ -2,15 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ldh.modules.merchant.mapper.MerchantMapper">
     <select id="list" resultType="com.ldh.modules.merchant.model.MerchantModel">
-        select m.*,
-               sdi.item_value as 'stsName',
-               ai.real_name as 'authorityRealName'
+        select m.*
         from merchant m
-             LEFT JOIN sys_dict_item sdi on sdi.item_key = m.sts
-             LEFT JOIN sys_dict sd on sdi.sys_dict_id = sd.id
-             LEFT JOIN authority_information ai on ai.authority_id = m.authority_id
         where 1=1
-          and sd.dict_no = 'examine_sts'
           <if test="merchant.sts!=null and merchant.sts!=''">
               and m.sts = #{merchant.sts}
           </if>
@@ -18,15 +12,9 @@
     </select>
 
     <select id="selectById" resultType="com.ldh.modules.merchant.model.MerchantModel">
-        select DISTINCT m.*,
-               sdi.item_value as 'stsName',
-               ai.real_name as 'authorityRealName'
+        select DISTINCT m.*
         from merchant m
-                 LEFT JOIN sys_dict_item sdi on sdi.item_key = m.sts
-                 LEFT JOIN sys_dict sd on sdi.sys_dict_id = sd.id
-                 LEFT JOIN authority_information ai on ai.authority_id = m.authority_id
         where 1=1
-        and sd.dict_no = 'examine_sts'
         and m.merchant_id = #{id}
     </select>
 

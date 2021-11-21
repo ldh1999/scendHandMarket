@@ -1,7 +1,7 @@
-package com.ldh.userService.model;
+package com.ldh.inventoryService.model;
 
 
-import com.ldh.userService.pojo.Merchant;
+import com.ldh.inventoryService.pojo.Merchant;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
