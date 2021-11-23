@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.sys.entity.SysDictItem;
 import com.ldh.modules.sys.mapper.SysDictItemMapper;
+import com.ldh.modules.sys.model.DictModel;
 import com.ldh.modules.sys.service.SysDictItemService;
 import common.OptionModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,10 @@ public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDi
     @Override
     public List<OptionModel> getOptionByDictNo(String dictNo) {
         return sysDictItemMapper.getOptionByDictNo(dictNo);
+    }
+
+    @Override
+    public List<DictModel> getAllDictItem() {
+        return sysDictItemMapper.getAllDictItem();
     }
 }

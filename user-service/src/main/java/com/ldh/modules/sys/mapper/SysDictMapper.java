@@ -18,4 +18,6 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 
     IPage<SysDict> list(Page<SysDict> page, SysDict sysDict, QueryWrapper queryWrapper);
 
+    List<SysDict> getCodeAll();
+
 }

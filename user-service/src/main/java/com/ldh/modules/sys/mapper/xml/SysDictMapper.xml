@@ -21,4 +21,9 @@
         ${queryWrapper.customSqlSegment}
     </select>
 
+    <select id="getCodeAll" resultType="com.ldh.modules.sys.entity.SysDict">
+        select sd.*
+        from sys_dict sd
+    </select>
+
 </mapper>

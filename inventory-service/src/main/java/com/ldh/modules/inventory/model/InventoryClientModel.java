@@ -9,10 +9,19 @@ import java.util.List;
 @Data
 public class InventoryClientModel extends Inventory implements Serializable {
 
+    public InventoryClientModel() {
+    }
+
+    public InventoryClientModel(Inventory inventory) {
+        super(inventory);
+    }
+
     private String title;
     private String key;
     private String content;
     private String inventoryCategory;
     private String inventoryCategoryName;
     private List<String> imageListUrl;
+
+
 }

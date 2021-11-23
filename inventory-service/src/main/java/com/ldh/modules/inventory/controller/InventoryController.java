@@ -283,4 +283,18 @@ public class InventoryController {
         return result;
     }
 
+    @ApiOperation(value = "根据id查商品(客户端)", notes = "根据id查商品(客户端)")
+    @RequestMapping(path = "/selectByIdClient", method = RequestMethod.GET)
+    public Result<?> selectByIdClient(@RequestParam(name = "id")String id) {
+        Result<InventoryClientModel> result = new Result<>();
+        try{
+            result.setResult(inventoryService.getByIdAll(id));
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
+
 }

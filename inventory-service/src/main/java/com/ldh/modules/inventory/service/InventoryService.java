@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ldh.inventoryService.client.InventoryClient;
 import com.ldh.modules.inventory.entity.Inventory;
 import com.ldh.modules.inventory.model.InventoryClientModel;
 import com.ldh.modules.inventory.model.InventoryModel;
@@ -19,5 +20,7 @@ public interface InventoryService extends IService<Inventory> {
     void deleteAnyById(String id);
 
     IPage<InventoryRecommendModel> getRecommendList(Page page);
+
+    InventoryClientModel getByIdAll(String id) throws Exception;
 
 }

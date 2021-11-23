@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.modules.sys.entity.SysDictItem;
+import com.ldh.modules.sys.model.DictModel;
 import common.OptionModel;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,5 +22,8 @@ public interface SysDictItemService extends IService<SysDictItem> {
     String getItemValueBydictNoAndItemKey(String dictNo, String itemKey);
 
     List<OptionModel> getOptionByDictNo(String dictNo);
+
+    List<DictModel> getAllDictItem();
+
 
 }

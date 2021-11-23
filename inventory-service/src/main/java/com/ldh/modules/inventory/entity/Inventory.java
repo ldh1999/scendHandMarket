@@ -15,6 +15,25 @@ import java.util.Date;
 @Data
 @Slf4j
 public class Inventory implements Serializable {
+
+    public Inventory() {
+    }
+
+    /** 深拷贝 */
+    public Inventory(Inventory inventory) {
+        this.id = inventory.id;
+        this.merchantId = inventory.merchantId;
+        this.inventoryName = inventory.inventoryName;
+        this.inventoryInformation = inventory.inventoryInformation;
+        this.inventoryPrice = inventory.inventoryPrice;
+        this.sts = inventory.sts;
+        this.remark = inventory.remark;
+        this.createBy = inventory.createBy;
+        this.createTime = inventory.createTime;
+        this.updateBy = inventory.updateBy;
+        this.updateTime = inventory.updateTime;
+    }
+
     /** 商品id*/
     @TableId(type = IdType.UUID)
     private String id;
@@ -40,11 +59,16 @@ public class Inventory implements Serializable {
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
-
     private String updateBy;
 
     @TableField(fill = FieldFill.INSERT)
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
+
+
 }
+
+
+

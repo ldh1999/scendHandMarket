@@ -40,4 +40,11 @@
         left join sys_dict sd on sd.id = sdi.sys_dict_id
         where sd.dict_no = #{dictNo}
     </select>
+
+    <select id="getAllDictItem" resultType="com.ldh.modules.sys.model.DictModel">
+        select sdi.item_key as 'value',
+               sdi.item_value as 'text',
+               sdi.sys_dict_id as 'dictId'
+        from sys_dict_item sdi
+    </select>
 </mapper>
