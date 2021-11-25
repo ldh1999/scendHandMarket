@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ldh.modules.inventory.mapper.ShopTrolleyMapper">
+    <select id="listToClient" resultType="com.ldh.modules.inventory.model.ShopTrolleyClientModel">
+        select s.*,
+               inn.inventory_name as 'inventoryName',
+               inn.inventory_price as 'inventoryPrice'
+        from shop_trolley s
+        LEFT JOIN inventory inn on s.inventory_id = inn.id
+        where 1=1
+        <if test="shopTrolley.authorityId != null and shopTrolley.authorityId != ''">
+            and s.authority_id = #{shopTrolley.authorityId}
+        </if>
+        order by s.create_time desc
+    </select>
+
+    <select id="countByUserIdAndInventoryId" resultType="integer">
+      select count(0)
+      from shop_trolley st
+      where 1=1
+      and st.inventory_id = #{inventoryId}
+      and st.authority_id = #{userId}
+    </select>
+
+    <update id="updateBySyn">
+        UPDATE shop_trolley st
+        SET st.inventory_num = #{shopTrolley.shopTrolley}
+        where 1=1
+        and st.authority_id = #{shopTrolley.authorityId}
+        and st.inventory_id = #{shopTrolley.inventoryId}
+    </update>
+
+    <select id="selectByUserIdAndInventoryId" resultType="com.ldh.modules.inventory.model.ShopTrolleyClientModel">
+        select st.*
+        from shop_trolley st
+        where 1=1
+        and st.authority_id = #{shopTrolley.authorityId}
+        and st.inventory_id = #{shopTrolley.inventoryId}
+    </select>
+
+</mapper>

@@ -114,4 +114,30 @@ public class SysUserController {
         }
         return result;
     }
+
+
+
+    @ApiOperation(value = "自动登录", notes = "自动登录")
+    @RequestMapping(path = "/autoLogin",method = RequestMethod.POST)
+    public Result<?> autoLogin(@RequestBody AuthorityInformation authorityInformation,
+                               HttpServletRequest request){
+        Result<AuthorityInformationModel> result = new Result<>();
+        try {
+            AuthorityInformationModel authorityInformationModel = authorityInformationService.findByUserName(authorityInformation.getAuthorityUsername());
+            if (authorityInformationModel == null ||
+                    authorityInformation.getAuthorityPassword().equals(authorityInformationModel.getAuthorityPassword())){
+                throw new Exception("登录信息已过期，请重新登录");
+            }
+            HttpSession session = request.getSession();
+            String token = UuidUtils.generateUuid();
+            authorityInformationModel.setToken(token);
+            session.setAttribute("user", authorityInformationModel);
+            result.setResult(authorityInformationModel);
+            result.succcess("");
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("登录信息已过期，请重新登录");
+        }
+        return result;
+    }
 }
