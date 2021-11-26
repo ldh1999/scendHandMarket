@@ -3,17 +3,27 @@ package com.ldh.modules.authority.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ldh.constant.FilePath;
 import com.ldh.modules.authority.entity.AuthorityInformation;
 import com.ldh.modules.authority.model.AuthorityInformationModel;
 import com.ldh.modules.authority.service.AuthorityInformationService;
 import com.ldh.modules.authority.service.AuthorityRoleService;
 import common.Result;
 import common.StringTo;
+import constant.UploadFileConstant;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.util.Random;
 
 @Slf4j
 @Api(tags="用户模块")
@@ -73,13 +83,14 @@ public class AuthorityInformationController {
     @ApiOperation(value="用户管理修改", notes="用户管理修改")
     @RequestMapping(path = "/updateById", method = RequestMethod.POST)
     public Result<?> updateById(@RequestBody AuthorityInformation authorityInformation){
-        Result<?> result = new Result<>();
+        Result<AuthorityInformation> result = new Result<>();
         try {
             if (authorityInformationService.countUserName(authorityInformation)>0){
                 result.error("该用户已存在");
                 return result;
             }
             authorityInformationService.updateById(authorityInformation);
+            result.setResult(authorityInformationService.getById(authorityInformation.getAuthorityId()));
             result.succcess("修改成功");
         }catch (Exception e){
             log.error(e.getMessage());
@@ -115,4 +126,50 @@ public class AuthorityInformationController {
         return result;
     }
 
+
+
+    @ApiOperation(value="头像更新", notes="头像更新")
+    @RequestMapping(path = "upload", method = RequestMethod.POST)
+    public Result<?> uploadImage(@RequestParam(value = "file") MultipartFile file,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 @RequestParam(name = "id") String id
+    ){
+        Result<String> result = new Result<>();
+        String fileName = file.getOriginalFilename();
+        String fileType = file.getContentType();
+        Random random = new Random();
+        String randomString = String.valueOf(random.nextInt());
+        String fileSaveName = randomString.substring(1,randomString.length());
+        String filePathName = fileSaveName+fileName;
+        String savePath = FilePath.IMAGE_SAVE_PATH+ UploadFileConstant.USER_HAND_IMAGE +"/"+filePathName;
+        String saveDbPath = FilePath.IMAGE_SHOW_PATH+UploadFileConstant.USER_HAND_IMAGE+"/"+filePathName;
+        if (!fileType.substring(0,fileType.indexOf("/")).equals("image")){
+            result.error("请上传图片");
+            return result;
+        }
+        try{
+            File file1 = new File(savePath);
+            if (!file1.isDirectory()){
+                file1.mkdirs();
+            }
+            file.transferTo(file1);
+            AuthorityInformation authorityInformation = new AuthorityInformation();
+            authorityInformation.setAuthorityId(id);
+            authorityInformation.setImgPath(saveDbPath);
+            authorityInformationService.updateById(authorityInformation);
+            result.setResult(this.getNowUrl(request)+saveDbPath);
+            result.setMessage("上传成功");
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            result.error("上传失败");
+        }
+        return result;
+    }
+
+    private String getNowUrl(ServletRequest request){
+        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
+    }
 }

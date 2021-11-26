@@ -53,6 +53,9 @@ public class AuthorityInformation implements Serializable {
      * 手机号
      */
     private String phone;
+    /** 头像路径 */
+    private String imgPath;
+
     private String sts;
     private String remark;
 

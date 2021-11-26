@@ -4,6 +4,7 @@ import com.alibaba.nacos.common.utils.UuidUtils;
 import com.ldh.modules.authority.entity.AuthorityInformation;
 import com.ldh.modules.authority.entity.SysUserEntity;
 import com.ldh.modules.authority.model.AuthorityInformationModel;
+import com.ldh.modules.authority.model.EditPasswordVO;
 import com.ldh.modules.authority.service.AuthorityInformationService;
 import com.ldh.modules.authority.service.SysRoleService;
 import common.Result;
@@ -22,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("sys/user")
 @Slf4j
-@Api(tags = "登录模块")
+@Api(tags = "用户信息模块")
 public class SysUserController {
 
     @Autowired
@@ -41,7 +42,7 @@ public class SysUserController {
         Result<AuthorityInformation> result = new Result<>();
 
         try{
-            AuthorityInformationModel authorityInformation = authorityInformationService.findByUserName(username);
+            AuthorityInformationModel authorityInformation = authorityInformationService.findByUserName(username,request);
             if (authorityInformation == null){
                 result.error("用户不存在");
             }else if (!authorityInformation.getAuthorityPassword().equals(password)){
@@ -72,7 +73,7 @@ public class SysUserController {
                    HttpServletRequest request){
 
         Result<AuthorityInformation> result = new Result<>();
-        AuthorityInformationModel authorityInformation = authorityInformationService.findByUserName(username);
+        AuthorityInformationModel authorityInformation = authorityInformationService.findByUserName(username,request);
 
         try{
             if (authorityInformation == null){
@@ -123,9 +124,9 @@ public class SysUserController {
                                HttpServletRequest request){
         Result<AuthorityInformationModel> result = new Result<>();
         try {
-            AuthorityInformationModel authorityInformationModel = authorityInformationService.findByUserName(authorityInformation.getAuthorityUsername());
+            AuthorityInformationModel authorityInformationModel = authorityInformationService.findByUserName(authorityInformation.getAuthorityUsername(),request);
             if (authorityInformationModel == null ||
-                    authorityInformation.getAuthorityPassword().equals(authorityInformationModel.getAuthorityPassword())){
+                    !authorityInformation.getAuthorityPassword().equals(authorityInformationModel.getAuthorityPassword())){
                 throw new Exception("登录信息已过期，请重新登录");
             }
             HttpSession session = request.getSession();
@@ -137,6 +138,28 @@ public class SysUserController {
         }catch (Exception e){
             log.error(e.getMessage());
             result.error("登录信息已过期，请重新登录");
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "修改密码", notes = "修改密码")
+    @RequestMapping(path = "/editPassword",method = RequestMethod.POST)
+    public Result<?> autoLogin(@RequestBody EditPasswordVO editPasswordVO){
+        Result<?> result = new Result<>();
+        try{
+            AuthorityInformation authorityInformation = authorityInformationService.getById(editPasswordVO.getAuthorityId());
+            if (!authorityInformation.getAuthorityPassword().equals(editPasswordVO.getOriginPassword())){
+                result.error("原始密码不对");
+                return result;
+            }
+            AuthorityInformation authorityInformationNow = new AuthorityInformation();
+            authorityInformationNow.setAuthorityId(editPasswordVO.getAuthorityId());
+            authorityInformationNow.setAuthorityPassword(editPasswordVO.getPassword());
+            authorityInformationService.updateById(authorityInformationNow);
+            result.succcess("修改成功");
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
         }
         return result;
     }

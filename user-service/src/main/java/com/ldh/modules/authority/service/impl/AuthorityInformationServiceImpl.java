@@ -16,7 +16,10 @@ import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.MethodOrderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Random;
 import java.util.UUID;
 
@@ -45,8 +48,13 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
     }
 
     @Override
-    public AuthorityInformationModel findByUserName(String username) {
-        return authorityInformationMapper.findByUserName(username);
+    public AuthorityInformationModel findByUserName(String username, HttpServletRequest request) {
+
+        AuthorityInformationModel authorityInformationModel = authorityInformationMapper.findByUserName(username);
+        if (!StringUtils.isEmpty(authorityInformationModel.getImgPath())){
+            authorityInformationModel.setImgPath(this.getNowUrl(request)+authorityInformationModel.getImgPath());
+        }
+        return authorityInformationModel;
     }
 
     @Override
@@ -65,5 +73,9 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
         this.save(authorityInformation);
         authorityRoleMapper.insert(authorityRoleInformation);
 
+    }
+
+    private String getNowUrl(ServletRequest request){
+        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
     }
 }

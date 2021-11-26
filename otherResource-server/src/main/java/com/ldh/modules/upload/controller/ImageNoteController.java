@@ -49,7 +49,7 @@ public class ImageNoteController {
                                  @RequestParam(name = "sort",required = false) Integer sort
     ){
 
-        Result<?> result = new Result<>();
+        Result<String> result = new Result<>();
 
         String fileName = file.getOriginalFilename();
         String fileType = file.getContentType();
@@ -76,7 +76,9 @@ public class ImageNoteController {
                     .setObjectId(objectId)
                     .setSort(sort);
             imageNoteService.save(imageNote);
-            result.succcess("上传成功");
+            result.setResult(this.getNowUrl(request)+imageNote.getImgPath());
+            result.setMessage("上传成功");
+            result.setSuccess(true);
         }catch (Exception e){
             log.error(e.getMessage());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
