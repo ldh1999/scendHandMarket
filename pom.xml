@@ -15,6 +15,7 @@
         <module>gateway-server</module>
         <module>inventory-service</module>
         <module>otherResource-server</module>
+        <module>order-service</module>
     </modules>
 
     <parent>

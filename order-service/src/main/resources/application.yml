@@ -4,22 +4,13 @@ logging:
   pattern:
     dateformat: MM-dd HH:mm:ss:SSS
 server:
-  port: 7091
+  port: 6081
 spring:
-  rabbitmq:
-    host: localhost # rabbitMQ的ip地址
-    port: 5672 # 端口
-    username: guest
-    password: guest
-    virtual-host: /
-    listener:
-      simple:
-        prefetch: 1
   session:
     store-type: redis
   datasource:
     #url: jdbc:mysql://192.168.233.128:3306/cloud_user_information?useSSL=false
-    url: jdbc:mysql://localhost/other_cloud?useSSL=false
+    url: jdbc:mysql://localhost/cloud_order?useSSL=false
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
@@ -58,9 +49,7 @@ ribbon:
     enabled: true
     clients:
       -userservice
-      -inventoryservice
-      -orderservice
-
+      -otherResourceservice
 
 
 

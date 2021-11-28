@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ldh.modules.authority.mapper.AuthorityAddressMapper">
+
+
+    <select id="getListClient" resultType="com.ldh.modules.authority.model.AuthorityAddressModel">
+        select aa.*
+        from authority_address aa
+        where 1=1
+        and aa.authority_id = #{authorityAddress.authorityId}
+        order by aa.create_time desc
+    </select>
+
+    <select id="getOptionByUserId" resultType="common.OptionModel">
+        select aa.address_id as 'key',
+               aa.address_id as 'title',
+               concat('收件人： ',aa.address_name,' 联系电话： ',aa.address_phone,' 收货地址： ',aa.address_site) as 'value'
+        from authority_address aa
+        where 1=1
+        and aa.authority_id = #{id}
+    </select>
+</mapper>

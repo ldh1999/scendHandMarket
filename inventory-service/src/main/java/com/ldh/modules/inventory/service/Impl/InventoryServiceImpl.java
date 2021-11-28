@@ -66,8 +66,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     @Override
     public InventoryClientModel getByIdAll(String id) throws Exception {
-        Inventory inventory = this.getById(id);
-        InventoryClientModel inventoryClientModel = new InventoryClientModel(inventory);
+        InventoryClientModel inventoryClientModel = inventoryMapper.selectByIdAll(id);
         ImageGetVO imageGetVO = new ImageGetVO();
         imageGetVO.setImgGroup(UploadFileConstant.INVENTORY_STATUE)
                 .setObjectId(id);

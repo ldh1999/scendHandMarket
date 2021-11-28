@@ -32,6 +32,14 @@ public class Result<T> {
         return r;
     }
 
+    public static<T> Result<T> OK(T t) {
+        Result<T> r = new Result<T>();
+        r.setResult(t);
+        r.setSuccess(true);
+        r.setMessage("成功");
+        return r;
+    }
+
     public static<T> Result<T> ERROR() {
         Result<T> r = new Result<T>();
         r.setSuccess(false);

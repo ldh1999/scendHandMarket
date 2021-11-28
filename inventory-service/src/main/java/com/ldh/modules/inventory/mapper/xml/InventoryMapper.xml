@@ -30,10 +30,20 @@
     </select>
 
     <select id="getRecommendList" resultType="com.ldh.modules.inventory.model.InventoryRecommendModel">
-        select i.*
+        select i.*,
+               m.merchant_name as 'merchantName'
         from inventory i
         LEFT JOIN merchant m on i.merchant_id = m.merchant_id
         where 1=1
         and m.sts = '2'
+    </select>
+
+    <select id="selectByIdAll" resultType="com.ldh.modules.inventory.model.InventoryClientModel">
+        select i.*,
+               m.merchant_name as 'merchantName'
+        from inventory i
+        LEFT JOIN merchant m on i.merchant_id = m.merchant_id
+        where 1=1
+          and i.id = #{id}
     </select>
 </mapper>
