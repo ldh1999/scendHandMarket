@@ -44,7 +44,7 @@ public class OrderInformation implements Serializable{
 	private Integer orderInventoryNum;
 	/**该订单商品单价*/
 	@ApiModelProperty(value = "该订单商品单价")
-	private Integer orderInventoryPrice;
+	private Float orderInventoryPrice;
 	/**该订单价格*/
     @ApiModelProperty(value = "该订单价格")
 	private Float orderInventoryPriceSum;

@@ -51,7 +51,7 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
     public AuthorityInformationModel findByUserName(String username, HttpServletRequest request) {
 
         AuthorityInformationModel authorityInformationModel = authorityInformationMapper.findByUserName(username);
-        if (!StringUtils.isEmpty(authorityInformationModel.getImgPath())){
+        if (authorityInformationModel != null && !StringUtils.isEmpty(authorityInformationModel.getImgPath())){
             authorityInformationModel.setImgPath(this.getNowUrl(request)+authorityInformationModel.getImgPath());
         }
         return authorityInformationModel;

@@ -66,7 +66,8 @@ public class OrderInformationController{
 			AuthorityInformation authorityInformation = (AuthorityInformation) RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
 			orderInformation.setCreateBy(authorityInformation.getAuthorityId());
 			orderInformation.setOrderCode(UUID.randomUUID().toString());
-			result.setResult(orderInformationService.save(orderInformation));
+			orderInformationService.save(orderInformation);
+			result.setResult(orderInformation);
 			result.setSuccess(true);
 			result.setMessage("订单增加成功");
 		}catch (Exception e){
@@ -127,5 +128,8 @@ public class OrderInformationController{
 		OrderInformation orderInformation = orderInformationService.getById(id);
 		return Result.OK(orderInformation);
 	}
+
+
+
 
 }
