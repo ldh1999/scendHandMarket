@@ -4,10 +4,15 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import User.AuthorityInformation;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.order.entity.OrderInformation;
+import com.ldh.modules.order.model.OrderInformationModel;
 import com.ldh.modules.order.service.OrderInformationService;
 import com.ldh.util.RedisSessionUtil;
 import common.Result;
+import common.StringTo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,45 +42,37 @@ public class OrderInformationController{
 	 * @param orderInformation
 	 * @param pageNo
 	 * @param pageSize
-	 * @param req
 	 * @return
 	 */
-/*	@ApiOperation(value="订单信息表-分页列表查询", notes="订单信息表-分页列表查询")
+	@ApiOperation(value="订单信息表-分页列表查询", notes="订单信息表-分页列表查询")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(OrderInformation orderInformation,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
-								   HttpServletRequest req) {
-		Page<OrderInformation> page = new Page<OrderInformation>(pageNo, pageSize);
-		IPage<OrderInformation> pageList = orderInformationService.page(page, queryWrapper);
-		return Result.OK(pageList);
-	}*/
-	
-	/**
-	 * 添加
-	 *
-	 * @param orderInformation
-	 * @return
-	 */
-	@ApiOperation(value="订单信息表-添加", notes="订单信息表-添加")
-	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody OrderInformation orderInformation, HttpServletRequest request) {
+								   @RequestParam(name="column", required = false) String column,
+								   @RequestParam(name="order", required = false) String order) {
+		Page<OrderInformation> page = new Page<>(pageNo, pageSize);
+		QueryWrapper queryWrapper = new QueryWrapper();
+		if(order.equals("desc")){
+			queryWrapper.orderByDesc(StringTo.humpToLine(column));
+		}else{
+			queryWrapper.orderByAsc(StringTo.humpToLine(column));
+		}
 		Result result = new Result();
-		HttpSession session = request.getSession();
 		try{
-			AuthorityInformation authorityInformation = (AuthorityInformation) RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
-			orderInformation.setCreateBy(authorityInformation.getAuthorityId());
-			orderInformation.setOrderCode(UUID.randomUUID().toString());
-			orderInformationService.save(orderInformation);
-			result.setResult(orderInformation);
+			IPage<OrderInformationModel> pageList = orderInformationService.list(page, queryWrapper, orderInformation);
+			result.setResult(pageList);
 			result.setSuccess(true);
-			result.setMessage("订单增加成功");
 		}catch (Exception e){
 			log.error(e.getMessage(), e);
 			result.error(e.getMessage());
 		}
 		return result;
 	}
+
+
+
+
 	
 	/**
 	 * 编辑

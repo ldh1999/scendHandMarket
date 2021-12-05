@@ -9,6 +9,8 @@ import com.ldh.modules.authority.model.AuthorityInformationModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface AuthorityInformationMapper extends BaseMapper<AuthorityInformation> {
     IPage<AuthorityInformationModel> list(Page page, @Param(value = "authorityInformation") AuthorityInformation authorityInformation, QueryWrapper queryWrapper);
@@ -16,4 +18,6 @@ public interface AuthorityInformationMapper extends BaseMapper<AuthorityInformat
     int countUserName(AuthorityInformation authorityInformation);
 
     AuthorityInformationModel findByUserName(String username);
+
+    List<AuthorityInformationModel> selectByIds(@Param("ids") String[] ids);
 }

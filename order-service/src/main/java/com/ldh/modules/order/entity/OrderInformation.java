@@ -22,7 +22,29 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Accessors(chain = true)
 @ApiModel(value="order_information对象", description="订单信息表")
 public class OrderInformation implements Serializable{
-    
+	public OrderInformation() {
+	}
+
+	/**
+	 * 深拷贝
+	 */
+	public OrderInformation(OrderInformation orderInformation) {
+		this.orderId = orderInformation.orderId;
+		this.orderCode = orderInformation.orderCode;
+		this.addressId = orderInformation.addressId;
+		this.merchantId = orderInformation.merchantId;
+		this.inventoryId = orderInformation.inventoryId;
+		this.orderInventoryNum = orderInformation.orderInventoryNum;
+		this.orderInventoryPrice = orderInformation.orderInventoryPrice;
+		this.orderInventoryPriceSum = orderInformation.orderInventoryPriceSum;
+		this.createTime = orderInformation.createTime;
+		this.createBy = orderInformation.createBy;
+		this.updateBy = orderInformation.updateBy;
+		this.updateTime = orderInformation.updateTime;
+		this.remark = orderInformation.remark;
+		this.sts = orderInformation.sts;
+	}
+
 	/**订单id*/
     @ApiModelProperty(value = "订单id")
 	@TableId(type = IdType.UUID)

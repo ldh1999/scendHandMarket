@@ -2,4 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ldh.modules.order.mapper.OrderInformationMapper">
 
+    <select id="list" resultType="com.ldh.modules.order.model.OrderInformationModel">
+      select oi.*
+      from order_information oi
+      where 1=1
+      <if test="orderInformation.createBy != null and orderInformation.createBy != ''">
+          and oi.create_by = #{orderInformation.createBy}
+      </if>
+      <if test="orderInformation.merchantId != null and orderInformation.merchantId != ''">
+          and oi.merchant_id = #{orderInformation.merchantId}
+      </if>
+      <if test="orderInformation.sts != null and orderInformation.sts != ''">
+          and oi.sts = #{orderInformation.sts}
+      </if>
+      ${queryWrapper.customSqlSegment}
+    </select>
 </mapper>

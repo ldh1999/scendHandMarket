@@ -46,4 +46,14 @@
         where 1=1
           and i.id = #{id}
     </select>
+
+    <select id="selectByIds" resultType="com.ldh.modules.inventory.entity.Inventory">
+        select i.*
+        from inventory i
+        where 1=1
+        and i.id in
+        <foreach collection="ids" item="item" separator="," close=")" open="(">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

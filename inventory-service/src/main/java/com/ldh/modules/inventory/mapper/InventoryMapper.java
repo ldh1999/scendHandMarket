@@ -11,6 +11,8 @@ import com.ldh.modules.inventory.model.InventoryRecommendModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface InventoryMapper extends BaseMapper<Inventory> {
     IPage<InventoryModel> list(Page page, QueryWrapper queryWrapper, @Param("inventory") Inventory inventory);
@@ -20,4 +22,7 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
     IPage<InventoryRecommendModel> getRecommendList(Page page);
 
     InventoryClientModel selectByIdAll(String id);
+
+    List<Inventory> selectByIds(@Param("ids") String[] ids);
+
 }

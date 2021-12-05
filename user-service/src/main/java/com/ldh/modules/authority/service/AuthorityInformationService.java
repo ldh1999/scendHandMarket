@@ -8,6 +8,7 @@ import com.ldh.modules.authority.entity.AuthorityInformation;
 import com.ldh.modules.authority.model.AuthorityInformationModel;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface AuthorityInformationService extends IService<AuthorityInformation> {
     IPage<AuthorityInformationModel> list(AuthorityInformation authorityInformation, Page page, QueryWrapper queryWrapper);
@@ -17,4 +18,7 @@ public interface AuthorityInformationService extends IService<AuthorityInformati
     AuthorityInformationModel findByUserName(String username,  HttpServletRequest request);
 
     void register(AuthorityInformation authorityInformation);
+
+    List<AuthorityInformationModel> selectByIds(String[] ids);
+
 }

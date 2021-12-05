@@ -11,6 +11,8 @@ import com.ldh.modules.inventory.model.InventoryModel;
 import com.ldh.modules.inventory.model.InventoryRecommendModel;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface InventoryService extends IService<Inventory> {
 
     IPage<InventoryModel> list(Page page, QueryWrapper queryWrapper, Inventory inventory);
@@ -22,5 +24,7 @@ public interface InventoryService extends IService<Inventory> {
     IPage<InventoryRecommendModel> getRecommendList(Page page);
 
     InventoryClientModel getByIdAll(String id) throws Exception;
+
+    List<Inventory> selectByIds(String[] ids);
 
 }

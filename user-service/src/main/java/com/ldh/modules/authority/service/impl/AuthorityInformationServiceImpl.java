@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -77,5 +78,10 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
 
     private String getNowUrl(ServletRequest request){
         return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
+    }
+
+    @Override
+    public List<AuthorityInformationModel> selectByIds(String[] ids) {
+        return authorityInformationMapper.selectByIds(ids);
     }
 }

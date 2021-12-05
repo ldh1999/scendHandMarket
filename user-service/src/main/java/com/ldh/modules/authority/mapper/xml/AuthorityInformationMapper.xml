@@ -29,4 +29,15 @@
     <select id="findByUserName" resultType="com.ldh.modules.authority.model.AuthorityInformationModel">
         select * from authority_information where 1=1 and authority_username = #{username}
     </select>
+
+    <select id="selectByIds" resultType="com.ldh.modules.authority.model.AuthorityInformationModel">
+        select ai.*
+        from authority_information ai
+        where 1=1
+        and ai.authority_id in
+        <foreach collection="ids" open="(" close=")" separator="," item="item">
+          #{item}
+        </foreach>
+
+    </select>
 </mapper>

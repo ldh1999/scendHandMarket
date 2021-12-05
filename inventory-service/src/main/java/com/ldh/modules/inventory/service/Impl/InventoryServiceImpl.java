@@ -85,4 +85,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         }
         return inventoryClientModel;
     }
+
+    @Override
+    public List<Inventory> selectByIds(String[] ids) {
+        return inventoryMapper.selectByIds(ids);
+    }
 }
