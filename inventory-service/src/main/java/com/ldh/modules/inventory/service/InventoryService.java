@@ -6,9 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.inventoryService.client.InventoryClient;
 import com.ldh.modules.inventory.entity.Inventory;
-import com.ldh.modules.inventory.model.InventoryClientModel;
-import com.ldh.modules.inventory.model.InventoryModel;
-import com.ldh.modules.inventory.model.InventoryRecommendModel;
+import com.ldh.modules.inventory.model.*;
+import com.ldh.modules.merchant.entity.Merchant;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -27,4 +26,11 @@ public interface InventoryService extends IService<Inventory> {
 
     List<Inventory> selectByIds(String[] ids);
 
+    IPage<InventoryMerchantModel> listToClientByMerchant(Page page,
+                                                            QueryWrapper queryWrapper,
+                                                            @Param("inventory") Inventory inventory);
+
+    IPage<InventoryCategoryClientModel> listToClientByCategory(Page page,
+                                                               QueryWrapper queryWrapper,
+                                                               @Param("categoryId") String categoryId);
 }

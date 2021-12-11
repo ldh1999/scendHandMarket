@@ -44,16 +44,10 @@ public class OrderClientController {
     @GetMapping(value = "/buyerList")
     public Result<?> buyerList(OrderInformation orderInformation,
                                    @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
-                                   @RequestParam(name="column", required = false) String column,
-                                   @RequestParam(name="order", required = false) String order) {
+                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize
+                               ) {
         Page<OrderInformation> page = new Page<>(pageNo, pageSize);
         QueryWrapper queryWrapper = new QueryWrapper();
-        if(order.equals("desc")){
-            queryWrapper.orderByDesc(StringTo.humpToLine(column));
-        }else{
-            queryWrapper.orderByAsc(StringTo.humpToLine(column));
-        }
         Result result = new Result();
         try{
             IPage<OrderInformationModel> pageList = orderInformationService.listToBuyer(page, queryWrapper, orderInformation);

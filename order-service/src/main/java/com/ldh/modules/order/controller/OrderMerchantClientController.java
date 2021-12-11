@@ -78,6 +78,24 @@ public class OrderMerchantClientController {
         return result;
     }
 
+    @ApiOperation(value="商家拒绝订单", notes="商家拒绝订单")
+    @GetMapping(value = "/acceptNoOrder")
+    public Result<?> acceptNoOrder(@RequestParam(name = "id", required = true)String id) {
+        Result<?> result = new Result<>();
+        try{
+            OrderInformation orderInformation = new OrderInformation();
+            orderInformation
+                    .setOrderId(id)
+                    .setSts(OrderEnum.no_accept.getOrder());
+            orderInformationService.updateById(orderInformation);
+            result.succcess("已拒绝订单");
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
+
     @ApiOperation(value="查看订单详情", notes="查看订单详情")
     @GetMapping(value = "/orderDetail")
     public Result<?> orderDetail(@RequestParam(name = "id", required = true)String id) {

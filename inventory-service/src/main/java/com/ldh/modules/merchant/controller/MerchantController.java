@@ -50,9 +50,10 @@ public class MerchantController {
     @ApiOperation(value="商家审批管理修改", notes="商家审批管理修改")
     @RequestMapping(path = "/updateById", method = RequestMethod.POST)
     public Result<?> updateById(@RequestBody Merchant merchant){
-        Result<?> result = new Result<>();
+        Result<Merchant> result = new Result<>();
         try {
             merchantService.updateById(merchant);
+            result.setResult(merchant);
             result.succcess("修改成功");
         }catch (Exception e){
             log.error(e.getMessage());

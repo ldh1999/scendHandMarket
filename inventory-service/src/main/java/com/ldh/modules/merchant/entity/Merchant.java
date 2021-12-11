@@ -20,6 +20,8 @@ public class Merchant implements Serializable {
     private String authorityId;
     /** 店铺名 */
     private String merchantName;
+    /** 店铺介绍 */
+    private String merchantInformation;
     /** 备案电话 */
     private String recordPhone;
     /** 备案身份证 */

@@ -14,5 +14,7 @@ public class OrderInformationModel extends OrderInformation implements Serializa
 
     /** 商品名称 */
     private String inventoryName;
+    /** 图片路径 */
+    private String firstImagePath;
 
 }

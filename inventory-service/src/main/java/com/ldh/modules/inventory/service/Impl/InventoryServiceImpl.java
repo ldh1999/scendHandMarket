@@ -9,18 +9,17 @@ import com.ldh.inventoryService.client.InventoryClient;
 import com.ldh.modules.inventory.entity.Inventory;
 import com.ldh.modules.inventory.mapper.InventoryCategoryAssociateMapper;
 import com.ldh.modules.inventory.mapper.InventoryMapper;
-import com.ldh.modules.inventory.model.InventoryClientModel;
-import com.ldh.modules.inventory.model.InventoryModel;
-import com.ldh.modules.inventory.model.InventoryRecommendModel;
+import com.ldh.modules.inventory.model.*;
 import com.ldh.modules.inventory.service.InventoryService;
 import com.ldh.inventoryService.client.MerchantClient;
-import com.ldh.inventoryService.pojo.Merchant;
+import com.ldh.modules.merchant.entity.Merchant;
 import com.ldh.otherResourceService.client.ImageNoteGetClient;
 import com.ldh.otherResourceService.model.ImageGetVO;
 import com.ldh.otherResourceService.model.ImageNoteModel;
 import common.Result;
 import constant.UploadFileConstant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -89,5 +88,15 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Override
     public List<Inventory> selectByIds(String[] ids) {
         return inventoryMapper.selectByIds(ids);
+    }
+
+    @Override
+    public IPage<InventoryMerchantModel> listToClientByMerchant(Page page, QueryWrapper queryWrapper, Inventory inventory) {
+        return inventoryMapper.listToClientByMerchant(page, queryWrapper, inventory);
+    }
+
+    @Override
+    public IPage<InventoryCategoryClientModel> listToClientByCategory(Page page, QueryWrapper queryWrapper, String categoryId) {
+        return inventoryMapper.listToClientByCategory(page, queryWrapper, categoryId);
     }
 }

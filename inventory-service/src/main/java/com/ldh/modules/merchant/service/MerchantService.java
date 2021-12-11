@@ -14,4 +14,6 @@ public interface MerchantService extends IService<Merchant> {
 
     MerchantModel selectByUserId(String userId);
 
+
+
 }
