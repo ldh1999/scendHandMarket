@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.modules.order.entity.OrderInformation;
+import com.ldh.modules.order.model.OrderInformationDetailModel;
 import com.ldh.modules.order.model.OrderInformationModel;
 import com.ldh.modules.order.model.OrderMerchantInformationModel;
 import org.apache.ibatis.annotations.Param;
@@ -16,11 +17,13 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface OrderInformationService extends IService<OrderInformation> {
 
-    Page<OrderInformationModel> list(Page page, QueryWrapper queryWrapper, @Param("orderInformation") OrderInformation orderInformation);
+    Page<OrderInformationModel> list(Page page, QueryWrapper queryWrapper, @Param("orderInformation") OrderInformation orderInformation) throws Exception;
 
     Page<OrderInformationModel> listToBuyer(Page page, QueryWrapper queryWrapper, @Param("orderInformation") OrderInformation orderInformation);
 
     Page<OrderInformationModel> listToMerchant(Page page, QueryWrapper queryWrapper, @Param("orderInformation") OrderInformation orderInformation) throws Exception;
 
     OrderMerchantInformationModel getByIdForMerchantDetail(String id);
+
+    OrderInformationDetailModel getByIdDetail(String id) throws Exception;
 }

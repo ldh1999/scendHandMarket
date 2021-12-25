@@ -49,23 +49,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     @Transactional(rollbackFor = {SQLException.class})
-    public Result<?> deleteByIdScan(String id, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Result result = new Result();
-        try{
-            AuthorityInformation authorityInformation = (AuthorityInformation)session.getAttribute("user");
-            if (!(sysRoleMapper.countRoleByUserIdAndRoleNo(authorityInformation.getAuthorityId(), "superAdmin")>0)){
-                result.error("权限不足");
-                return result;
-            }
-            this.removeById(id);
-            authorityRoleMapper.deleteBySysRole(id);
-            result.succcess("删除成功");
-        }catch (Exception e){
-            log.error(e.getMessage());
-            result.error("请登录");
-        }
-        return result;
+    public void deleteByIdScan(String id, HttpServletRequest request) {
+        this.removeById(id);
+        authorityRoleMapper.deleteBySysRole(id);
     }
 
     /**

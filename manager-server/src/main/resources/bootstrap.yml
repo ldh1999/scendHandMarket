@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: managerservice
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        cluster-name: TJ
+      #server-addr: 8848
+      config:
+        file-extension: yaml

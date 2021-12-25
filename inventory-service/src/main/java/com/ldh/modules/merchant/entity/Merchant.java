@@ -16,6 +16,8 @@ public class Merchant implements Serializable {
     /** 店铺id */
     @TableId(type = IdType.UUID)
     private String merchantId;
+    /** 店铺编号 */
+    private String merchantCode;
     /** 用户id */
     private String authorityId;
     /** 店铺名 */

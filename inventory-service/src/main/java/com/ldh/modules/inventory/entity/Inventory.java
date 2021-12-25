@@ -22,6 +22,7 @@ public class Inventory implements Serializable {
     /** 深拷贝 */
     public Inventory(Inventory inventory) {
         this.id = inventory.id;
+        this.inventoryCode = inventory.inventoryCode;
         this.merchantId = inventory.merchantId;
         this.inventoryName = inventory.inventoryName;
         this.inventoryInformation = inventory.inventoryInformation;
@@ -37,6 +38,8 @@ public class Inventory implements Serializable {
     /** 商品id*/
     @TableId(type = IdType.UUID)
     private String id;
+    /** 商品编号*/
+    private String inventoryCode;
     /** 商家id */
     private String merchantId;
     /** 商品名称 */

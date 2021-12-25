@@ -7,12 +7,16 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.modules.merchant.entity.Merchant;
 import com.ldh.modules.merchant.model.MerchantModel;
 
+import java.util.List;
+
 public interface MerchantService extends IService<Merchant> {
     IPage<MerchantModel> list(Page page, QueryWrapper queryWrapper, Merchant merchant);
 
     MerchantModel selectById(String id);
 
     MerchantModel selectByUserId(String userId);
+
+    List<MerchantModel> selectByIds(String[] ids);
 
 
 

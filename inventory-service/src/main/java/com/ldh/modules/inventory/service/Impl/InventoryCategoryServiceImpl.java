@@ -12,7 +12,9 @@ import com.ldh.modules.inventory.model.InventoryCategoryClientModel;
 import com.ldh.modules.inventory.model.InventoryCategoryModel;
 import com.ldh.modules.inventory.service.InventoryCategoryService;
 import com.ldh.userService.client.AuthorityClient;
+import com.ldh.userService.model.AuthorityInformationModel;
 import common.OptionModel;
+import common.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -38,21 +40,34 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
     private AuthorityClient authorityClient;
 
     @Override
-    public IPage<InventoryCategoryModel> list(Page page, QueryWrapper queryWrapper, InventoryCategory inventoryCategory) {
+    public IPage<InventoryCategoryModel> list(Page page, QueryWrapper queryWrapper, InventoryCategory inventoryCategory) throws Exception {
 
         IPage<InventoryCategoryModel> iPage = inventoryCategoryMapper.list(page, queryWrapper, inventoryCategory);
         List<InventoryCategoryModel> list = iPage.getRecords();
-        Map<String, String> map = new HashMap<>();
-        list.stream().forEach(e->{
-            String create = e.getCreateBy();
-            if (map.containsKey(create)){
-                e.setCreateRealName(map.get(create));
-            }else {
-                String createRealName = authorityClient.selectById(e.getCreateBy()).getResult().getRealName();
-                e.setCreateRealName(createRealName);
-                map.put(create, createRealName);
-            }
-        });
+
+        StringBuilder createIds = new StringBuilder();
+        list.stream()
+                .filter(e->e.getCreateBy() != null)
+                .map(e-> e.getCreateBy()).distinct().collect(Collectors.toList())
+                .forEach(e->{
+                    createIds.append(e);
+                    createIds.append(",");
+                });
+
+        Result<List<AuthorityInformationModel>> result = authorityClient.selectByIds(createIds.toString());
+        if (result.isSuccess()){
+            List<AuthorityInformationModel> authorityInformationModelLis = result.getResult();
+            Map<String, String> map = authorityInformationModelLis.stream()
+                    .collect(Collectors.toMap(AuthorityInformationModel::getAuthorityId,AuthorityInformationModel::getAuthorityName));
+            list.forEach(e->{
+                if (map.containsKey(e.getCreateBy())){
+                    e.setCreateRealName(map.get(e.getCreateBy()));
+                }
+            });
+
+        }else {
+            throw new Exception("fegin error");
+        }
         iPage.setRecords(list);
         return iPage;
     }

@@ -3,9 +3,13 @@ package com.ldh.modules.order.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.inventoryService.client.InventoryClient;
+import com.ldh.inventoryService.client.MerchantClient;
+import com.ldh.inventoryService.model.InventoryModel;
+import com.ldh.inventoryService.model.MerchantModel;
 import com.ldh.inventoryService.pojo.Inventory;
 import com.ldh.modules.order.entity.OrderInformation;
 import com.ldh.modules.order.mapper.OrderInformationMapper;
+import com.ldh.modules.order.model.OrderInformationDetailModel;
 import com.ldh.modules.order.model.OrderInformationModel;
 import com.ldh.modules.order.model.OrderMerchantInformationModel;
 import com.ldh.modules.order.service.OrderInformationService;
@@ -19,14 +23,12 @@ import com.ldh.userService.model.AuthorityInformationModel;
 import common.Result;
 import constant.UploadFileConstant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,11 +50,68 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
     private AuthorityAddressClient authorityAddressClient;
 
     @Autowired
+    private AuthorityClient authorityClient;
+
+    @Autowired
+    private MerchantClient merchantClient;
+
+    @Autowired
     private ImageNoteGetClient imageNoteGetClient;
 
     @Override
-    public Page<OrderInformationModel> list(Page page, QueryWrapper queryWrapper, OrderInformation orderInformation) {
-        return orderInformationMapper.list(page, queryWrapper, orderInformation);
+    public Page<OrderInformationModel> list(Page page, QueryWrapper queryWrapper, OrderInformation orderInformation) throws Exception {
+        Page<OrderInformationModel> page1 = orderInformationMapper.list(page, queryWrapper, orderInformation);
+        List<OrderInformationModel> orderInformationModelList = page1.getRecords();
+        //构建请求参数
+        StringBuilder inventoryIds = new StringBuilder();
+        StringBuilder merchantIds = new StringBuilder();
+        StringBuilder userIds = new StringBuilder();
+        //去重
+        Set<String> inventoryIdSet = new HashSet<>();
+        Set<String> merchantIdSet = new HashSet<>();
+        Set<String> userIdSet = new HashSet<>();
+        orderInformationModelList.stream().forEach(e->{
+            inventoryIdSet.add(e.getInventoryId());
+            merchantIdSet.add(e.getMerchantId());
+            userIdSet.add(e.getCreateBy());
+        });
+        inventoryIdSet.forEach(e->{
+            inventoryIds.append(e);
+            inventoryIds.append(",");
+        });
+        merchantIdSet.forEach(e->{
+            merchantIds.append(e);
+            merchantIds.append(",");
+        });
+        userIdSet.forEach(e->{
+            userIds.append(e);
+            userIds.append(",");
+        });
+        //发送请求
+        Result<List<Inventory>> inventoryResult = inventoryClient.selectByIds(inventoryIds.toString());
+        Result<List<MerchantModel>> merchantResult = merchantClient.selectByIds(merchantIds.toString());
+        Result<List<AuthorityInformationModel>> userResult = authorityClient.selectByIds(userIds.toString());
+
+        if (inventoryResult.isSuccess() && merchantResult.isSuccess() && userResult.isSuccess()){
+            Map<String, Inventory> inventoryMap = inventoryResult.getResult().stream().collect(Collectors.toMap(Inventory::getId,r->r));
+            Map<String, MerchantModel> merchantModelMap = merchantResult.getResult().stream().collect(Collectors.toMap(MerchantModel::getMerchantId,r->r));
+            Map<String, AuthorityInformationModel> authorityInformationModelMap = userResult.getResult().stream().collect(Collectors.toMap(AuthorityInformationModel::getAuthorityId, r->r));
+            orderInformationModelList.stream().forEach(e->{
+                if (inventoryMap.containsKey(e.getInventoryId())){
+                    e.setInventoryCode(inventoryMap.get(e.getInventoryId()).getInventoryCode());
+                }
+                if (merchantModelMap.containsKey(e.getMerchantId())){
+                    e.setMerchantCode(merchantModelMap.get(e.getMerchantId()).getMerchantCode());
+                }
+                if (authorityInformationModelMap.containsKey(e.getCreateBy())){
+                    e.setUserName(authorityInformationModelMap.get(e.getCreateBy()).getAuthorityUsername());
+                }
+            });
+            page1.setRecords(orderInformationModelList);
+        }else {
+            throw new Exception("fegin error");
+        }
+        return page1;
     }
 
     @Override
@@ -174,5 +233,38 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
                 .setAddressSite(authorityAddressModel.getAddressSite())
                 .setInventoryName(inventory.getInventoryName());
         return orderMerchantInformationModel;
+    }
+
+    @Override
+    public OrderInformationDetailModel getByIdDetail(String id) throws Exception {
+        OrderInformation orderInformation = this.getById(id);
+
+        Result<Inventory> inventoryResult = inventoryClient.getById(orderInformation.getInventoryId());
+        Result<MerchantModel> merchantResult = merchantClient.selectById(orderInformation.getMerchantId());
+        Result<AuthorityInformationModel> userResult = authorityClient.selectById(orderInformation.getCreateBy());
+
+        MerchantModel merchantModel = merchantResult.getResult();
+        AuthorityInformationModel authorityInformationModel = userResult.getResult();
+
+        if (inventoryResult.isSuccess() && merchantResult.isSuccess() && userResult.isSuccess()){
+            OrderInformationDetailModel orderInformationDetailModel = new OrderInformationDetailModel(orderInformation);
+
+            orderInformationDetailModel
+                    .setMerchantCode(merchantModel.getMerchantCode())
+                    .setMerchantInformation(merchantModel.getMerchantInformation())
+                    .setMerchantName(merchantModel.getMerchantName())
+                    .setMerchantSts(merchantModel.getSts())
+                    .setRecordIdentityCode(merchantModel.getRecordIdentityCode())
+                    .setRecordPhone(merchantModel.getRecordPhone())
+                    .setRecordRealName(merchantModel.getRecordRealName());
+            //TODO 还差商品的详情
+
+
+        }else {
+            throw new Exception("fegin error");
+        }
+
+
+        return null;
     }
 }

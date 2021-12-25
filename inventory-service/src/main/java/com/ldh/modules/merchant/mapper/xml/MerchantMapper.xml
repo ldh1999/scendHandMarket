@@ -24,4 +24,14 @@
         where 1=1
         and m.authority_id = #{userId}
     </select>
+    
+    <select id="selectByIds" resultType="com.ldh.modules.merchant.model.MerchantModel">
+        select m.*
+        from merchant m
+        where 1=1
+        and m.merchant_id in
+        <foreach collection="ids" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

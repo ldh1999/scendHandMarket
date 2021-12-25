@@ -16,7 +16,7 @@ import java.util.Map;
 
 public interface InventoryCategoryService extends IService<InventoryCategory> {
 
-    IPage<InventoryCategoryModel> list(Page page, QueryWrapper queryWrapper, InventoryCategory inventoryCategory);
+    IPage<InventoryCategoryModel> list(Page page, QueryWrapper queryWrapper, InventoryCategory inventoryCategory) throws Exception;
 
     void deleteAnyById(String id);
 

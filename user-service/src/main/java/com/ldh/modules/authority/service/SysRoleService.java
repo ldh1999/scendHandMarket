@@ -19,7 +19,7 @@ public interface SysRoleService extends IService<SysRole> {
 
     Integer countByNo(SysRole sysRole);
 
-    Result<?> deleteByIdScan(String id, HttpServletRequest request);
+    void deleteByIdScan(String id, HttpServletRequest request);
 
     Result<AuthorityInformation> scanManagerRoleByUserId(String userId);
 }

@@ -54,7 +54,13 @@ public class SysRoleController {
     @RequestMapping(path = "delete" , method = RequestMethod.DELETE)
     public Result<?> delete(@RequestParam(name="id")String id, HttpServletRequest request){
         Result<?> result = new Result<>();
-        result = sysRoleService.deleteByIdScan(id, request);
+        try{
+            sysRoleService.deleteByIdScan(id, request);
+            result.succcess("删除成功");
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
         return result;
     }
 

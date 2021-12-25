@@ -13,6 +13,8 @@ import java.util.Date;
 public class Inventory implements Serializable {
     /** 商品id*/
     private String id;
+    /** 商品编号*/
+    private String inventoryCode;
     /** 商家id */
     private String merchantId;
     /** 商品名称 */

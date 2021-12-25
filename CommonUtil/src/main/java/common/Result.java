@@ -3,6 +3,11 @@ public class Result<T> {
     private boolean success = true;
     private T result;
     private String message;
+    /**
+     * 401：token失效
+     * 402: 权限不足
+     */
+    private int code;
 
     public void succcess(T result){
         this.success = true;
@@ -69,5 +74,13 @@ public class Result<T> {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 }

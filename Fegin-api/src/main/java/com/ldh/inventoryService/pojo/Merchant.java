@@ -10,14 +10,17 @@ import java.util.Date;
 @Data
 public class Merchant implements Serializable {
     /** 店铺id */
-
     private String merchantId;
+    /** 店铺编号 */
+    private String merchantCode;
     /** 用户id */
     private String authorityId;
     /** 店铺名 */
     private String merchantName;
     /** 备案电话 */
     private String recordPhone;
+    /** 店铺介绍 */
+    private String merchantInformation;
     /** 备案身份证 */
     private String recordIdentityCode;
     /** 备案真实姓名 */

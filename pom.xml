@@ -16,6 +16,7 @@
         <module>inventory-service</module>
         <module>otherResource-server</module>
         <module>order-service</module>
+        <module>manager-server</module>
     </modules>
 
     <parent>
@@ -93,10 +94,17 @@
     </dependencyManagement>
     <dependencies>
         <!-- 阿里巴巴json包 -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.47</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.48.sec10</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>

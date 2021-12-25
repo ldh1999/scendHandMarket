@@ -165,6 +165,7 @@ public class InventoryController {
         Inventory inventory = inventoryVO;
 
         try {
+            inventory.setInventoryCode(UUID.randomUUID().toString());
             inventoryService.save(inventory);
             Arrays.stream(category).forEach(e -> {
                 InventoryCategoryAssociate inventoryCategoryAssociate = new InventoryCategoryAssociate();

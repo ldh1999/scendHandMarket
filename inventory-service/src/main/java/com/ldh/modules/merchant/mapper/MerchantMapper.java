@@ -9,6 +9,8 @@ import com.ldh.modules.merchant.model.MerchantModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface MerchantMapper extends BaseMapper<Merchant> {
 
@@ -17,4 +19,6 @@ public interface MerchantMapper extends BaseMapper<Merchant> {
     MerchantModel selectById(String id);
 
     MerchantModel selectByUserId(String userId);
+
+    List<MerchantModel> selectByIds(@Param("ids") String[] ids);
 }

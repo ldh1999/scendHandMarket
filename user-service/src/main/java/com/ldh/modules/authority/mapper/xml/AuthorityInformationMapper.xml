@@ -27,7 +27,14 @@
          </if>
     </select>
     <select id="findByUserName" resultType="com.ldh.modules.authority.model.AuthorityInformationModel">
-        select * from authority_information where 1=1 and authority_username = #{username}
+        select ai.*,
+               GROUP_CONCAT(sr.role_no) as 'roleNos'
+        from authority_information ai
+         LEFT JOIN authority_role_information ari ON ari.authority_id = ai.authority_id
+         LEFT JOIN sys_role sr ON ari.sys_role_id = sr.id
+        where 1=1
+        and ai.authority_username = #{username}
+        GROUP BY ai.authority_id
     </select>
 
     <select id="selectByIds" resultType="com.ldh.modules.authority.model.AuthorityInformationModel">

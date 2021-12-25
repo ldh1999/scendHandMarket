@@ -46,4 +46,9 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
     public MerchantModel selectByUserId(String userId) {
         return merchantMapper.selectByUserId(userId);
     }
+
+    @Override
+    public List<MerchantModel> selectByIds(String[] ids) {
+        return merchantMapper.selectByIds(ids);
+    }
 }

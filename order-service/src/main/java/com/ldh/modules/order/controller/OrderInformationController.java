@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.order.entity.OrderInformation;
+import com.ldh.modules.order.model.OrderInformationDetailModel;
 import com.ldh.modules.order.model.OrderInformationModel;
 import com.ldh.modules.order.service.OrderInformationService;
 import com.ldh.util.RedisSessionUtil;
@@ -71,8 +72,6 @@ public class OrderInformationController{
 	}
 
 
-
-
 	
 	/**
 	 * 编辑
@@ -94,7 +93,7 @@ public class OrderInformationController{
 	 * @return
 	 */
 	@ApiOperation(value="订单信息表-通过id删除", notes="订单信息表-通过id删除")
-	@DeleteMapping(value = "/delete")
+	@DeleteMapping(value = "/deleteById")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		orderInformationService.removeById(id);
 		return Result.OK("删除成功!");
@@ -126,7 +125,25 @@ public class OrderInformationController{
 		return Result.OK(orderInformation);
 	}
 
-
+	/**
+	 * 通过id查询详情
+	 *
+	 * @param id
+	 * @return
+	 */
+	@ApiOperation(value="订单信息表-通过id查询详情", notes="订单信息表-通过id查询详情")
+	@GetMapping(value = "/queryByIdDetail")
+	public Result<?> queryByIdDetail(@RequestParam(name="id",required=true) String id) {
+		Result<OrderInformationDetailModel> result = new Result<>();
+		try{
+			result.setResult(orderInformationService.getByIdDetail(id));
+			result.setSuccess(true);
+		}catch (Exception e){
+			log.error(e.getMessage(), e);
+			result.error(e.getMessage());
+		}
+		return result;
+	}
 
 
 }

@@ -27,4 +27,8 @@ spring:
           uri: lb://orderservice
           predicates:
             - Header=gateway, orderService
+        - id: managerservice
+          uri: lb://managerservice
+          predicates:
+            - Header=gateway, managerService
 

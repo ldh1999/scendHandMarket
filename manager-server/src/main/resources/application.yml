@@ -1,0 +1,69 @@
+logging:
+  level:
+    com.ldh: debug
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS
+server:
+  port: 5081
+spring:
+  session:
+    store-type: redis
+  datasource:
+    #url: jdbc:mysql://192.168.233.128:3306/cloud_user_information?useSSL=false
+    url: jdbc:mysql://localhost/cloud_order?useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    #host: 192.168.233.128
+    host: 127.0.0.1
+    lettuce:
+      pool:
+        max-active: 8   #最大连接数据库连接数,设 0 为没有限制
+        max-idle: 8     #最大等待连接中的数量,设 0 为没有限制
+        max-wait: -1ms  #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。
+        min-idle: 0     #最小等待连接中的数量,设 0 为没有限制
+      shutdown-timeout: 5000ms
+    password:
+    port: 6379
+    timeout: 3000ms
+
+mybatis-plus:
+  mapper-locations: classpath*:com/ldh/modules/**/xml/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+myConfig:
+  security:
+    tokenValiditySeconds: 5000
+
+
+feign:
+  httpclient:
+    enabled: true
+    max-connections-per-route: 50
+    max-connections: 200
+ribbon:
+  eager-load:
+    enabled: true
+    clients:
+      -userservice
+      -otherResourceservice
+jwt:
+  header: Authorization
+  base64-secret: meng
+  token-validity-in-seconds: 14400000
+
+##请求头
+#  jwt.header=Authorization
+#  #盐值
+#  jwt.base64-secret=meng
+#  #过期时间
+#  jwt.token-validity-in-seconds=14400000
+
+
+
+
+

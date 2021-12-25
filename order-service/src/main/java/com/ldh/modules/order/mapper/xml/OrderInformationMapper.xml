@@ -15,6 +15,9 @@
       <if test="orderInformation.sts != null and orderInformation.sts != ''">
           and oi.sts = #{orderInformation.sts}
       </if>
+      <if test="orderInformation.orderCode != null and orderInformation.orderCode != ''">
+          and oi.order_code = #{orderInformation.orderCode}
+      </if>
       ${queryWrapper.customSqlSegment}
     </select>
 </mapper>
