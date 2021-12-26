@@ -3,6 +3,7 @@ package com.ldh.modules.user.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ldh.modules.user.service.SysRoleService;
 import com.ldh.userService.client.SysRoleClient;
 import com.ldh.userService.pojo.AuthorityInformation;
 import com.ldh.userService.pojo.SysRole;
@@ -26,7 +27,7 @@ import java.util.List;
 public class SysRoleController {
 
     @Autowired
-    private SysRoleClient sysRoleClient;
+    private SysRoleService sysRoleService;
 
     @PreAuthorize("hasAuthority('admin')")
     @RequestMapping(path = "list",method = RequestMethod.GET)
@@ -36,28 +37,28 @@ public class SysRoleController {
                           @RequestParam(name="column", required = false) String column,
                           @RequestParam(name="order", required = false) String order){
 
-        return sysRoleClient.list(sysRole, pageNo, pageSize, column, order);
+        return sysRoleService.list(sysRole, pageNo, pageSize, column, order);
     }
 
     @PreAuthorize("hasAuthority('superAdmin')")
     @RequestMapping(path = "delete" , method = RequestMethod.DELETE)
-    public Result<?> delete(@RequestParam(name="id")String id, HttpServletRequest request){
+    public Result<?> delete(@RequestParam(name="id")String id){
 
-        return sysRoleClient.delete(id);
+        return sysRoleService.delete(id);
     }
 
     @PreAuthorize("hasAuthority('superAdmin')")
     @RequestMapping(path = "add" , method = RequestMethod.POST)
     public Result<?> add(@RequestBody SysRole sysRole){
 
-        return sysRoleClient.add(sysRole);
+        return sysRoleService.add(sysRole);
     }
 
     @PreAuthorize("hasAuthority('superAdmin')")
     @RequestMapping(path = "updateById" , method = RequestMethod.POST)
     public Result<?> update(@RequestBody SysRole sysRole){
 
-        return sysRoleClient.update(sysRole);
+        return sysRoleService.update(sysRole);
     }
 
 }

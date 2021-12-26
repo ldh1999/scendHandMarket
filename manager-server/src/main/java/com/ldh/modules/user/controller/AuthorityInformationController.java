@@ -1,5 +1,6 @@
 package com.ldh.modules.user.controller;
 
+import com.ldh.modules.user.service.AuthorityInformationService;
 import com.ldh.userService.client.AuthorityClient;
 import com.ldh.userService.pojo.AuthorityInformation;
 import common.Result;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthorityInformationController {
 
     @Autowired
-    private AuthorityClient authorityClient;
+    private AuthorityInformationService authorityInformationService;
 
     @PreAuthorize("hasAuthority('admin')")
     @ApiOperation(value="用户管理列表", notes="用户管理列表")
@@ -27,7 +28,7 @@ public class AuthorityInformationController {
                           @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
                           @RequestParam(name="column", required = false) String column,
                           @RequestParam(name="order", required = false) String order){
-        return authorityClient.list(authorityInformation, pageNo, pageSize, column, order);
+        return authorityInformationService.list(authorityInformation, pageNo, pageSize, column, order);
     }
 
     @PreAuthorize("hasAuthority('admin')")
@@ -35,7 +36,7 @@ public class AuthorityInformationController {
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     public Result<?> insert(@RequestBody AuthorityInformation authorityInformation){
 
-        return authorityClient.insert(authorityInformation);
+        return authorityInformationService.insert(authorityInformation);
     }
 
     @PreAuthorize("hasAuthority('admin')")
@@ -43,21 +44,21 @@ public class AuthorityInformationController {
     @RequestMapping(path = "/updateById", method = RequestMethod.POST)
     public Result<?> updateById(@RequestBody AuthorityInformation authorityInformation){
 
-        return authorityClient.updateById(authorityInformation);
+        return authorityInformationService.updateById(authorityInformation);
     }
     @PreAuthorize("hasAuthority('admin')")
     @ApiOperation(value="用户管理删除", notes="用户管理删除")
     @RequestMapping(path = "/deleteById", method = RequestMethod.DELETE)
     public Result<?> deleteById(@RequestParam(value = "id", required = true)String id){
 
-        return authorityClient.deleteById(id);
+        return authorityInformationService.deleteById(id);
     }
     @PreAuthorize("hasAuthority('admin')")
     @ApiOperation(value="用户管理查找", notes="用户管理查找")
     @RequestMapping(path = "/selectById", method = RequestMethod.GET)
     public Result<?> selectById(@RequestParam(value = "id", required = true)String id){
 
-        return authorityClient.selectById(id);
+        return authorityInformationService.selectById(id);
     }
 
 }

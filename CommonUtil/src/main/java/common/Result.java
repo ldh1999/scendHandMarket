@@ -1,5 +1,8 @@
 package common;
-public class Result<T> {
+
+import java.io.Serializable;
+
+public class Result<T> implements Serializable {
     private boolean success = true;
     private T result;
     private String message;

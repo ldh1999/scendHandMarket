@@ -27,10 +27,8 @@ import java.util.UUID;
 @RequestMapping("/order/orderClient")
 public class OrderClientController {
 
-
     @Autowired
     private OrderInformationService orderInformationService;
-
 
     /**
      * 卖家订单分页列表查询

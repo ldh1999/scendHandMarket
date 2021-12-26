@@ -3,6 +3,7 @@ package com.ldh.modules.user.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ldh.modules.user.service.AuthorityRoleService;
 import com.ldh.userService.client.AuthorityRoleInformationClient;
 import com.ldh.userService.model.AuthorityRoleInformationModel;
 import com.ldh.userService.pojo.AuthorityInformation;
@@ -24,7 +25,7 @@ public class AuthorityRoleController {
 
 
     @Autowired
-    private AuthorityRoleInformationClient authorityRoleInformationClient;
+    private AuthorityRoleService authorityRoleService;
 
     @PreAuthorize("hasAuthority('admin')")
     @ApiOperation(value="用户权限列表", notes="用户权限列表")
@@ -34,7 +35,7 @@ public class AuthorityRoleController {
                           @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
                           @RequestParam(name="column", required = false) String column,
                           @RequestParam(name="order", required = false) String order){
-        return authorityRoleInformationClient.list(authorityInformation, pageNo, pageSize, column, order);
+        return authorityRoleService.list(authorityInformation, pageNo, pageSize, column, order);
     }
 
     @PreAuthorize("hasAuthority('admin')")
@@ -42,13 +43,13 @@ public class AuthorityRoleController {
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     public Result<?> insert(@RequestBody AuthorityRoleInformation authorityRoleInformation){
 
-        return authorityRoleInformationClient.insert(authorityRoleInformation);
+        return authorityRoleService.insert(authorityRoleInformation);
     }
     @PreAuthorize("hasAuthority('admin')")
     @ApiOperation(value="用户权限删除", notes="用户权限删除")
     @RequestMapping(path = "/deleteById", method = RequestMethod.DELETE)
     public Result<?> deleteById(@RequestParam(value = "id", required = true)String id){
 
-        return authorityRoleInformationClient.deleteById(id);
+        return authorityRoleService.deleteById(id);
     }
 }

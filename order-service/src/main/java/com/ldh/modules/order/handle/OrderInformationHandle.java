@@ -1,9 +1,5 @@
-package com.ldh.modules.order.controller;
+package com.ldh.modules.order.handle;
 
-import java.util.Arrays;
-import java.util.UUID;
-
-import User.AuthorityInformation;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,17 +7,15 @@ import com.ldh.modules.order.entity.OrderInformation;
 import com.ldh.modules.order.model.OrderInformationDetailModel;
 import com.ldh.modules.order.model.OrderInformationModel;
 import com.ldh.modules.order.service.OrderInformationService;
-import com.ldh.util.RedisSessionUtil;
 import common.Result;
 import common.StringTo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 
 /**
  * @Description: 订单信息表
@@ -30,10 +24,10 @@ import javax.servlet.http.HttpSession;
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags = "订单信息表")
+@Api(tags = "订单信息表对外接口")
 @RestController
-@RequestMapping("/order/orderInformation")
-public class OrderInformationController {
+@RequestMapping("/order/orderInformation/handle")
+public class OrderInformationHandle {
     @Autowired
     private OrderInformationService orderInformationService;
 
@@ -97,20 +91,6 @@ public class OrderInformationController {
         orderInformationService.removeById(id);
         return Result.OK("删除成功!");
     }
-
-    /**
-     * 批量删除
-     *
-     * @param ids
-     * @return
-     */
-    @ApiOperation(value = "订单信息表-批量删除", notes = "订单信息表-批量删除")
-    @DeleteMapping(value = "/deleteBatch")
-    public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
-        this.orderInformationService.removeByIds(Arrays.asList(ids.split(",")));
-        return Result.OK("批量删除成功！");
-    }
-
     /**
      * 通过id查询
      *
@@ -143,6 +123,5 @@ public class OrderInformationController {
         }
         return result;
     }
-
 
 }

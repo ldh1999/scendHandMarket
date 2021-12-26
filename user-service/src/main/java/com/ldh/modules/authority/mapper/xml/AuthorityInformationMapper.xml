@@ -33,6 +33,7 @@
          LEFT JOIN authority_role_information ari ON ari.authority_id = ai.authority_id
          LEFT JOIN sys_role sr ON ari.sys_role_id = sr.id
         where 1=1
+        and ai.sts != '-1'
         and ai.authority_username = #{username}
         GROUP BY ai.authority_id
     </select>

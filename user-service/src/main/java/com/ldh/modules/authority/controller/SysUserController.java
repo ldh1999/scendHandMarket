@@ -1,6 +1,7 @@
 package com.ldh.modules.authority.controller;
 
 import com.alibaba.nacos.common.utils.UuidUtils;
+import com.ldh.constant.UserStsEnum;
 import com.ldh.modules.authority.entity.AuthorityInformation;
 import com.ldh.modules.authority.entity.SysUserEntity;
 import com.ldh.modules.authority.model.AuthorityInformationModel;
@@ -80,9 +81,12 @@ public class SysUserController {
                 result.error("用户不存在");
             }else if (!authorityInformation.getAuthorityPassword().equals(password)){
                 result.error("密码错误");
+            }else if (authorityInformation.getSts().equals(UserStsEnum.freeze.getUserSts())){
+                result.error("该账号已冻结");
             }else {
                 HttpSession session = request.getSession();
                 String token = UuidUtils.generateUuid();
+                session.removeAttribute("user");
                 session.setAttribute("user", authorityInformation);
                 redisTemplate.opsForValue().set(authorityInformation.getAuthorityId(), token,20, TimeUnit.MINUTES);
                 authorityInformation.setToken(token);

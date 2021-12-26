@@ -1,5 +1,6 @@
 package com.ldh.modules.sys.controller;
 
+import com.ldh.modules.sys.service.SysHorseLampService;
 import com.ldh.sysService.client.SysHorseLampClient;
 import com.ldh.sysService.model.SysHorseLampVO;
 import com.ldh.sysService.pojo.SysHorseLamp;
@@ -20,7 +21,7 @@ public class SysHorseLampController {
 
 
     @Autowired
-    private SysHorseLampClient sysHorseLampClient;
+    private SysHorseLampService sysHorseLampService;
 
     @PreAuthorize("hasAuthority('admin')")
     @ApiOperation(value="走马灯列表", notes="走马灯列表")
@@ -30,35 +31,35 @@ public class SysHorseLampController {
                           @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
                           @RequestParam(name="column", required = false) String column,
                           @RequestParam(name="order", required = false) String order){
-        return sysHorseLampClient.list(sysHorseLamp, pageNo, pageSize, column, order);
+        return sysHorseLampService.list(sysHorseLamp, pageNo, pageSize, column, order);
     }
 
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAuthority('admin,user')")
     @ApiOperation(value="主页走马灯", notes="主页走马灯")
     @RequestMapping(path = "/homeListClient", method = RequestMethod.GET)
     public Result<?> homeListClient(){
-        return sysHorseLampClient.homeListClient();
+        return sysHorseLampService.homeListClient();
     }
 
     @PreAuthorize("hasAuthority('admin')")
     @ApiOperation(value="添加走马灯", notes="添加走马灯")
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     public Result<?> add(@RequestBody SysHorseLampVO sysHorseLampVO){
-        return sysHorseLampClient.add(sysHorseLampVO);
+        return sysHorseLampService.add(sysHorseLampVO);
     }
 
     @PreAuthorize("hasAuthority('admin')")
     @ApiOperation(value="走马灯删除", notes="走马灯删除")
     @RequestMapping(path = "/deleteById", method = RequestMethod.DELETE)
     public Result<?> deleteById(@RequestParam(value = "id", required = true)String id){
-        return sysHorseLampClient.deleteById(id);
+        return sysHorseLampService.deleteById(id);
     }
 
     @PreAuthorize("hasAuthority('admin')")
     @ApiOperation(value="走马灯修改", notes="走马灯修改")
     @RequestMapping(path = "/updateById", method = RequestMethod.POST)
     public Result<?> updateById(@RequestBody SysHorseLamp sysHorseLamp){
-        return sysHorseLampClient.updateById(sysHorseLamp);
+        return sysHorseLampService.updateById(sysHorseLamp);
     }
 
 

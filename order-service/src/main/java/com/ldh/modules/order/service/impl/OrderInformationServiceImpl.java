@@ -238,17 +238,20 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
     @Override
     public OrderInformationDetailModel getByIdDetail(String id) throws Exception {
         OrderInformation orderInformation = this.getById(id);
-
         Result<Inventory> inventoryResult = inventoryClient.getById(orderInformation.getInventoryId());
         Result<MerchantModel> merchantResult = merchantClient.selectById(orderInformation.getMerchantId());
         Result<AuthorityInformationModel> userResult = authorityClient.selectById(orderInformation.getCreateBy());
 
         MerchantModel merchantModel = merchantResult.getResult();
+        Inventory inventory = inventoryResult.getResult();
         AuthorityInformationModel authorityInformationModel = userResult.getResult();
 
+        OrderInformationDetailModel orderInformationDetailModel = null;
         if (inventoryResult.isSuccess() && merchantResult.isSuccess() && userResult.isSuccess()){
-            OrderInformationDetailModel orderInformationDetailModel = new OrderInformationDetailModel(orderInformation);
+            //订单基础信息
+            orderInformationDetailModel = new OrderInformationDetailModel(orderInformation);
 
+            //商家详情
             orderInformationDetailModel
                     .setMerchantCode(merchantModel.getMerchantCode())
                     .setMerchantInformation(merchantModel.getMerchantInformation())
@@ -257,14 +260,21 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
                     .setRecordIdentityCode(merchantModel.getRecordIdentityCode())
                     .setRecordPhone(merchantModel.getRecordPhone())
                     .setRecordRealName(merchantModel.getRecordRealName());
-            //TODO 还差商品的详情
-
-
+            //商品详情
+            orderInformationDetailModel
+                    .setInventoryCode(inventory.getInventoryCode())
+                    .setInventoryName(inventory.getInventoryName())
+                    .setInventoryInformation(inventory.getInventoryInformation())
+                    .setInventoryPrice(inventory.getInventoryPrice());
+            //接收订单人的详情
+            orderInformationDetailModel
+                    .setUserName(authorityInformationModel.getAuthorityUsername())
+                    .setAuthorityName(authorityInformationModel.getAuthorityName())
+                    .setRealName(authorityInformationModel.getRealName())
+                    .setPhone(authorityInformationModel.getPhone());
         }else {
             throw new Exception("fegin error");
         }
-
-
-        return null;
+        return orderInformationDetailModel;
     }
 }
