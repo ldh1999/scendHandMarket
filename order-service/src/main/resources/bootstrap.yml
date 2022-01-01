@@ -1,8 +1,8 @@
 spring:
-  application:
-    name: orderservice
   profiles:
     active: dev
+  application:
+    name: orderservice
   cloud:
     nacos:
       discovery:

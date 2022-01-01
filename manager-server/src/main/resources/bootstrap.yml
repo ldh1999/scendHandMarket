@@ -1,8 +1,8 @@
 spring:
-  application:
-    name: managerservice
   profiles:
     active: dev
+  application:
+    name: managerservice
   cloud:
     nacos:
       discovery:

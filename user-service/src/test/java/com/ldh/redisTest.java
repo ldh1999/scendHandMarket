@@ -20,12 +20,8 @@ public class redisTest {
     @Autowired
     RedisTemplate<String, String> redisTemplate;
 
-    private DataSource a;
-
-
     @Test
     public void redisTeest(){
-        log.debug(a.toString());
        //redisTemplate.opsForValue().set("key","value",20, TimeUnit.SECONDS);
         //System.out.println(redisTemplate.opsForValue().get("test"));
     }

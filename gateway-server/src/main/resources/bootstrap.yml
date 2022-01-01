@@ -2,7 +2,7 @@ spring:
   profiles:
     active: dev
   application:
-    name: userservice
+    name: gateway
   cloud:
     nacos:
       discovery:

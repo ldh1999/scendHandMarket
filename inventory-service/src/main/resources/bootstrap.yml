@@ -1,8 +1,8 @@
 spring:
-  application:
-    name: inventoryservice
   profiles:
     active: dev
+  application:
+    name: inventoryservice
   cloud:
     nacos:
       discovery:

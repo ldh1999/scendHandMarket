@@ -1,8 +1,8 @@
 spring:
-  application:
-    name: otherResourceservice
   profiles:
     active: dev
+  application:
+    name: otherResourceservice
   cloud:
     nacos:
       discovery:
