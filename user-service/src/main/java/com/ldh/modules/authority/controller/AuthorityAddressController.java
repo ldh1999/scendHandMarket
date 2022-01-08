@@ -148,7 +148,7 @@ public class AuthorityAddressController{
 	 * 获取当前用户地址下拉框
 	 * @return
 	 */
-	@ApiOperation(value="用户地址-通过id查询", notes="用户地址-通过id查询")
+	@ApiOperation(value="用户地址-获取当前用户地址下拉框", notes="用户地址-获取当前用户地址下拉框")
 	@GetMapping(value = "/getNowUserOption")
 	public Result<?> getNowUserOption(HttpServletRequest request){
 		Result<List<?>> result = new Result<>();
