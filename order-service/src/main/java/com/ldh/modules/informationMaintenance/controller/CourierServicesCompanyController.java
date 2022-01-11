@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiOperation;
 
  /**
  * @Description: 快递公司维护
- * @Author: jeecg-boot
+ * @Author: ldh
  * @Date:   2022-01-08
  * @Version: V1.0
  */
@@ -126,5 +126,25 @@ public class CourierServicesCompanyController {
 		CourierServicesCompany courierServicesCompany = courierServicesCompanyService.getById(id);
 		return Result.OK(courierServicesCompany);
 	}
+
+	 /**
+	  * 获取全部下拉框
+	  *
+	  * @return
+	  */
+	 @ApiOperation(value="快递公司维护-获取全部下拉框", notes="快递公司维护-获取全部下拉框")
+	 @GetMapping(value = "/getAllOption")
+	 public Result<?> getAllOption(){
+	 	Result result = new Result();
+	 	try{
+			result.setResult(courierServicesCompanyService.getAllOption());
+			result.setSuccess(true);
+		}catch (Exception e){
+	 		log.error(e.getMessage(), e);
+	 		result.error(e.getMessage());
+		}
+	 	return result;
+	 }
+
 
 }

@@ -1,16 +1,15 @@
-package com.ldh.modules.informationMaintenance.entity;
+package com.ldh.orderService.pojo;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @Description: 快递公司维护
@@ -19,7 +18,6 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @Version: V1.0
  */
 @Data
-@TableName("courier_services_company")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="courier_services_company对象", description="快递公司维护")
@@ -27,7 +25,6 @@ public class CourierServicesCompany implements Serializable {
     
 	/**id*/
     @ApiModelProperty(value = "id")
-	@TableId(type = IdType.UUID)
 	private String courierServicesCompanyId;
 	/**快递公司编码*/
     @ApiModelProperty(value = "快递公司编码")
@@ -45,7 +42,6 @@ public class CourierServicesCompany implements Serializable {
     @ApiModelProperty(value = "sts")
 	private String sts;
 	/**创建时间*/
-	@TableField(fill = FieldFill.INSERT)
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "创建时间")
@@ -57,7 +53,6 @@ public class CourierServicesCompany implements Serializable {
 	@ApiModelProperty(value = "修改人")
 	private String updateBy;
 	/**修改时间*/
-	@TableField(fill = FieldFill.UPDATE)
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "修改时间")

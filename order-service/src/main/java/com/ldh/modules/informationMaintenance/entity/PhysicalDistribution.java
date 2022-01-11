@@ -1,4 +1,4 @@
-package com.ldh.modules.authority.entity;
+package com.ldh.modules.informationMaintenance.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,40 +13,42 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * @Description: 用户地址
- * @Author: ldh
- * @Date:   2021-11-27
+ * @Description: 物流信息
+ * @Author: jeecg-boot
+ * @Date:   2022-01-11
  * @Version: V1.0
  */
 @Data
-@TableName("authority_address")
+@TableName("physical_distribution")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="authority_address对象", description="用户地址")
-public class AuthorityAddress implements Serializable{
+@ApiModel(value="physical_distribution对象", description="物流信息")
+public class PhysicalDistribution {
     
-	/**id*/
-    @ApiModelProperty(value = "addressId")
-	@TableId(type = IdType.UUID)
-	private String addressId;
-	/**用户id*/
-    @ApiModelProperty(value = "用户id")
-	private String authorityId;
-	/**通讯人姓名*/
-    @ApiModelProperty(value = "通讯人姓名")
-	private String addressName;
-	/**通讯人地址*/
-    @ApiModelProperty(value = "通讯人地址")
-	private String addressSite;
-	/**通讯人手机号*/
-    @ApiModelProperty(value = "通讯人手机号")
-	private String addressPhone;
-	/**remark*/
-    @ApiModelProperty(value = "remark")
-	private String remark;
+	/**物流id*/
+    @ApiModelProperty(value = "物流id")
+	private String physicalDistributionId;
+	/**物流订单id*/
+    @ApiModelProperty(value = "物流订单id")
+	private String orderPhysicalDistributionId;
+	/**下一位置id*/
+    @ApiModelProperty(value = "下一位置id")
+	private String nextPositionId;
+	/**当前位置id*/
+    @ApiModelProperty(value = "当前位置id")
+	private String nowPositionId;
+	/**下一位置名称*/
+    @ApiModelProperty(value = "下一位置名称")
+	private String nextPositionName;
+	/**当前位置名称*/
+    @ApiModelProperty(value = "当前位置名称")
+	private String nowPositionName;
 	/**sts*/
     @ApiModelProperty(value = "sts")
 	private String sts;
+	/**remark*/
+    @ApiModelProperty(value = "remark")
+	private String remark;
 	/**createTime*/
 	@TableField(fill = FieldFill.INSERT)
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")

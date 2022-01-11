@@ -43,7 +43,8 @@
 
     <select id="selectByIdAll" resultType="com.ldh.modules.inventory.model.InventoryClientModel">
         select i.*,
-               m.merchant_name as 'merchantName'
+               m.merchant_name as 'merchantName',
+               m.img_path as 'merchantImgPath'
         from inventory i
         LEFT JOIN merchant m on i.merchant_id = m.merchant_id
         where 1=1

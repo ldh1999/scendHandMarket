@@ -83,4 +83,18 @@ public class OrderClientController {
         }
         return result;
     }
+
+    @ApiOperation(value="买家订单-确认收货", notes="订单信息表-确认收货")
+    @GetMapping(value = "/orderEnd")
+    public Result<?> orderEnd(@RequestParam(value = "orderId", required = true) String id){
+        Result result = new Result();
+        try {
+            orderInformationService.orderEnd(id);
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
 }

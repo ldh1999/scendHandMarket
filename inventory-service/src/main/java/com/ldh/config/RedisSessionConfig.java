@@ -7,7 +7,7 @@ import org.springframework.session.data.redis.config.ConfigureRedisAction;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /*@EnableCaching*/
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 30)//session过期时间(秒)
+@EnableRedisHttpSession()//session过期时间(秒)
 @Configuration
 public class RedisSessionConfig
 {

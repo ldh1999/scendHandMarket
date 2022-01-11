@@ -7,11 +7,12 @@ import com.ldh.modules.order.entity.OrderInformation;
 import com.ldh.modules.order.model.OrderInformationDetailModel;
 import com.ldh.modules.order.model.OrderInformationModel;
 import com.ldh.modules.order.model.OrderMerchantInformationModel;
+import com.ldh.modules.order.vo.SendInventoryVO;
 import org.apache.ibatis.annotations.Param;
 
 /**
  * @Description: 订单信息表
- * @Author: jeecg-boot
+ * @Author: ldh
  * @Date:   2021-11-28
  * @Version: V1.0
  */
@@ -26,4 +27,10 @@ public interface OrderInformationService extends IService<OrderInformation> {
     OrderMerchantInformationModel getByIdForMerchantDetail(String id);
 
     OrderInformationDetailModel getByIdDetail(String id) throws Exception;
+
+    /** 商家发货 */
+    void sendInventory(SendInventoryVO sendInventoryVO);
+
+    /** 订单结束（确认收货） */
+    void orderEnd(String id);
 }

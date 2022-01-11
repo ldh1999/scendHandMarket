@@ -2,17 +2,26 @@ package com.ldh.modules.merchant.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ldh.constant.FilePath;
 import com.ldh.modules.merchant.entity.Merchant;
 import com.ldh.modules.merchant.model.MerchantModel;
 import com.ldh.modules.merchant.service.MerchantService;
 import common.Result;
 import common.StringTo;
+import constant.UploadFileConstant;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.util.Random;
 import java.util.UUID;
 
 @RestController
@@ -66,10 +75,12 @@ public class MerchantController {
 
     @ApiOperation(value="根据id查询", notes="根据id查询")
     @RequestMapping(path = "/selectById", method = RequestMethod.GET)
-    public Result<?> selectById(@RequestParam(name = "id", required = true) String id){
+    public Result<?> selectById(@RequestParam(name = "id", required = true) String id,
+                                HttpServletRequest request){
         Result<MerchantModel> result = new Result<>();
         try {
             MerchantModel merchantModel = merchantService.selectById(id);
+            merchantModel.setImgPath(this.getNowUrl(request)+merchantModel.getImgPath());
             result.setSuccess(true);
             result.setResult(merchantModel);
         }catch (Exception e){
@@ -81,10 +92,12 @@ public class MerchantController {
 
     @ApiOperation(value="根据用户id查询", notes="根据用户id查询")
     @RequestMapping(path = "/selectByUserId", method = RequestMethod.GET)
-    public Result<?> selectByUserId(@RequestParam(name = "id", required = true) String id){
+    public Result<?> selectByUserId(@RequestParam(name = "id", required = true) String id,
+                                    HttpServletRequest request){
         Result<MerchantModel> result = new Result<>();
         try {
             MerchantModel merchantModel = merchantService.selectByUserId(id);
+            merchantModel.setImgPath(this.getNowUrl(request)+merchantModel.getImgPath());
             result.setSuccess(true);
             result.setResult(merchantModel);
         }catch (Exception e){
@@ -107,6 +120,51 @@ public class MerchantController {
             result.error();
         }
         return result;
+    }
+
+    @ApiOperation(value="头像更新", notes="头像更新")
+    @RequestMapping(path = "upload", method = RequestMethod.POST)
+    public Result<?> uploadImage(@RequestParam(value = "file") MultipartFile file,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 @RequestParam(name = "id") String id
+    ){
+        Result<String> result = new Result<>();
+        String fileName = file.getOriginalFilename();
+        String fileType = file.getContentType();
+        Random random = new Random();
+        String randomString = String.valueOf(random.nextInt());
+        String fileSaveName = randomString.substring(1,randomString.length());
+        String filePathName = fileSaveName+fileName;
+        String savePath = FilePath.IMAGE_SAVE_PATH+ UploadFileConstant.MERCHANT_HAND_IMAGE +"/"+filePathName;
+        String saveDbPath = FilePath.IMAGE_SHOW_PATH+UploadFileConstant.MERCHANT_HAND_IMAGE+"/"+filePathName;
+        if (!fileType.substring(0,fileType.indexOf("/")).equals("image")){
+            result.error("请上传图片");
+            return result;
+        }
+        try{
+            File file1 = new File(savePath);
+            if (!file1.isDirectory()){
+                file1.mkdirs();
+            }
+            file.transferTo(file1);
+            Merchant merchant = new Merchant();
+            merchant.setMerchantId(id);
+            merchant.setImgPath(saveDbPath);
+            merchantService.updateById(merchant);
+            result.setResult(this.getNowUrl(request)+saveDbPath);
+            result.setMessage("上传成功");
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            result.error("上传失败");
+        }
+        return result;
+    }
+
+    private String getNowUrl(ServletRequest request){
+        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
     }
 
 

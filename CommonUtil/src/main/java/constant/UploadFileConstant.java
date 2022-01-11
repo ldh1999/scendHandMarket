@@ -7,6 +7,8 @@ public class UploadFileConstant {
     public final static String HORSE_LAMP_MANAGER = "horseLampImage";
     /** 用户头像 */
     public final static String USER_HAND_IMAGE = "userHandImage";
+    /** 店铺头像 */
+    public final static String MERCHANT_HAND_IMAGE = "merchantHandImage";
 
 
 }

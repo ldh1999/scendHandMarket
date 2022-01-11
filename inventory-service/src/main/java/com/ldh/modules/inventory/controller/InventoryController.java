@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -286,16 +287,23 @@ public class InventoryController {
 
     @ApiOperation(value = "根据id查商品(客户端)", notes = "根据id查商品(客户端)")
     @RequestMapping(path = "/selectByIdClient", method = RequestMethod.GET)
-    public Result<?> selectByIdClient(@RequestParam(name = "id")String id) {
+    public Result<?> selectByIdClient(@RequestParam(name = "id")String id,ServletRequest request) {
         Result<InventoryClientModel> result = new Result<>();
         try{
-            result.setResult(inventoryService.getByIdAll(id));
+            InventoryClientModel inventoryClientModel = inventoryService.getByIdAll(id);
+            if (inventoryClientModel.getMerchantImgPath() != null){
+                inventoryClientModel.setMerchantImgPath(this.getNowUrl(request)+inventoryClientModel.getMerchantImgPath());
+            }
+            result.setResult(inventoryClientModel);
             result.setSuccess(true);
         }catch (Exception e){
             log.error(e.getMessage(), e);
             result.error(e.getMessage());
         }
         return result;
+    }
+    private String getNowUrl(ServletRequest request){
+        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
     }
 
 }

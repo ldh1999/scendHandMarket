@@ -15,4 +15,12 @@
         </if>
         ${queryWrapper.customSqlSegment}
     </select>
+
+    <select id="getAllOption" resultType="common.OptionModel">
+        select csc.courier_services_company_id as 'key',
+               csc.courier_services_company_name as 'title',
+               csc.courier_services_company_name as 'value'
+        from courier_services_company csc
+        where 1=1
+    </select>
 </mapper>

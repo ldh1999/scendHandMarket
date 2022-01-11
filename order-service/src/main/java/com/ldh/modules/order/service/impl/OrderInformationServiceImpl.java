@@ -8,11 +8,14 @@ import com.ldh.inventoryService.model.InventoryModel;
 import com.ldh.inventoryService.model.MerchantModel;
 import com.ldh.inventoryService.pojo.Inventory;
 import com.ldh.modules.order.entity.OrderInformation;
+import com.ldh.modules.order.entity.OrderPhysicalDistribution;
 import com.ldh.modules.order.mapper.OrderInformationMapper;
 import com.ldh.modules.order.model.OrderInformationDetailModel;
 import com.ldh.modules.order.model.OrderInformationModel;
 import com.ldh.modules.order.model.OrderMerchantInformationModel;
 import com.ldh.modules.order.service.OrderInformationService;
+import com.ldh.modules.order.service.OrderPhysicalDistributionService;
+import com.ldh.modules.order.vo.SendInventoryVO;
 import com.ldh.otherResourceService.client.ImageNoteGetClient;
 import com.ldh.otherResourceService.model.ImageListGetVO;
 import com.ldh.otherResourceService.model.ImageNoteModel;
@@ -22,18 +25,20 @@ import com.ldh.userService.model.AuthorityAddressModel;
 import com.ldh.userService.model.AuthorityInformationModel;
 import common.Result;
 import constant.UploadFileConstant;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * @Description: 订单信息表
- * @Author: jeecg-boot
+ * @Author: ldh
  * @Date:   2021-11-28
  * @Version: V1.0
  */
@@ -57,6 +62,9 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
 
     @Autowired
     private ImageNoteGetClient imageNoteGetClient;
+
+    @Autowired
+    private OrderPhysicalDistributionService orderPhysicalDistributionService;
 
     @Override
     public Page<OrderInformationModel> list(Page page, QueryWrapper queryWrapper, OrderInformation orderInformation) throws Exception {
@@ -276,5 +284,32 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
             throw new Exception("fegin error");
         }
         return orderInformationDetailModel;
+    }
+
+    @Override
+    @Transactional
+    public void sendInventory(SendInventoryVO sendInventoryVO) {
+        OrderInformation orderInformation = new OrderInformation();
+        //订单状态更改为已发货
+        orderInformation
+                .setOrderId(sendInventoryVO.getOrderId())
+                .setSts("3");
+        this.updateById(orderInformation);
+        OrderPhysicalDistribution orderPhysicalDistribution = new OrderPhysicalDistribution();
+        BeanUtils.copyProperties(sendInventoryVO, orderPhysicalDistribution);
+        orderPhysicalDistribution
+                .setSts("wait_courier")
+                .setOrderPhysicalDistributionCode(UUID.randomUUID().toString());
+        orderPhysicalDistributionService.save(orderPhysicalDistribution);
+    }
+
+    @Override
+    @Transactional
+    public void orderEnd(String id) {
+        OrderInformation orderInformation = new OrderInformation();
+        orderInformation
+                .setOrderId(id)
+                .setSts("2");
+        this.updateById(orderInformation);
     }
 }

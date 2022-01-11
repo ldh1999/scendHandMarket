@@ -14,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @Description: 订单物流
- * @Author: jeecg-boot
+ * @Author: ldh
  * @Date:   2022-01-08
  * @Version: V1.0
  */
@@ -35,6 +35,9 @@ public class OrderPhysicalDistribution implements Serializable{
 	/**订单id*/
     @ApiModelProperty(value = "订单id")
 	private String orderId;
+    /** 快递公司id */
+	@ApiModelProperty(value = "快递公司id")
+	private String courierServicesCompanyId;
 	/**发货人姓名*/
     @ApiModelProperty(value = "发货人姓名")
 	private String startRealname;
@@ -53,6 +56,9 @@ public class OrderPhysicalDistribution implements Serializable{
 	/**收件人详细地址*/
     @ApiModelProperty(value = "收件人详细地址")
 	private String endPositionDetail;
+	/**快递员编号*/
+	@ApiModelProperty(value = "快递员编号")
+    private String courierCode;
 	/**sts*/
     @ApiModelProperty(value = "sts")
 	private String sts;

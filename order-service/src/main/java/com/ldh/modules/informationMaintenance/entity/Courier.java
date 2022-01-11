@@ -1,4 +1,4 @@
-package com.ldh.modules.authority.entity;
+package com.ldh.modules.informationMaintenance.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,37 +13,34 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * @Description: 用户地址
+ * @Description: 快递员
  * @Author: ldh
- * @Date:   2021-11-27
+ * @Date:   2022-01-11
  * @Version: V1.0
  */
 @Data
-@TableName("authority_address")
+@TableName("courier")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="authority_address对象", description="用户地址")
-public class AuthorityAddress implements Serializable{
+@ApiModel(value="courier对象", description="快递员")
+public class Courier implements Serializable{
     
 	/**id*/
-    @ApiModelProperty(value = "addressId")
 	@TableId(type = IdType.UUID)
-	private String addressId;
-	/**用户id*/
-    @ApiModelProperty(value = "用户id")
-	private String authorityId;
-	/**通讯人姓名*/
-    @ApiModelProperty(value = "通讯人姓名")
-	private String addressName;
-	/**通讯人地址*/
-    @ApiModelProperty(value = "通讯人地址")
-	private String addressSite;
-	/**通讯人手机号*/
-    @ApiModelProperty(value = "通讯人手机号")
-	private String addressPhone;
-	/**remark*/
-    @ApiModelProperty(value = "remark")
-	private String remark;
+    @ApiModelProperty(value = "id")
+	private Integer courierId;
+	/**物流公司id*/
+    @ApiModelProperty(value = "物流公司id")
+	private Integer courierServicesCompanyId;
+	/**快递员编号*/
+    @ApiModelProperty(value = "快递员编号")
+	private String courierCode;
+	/**快递员姓名*/
+    @ApiModelProperty(value = "快递员姓名")
+	private String courierName;
+	/**快递员手机号*/
+    @ApiModelProperty(value = "快递员手机号")
+	private String courierPhone;
 	/**sts*/
     @ApiModelProperty(value = "sts")
 	private String sts;
@@ -56,13 +53,13 @@ public class AuthorityAddress implements Serializable{
 	/**createBy*/
     @ApiModelProperty(value = "createBy")
 	private String createBy;
+	/**updateBy*/
+    @ApiModelProperty(value = "updateBy")
+	private String updateBy;
 	/**updateTime*/
 	@TableField(fill = FieldFill.UPDATE)
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "updateTime")
 	private Date updateTime;
-	/**updateBy*/
-    @ApiModelProperty(value = "updateBy")
-	private String updateBy;
 }

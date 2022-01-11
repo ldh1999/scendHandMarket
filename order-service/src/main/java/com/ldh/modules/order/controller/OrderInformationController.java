@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * @Description: 订单信息表
- * @Author: jeecg-boot
+ * @Author: ldh
  * @Date: 2021-11-28
  * @Version: V1.0
  */
@@ -143,6 +143,4 @@ public class OrderInformationController {
         }
         return result;
     }
-
-
 }

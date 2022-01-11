@@ -7,16 +7,14 @@ import com.ldh.modules.order.entity.OrderInformation;
 import com.ldh.modules.order.model.OrderInformationModel;
 import com.ldh.modules.order.model.OrderMerchantInformationModel;
 import com.ldh.modules.order.service.OrderInformationService;
+import com.ldh.modules.order.vo.SendInventoryVO;
 import common.Result;
 import common.StringTo;
 import constant.OrderEnum;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/order/merchantClient")
 @Slf4j
@@ -110,5 +108,21 @@ public class OrderMerchantClientController {
         return result;
     }
 
+    /**
+     * 商家发货
+     */
+    @ApiOperation(value="商家发货", notes="商家发货")
+    @PostMapping(value = "/sendInventory")
+    public Result<?> sendInventory(@RequestBody SendInventoryVO sendInventoryVO){
+        Result result = new Result();
+        try {
+            orderInformationService.sendInventory(sendInventoryVO);
+            result.succcess("操作成功");
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
 
 }

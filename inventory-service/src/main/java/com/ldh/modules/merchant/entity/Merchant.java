@@ -30,6 +30,9 @@ public class Merchant implements Serializable {
     private String recordIdentityCode;
     /** 备案真实姓名 */
     private String recordRealName;
+    /** 头像路径 */
+    private String imgPath;
+
     private String sts;
 
 
