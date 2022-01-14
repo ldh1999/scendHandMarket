@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ldh.modules.order.mapper.OrderPhysicalDistributionMapper">
 
+    <select id="listAccept" resultType="com.ldh.modules.order.model.OrderPhysicalDistributionModel">
+        select opd.*
+        from order_physical_distribution opd
+        LEFT JOIN courier c on c.courier_services_company_id = opd.courier_services_company_id
+        where 1=1
+        and opd.sts = 'wait_courier'
+        <if test="orderPhysicalDistributionVO.courierUsername != null and orderPhysicalDistributionVO.courierUsername != ''">
+            and c.courier_code = #{orderPhysicalDistributionVO.courierUsername}
+        </if>
+    </select>
 </mapper>

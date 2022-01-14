@@ -101,11 +101,9 @@ public class AuthorityInformationController {
     @ApiOperation(value="用户管理删除", notes="用户管理删除")
     @RequestMapping(path = "/deleteById", method = RequestMethod.DELETE)
     public Result<?> updateById(@RequestParam(value = "id", required = true)String id){
-
         Result<?> result = new Result<>();
         try{
-            authorityInformationService.removeById(id);
-            authorityRoleService.deleteByAuthorityId(id);
+            authorityInformationService.deleteAnyOneById(id);
             result.succcess("删除成功");
         }catch (Exception e){
             log.error(e.getMessage());

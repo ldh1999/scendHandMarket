@@ -26,6 +26,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class PhysicalDistribution {
     
 	/**物流id*/
+	@TableId(type = IdType.UUID)
     @ApiModelProperty(value = "物流id")
 	private String physicalDistributionId;
 	/**物流订单id*/

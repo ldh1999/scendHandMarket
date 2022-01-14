@@ -108,7 +108,7 @@ public class SysUserController {
         Result<?> result = new Result<>();
         try {
             if(authorityInformationService.countUserName(authorityInformation)>0){
-                result.error("改用户名已被占用");
+                result.error("该用户名已被占用");
                 return result;
             }
             authorityInformationService.register(authorityInformation);

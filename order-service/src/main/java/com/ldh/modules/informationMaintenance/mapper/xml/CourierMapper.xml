@@ -2,4 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ldh.modules.informationMaintenance.mapper.CourierMapper">
 
+    <select id="list" resultType="com.ldh.modules.informationMaintenance.model.CourierModel">
+        select c.* ,
+               csc.courier_services_company_name as 'courierServicesCompanyName'
+        from courier c
+        LEFT JOIN courier_services_company csc on c.courier_services_company_id = csc.courier_services_company_id
+        where 1=1
+        <if test="courier.courierExternalIdentifierCode != null and courier.courierExternalIdentifierCode != ''">
+            and c.courier_external_identifier_code = #{courier.courierExternalIdentifierCode}
+        </if>
+        <if test="courier.courierCode != null and courier.courierCode != ''">
+            and c.courier_code = #{courier.courierCode}
+        </if>
+    </select>
+
+    <select id="countByPhone" resultType="integer">
+        select count(*)
+        from courier
+        where courier_phone = #{phone}
+    </select>
+
+    <select id="getByCode" resultType="com.ldh.modules.informationMaintenance.entity.Courier">
+        select * from courier where courier_code = #{code}
+    </select>
 </mapper>

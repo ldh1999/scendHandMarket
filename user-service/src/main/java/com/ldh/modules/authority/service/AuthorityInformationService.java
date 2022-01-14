@@ -17,8 +17,15 @@ public interface AuthorityInformationService extends IService<AuthorityInformati
 
     AuthorityInformationModel findByUserName(String username,  HttpServletRequest request);
 
+    /**
+     * 普通用户注册
+     * @param authorityInformation
+     */
     void register(AuthorityInformation authorityInformation);
 
     List<AuthorityInformationModel> selectByIds(String[] ids);
 
+    void deleteAnyOneById(String id);
+
+    void registerCourier(AuthorityInformation authorityInformation);
 }

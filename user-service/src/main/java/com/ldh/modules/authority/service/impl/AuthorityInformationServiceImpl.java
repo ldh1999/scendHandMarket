@@ -16,6 +16,7 @@ import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.MethodOrderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;
@@ -60,20 +61,20 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
 
     @Override
     public void register(AuthorityInformation authorityInformation) {
-
         Random random = new Random();
         String userId = UUID.randomUUID().toString();
-        String authorityName = "游客:"+random.nextInt();
+        if (StringUtils.isEmpty(authorityInformation.getAuthorityName())){
+            String authorityName = "游客:"+random.nextInt();
+            authorityInformation.setAuthorityName(authorityName);
+        }
         String roleId = sysRoleMapper.selectByRoleNo("user").getId();
         authorityInformation.setAuthorityId(userId);
-        authorityInformation.setAuthorityName(authorityName);
         AuthorityRoleInformation authorityRoleInformation= new AuthorityRoleInformation();
         authorityRoleInformation.setAuthorityId(userId);
         authorityRoleInformation.setSysRoleId(roleId);
 
         this.save(authorityInformation);
         authorityRoleMapper.insert(authorityRoleInformation);
-
     }
 
     private String getNowUrl(ServletRequest request){
@@ -83,5 +84,32 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
     @Override
     public List<AuthorityInformationModel> selectByIds(String[] ids) {
         return authorityInformationMapper.selectByIds(ids);
+    }
+
+    @Override
+    public void deleteAnyOneById(String id) {
+        authorityInformationMapper.deleteById(id);
+        authorityRoleMapper.deleteByAuthorityId(id);
+    }
+
+    @Override
+    @Transactional
+    public void registerCourier(AuthorityInformation authorityInformation) {
+        String roleUserId = sysRoleMapper.selectByRoleNo("user").getId();
+        String roleCourierId = sysRoleMapper.selectByRoleNo("courier").getId();
+
+        String userId = UUID.randomUUID().toString();
+        authorityInformation.setAuthorityId(userId);
+
+        AuthorityRoleInformation authorityRoleInformation= new AuthorityRoleInformation();
+        authorityRoleInformation.setAuthorityId(userId);
+        authorityRoleInformation.setSysRoleId(roleUserId);
+        authorityRoleMapper.insert(authorityRoleInformation);
+
+        authorityRoleInformation.setId(null);
+        authorityRoleInformation.setSysRoleId(roleCourierId);
+        authorityRoleMapper.insert(authorityRoleInformation);
+        this.save(authorityInformation);
+
     }
 }
