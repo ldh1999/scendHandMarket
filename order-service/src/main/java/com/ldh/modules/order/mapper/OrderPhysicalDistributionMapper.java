@@ -23,4 +23,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface OrderPhysicalDistributionMapper extends BaseMapper<OrderPhysicalDistribution> {
 
     Page<OrderPhysicalDistributionModel> listAccept(Page page, QueryWrapper queryWrapper, @Param("orderPhysicalDistributionVO") OrderPhysicalDistributionVO orderPhysicalDistribution);
+
+    Page<OrderPhysicalDistributionModel> listWork(Page page, QueryWrapper queryWrapper, @Param("orderPhysicalDistributionVO") OrderPhysicalDistributionVO orderPhysicalDistribution);
 }

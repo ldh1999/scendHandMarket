@@ -26,4 +26,15 @@ public interface OrderPhysicalDistributionClient {
                                 @RequestParam(name="column", required = false) String column,
                                 @RequestParam(name="order", required = false) String order);
 
+    @GetMapping(value = "/acceptCourier")
+    Result<?> acceptCourier(@RequestParam(value = "orderPhysicalDistributionId", required = true) String orderPhysicalDistributionId,
+                            @RequestParam(value = "courierCode", required = true) String courierCode);
+
+    @GetMapping(value = "/listWork")
+    Result<?> listWork(@SpringQueryMap OrderPhysicalDistributionVO orderPhysicalDistributionVO,
+                              @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+                              @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+                              @RequestParam(name="column", required = false) String column,
+                              @RequestParam(name="order", required = false) String order);
+
 }

@@ -2,4 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ldh.modules.informationMaintenance.mapper.PhysicalDistributionMapper">
 
+    <select id="list" resultType="com.ldh.modules.informationMaintenance.model.PhysicalDistributionModel">
+        select *
+        from physical_distribution pd
+        where 1=1
+        <if test="physicalDistribution.orderPhysicalDistributionId != null and physicalDistribution.orderPhysicalDistributionId != ''">
+            and pd.order_physical_distribution_id = #{physicalDistribution.orderPhysicalDistributionId}
+        </if>
+        ${queryWrapper.customSqlSegment}
+    </select>
 </mapper>

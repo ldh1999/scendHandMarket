@@ -65,11 +65,48 @@ public class OrderPhysicalDistributionHandle {
         return result;
     }
 
+    /**
+     * 快递员工作台
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value="快递员工作台", notes="快递员工作台")
+    @GetMapping(value = "/listWork")
+    public Result<?> listWork(OrderPhysicalDistributionVO orderPhysicalDistributionVO,
+                                @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+                                @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+                                @RequestParam(name="column", required = false) String column,
+                                @RequestParam(name="order", required = false) String order) {
+        Page<OrderPhysicalDistribution> page = new Page<>(pageNo, pageSize);
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if(order.equals("desc")){
+            queryWrapper.orderByDesc(StringTo.humpToLine(column));
+        }else{
+            queryWrapper.orderByAsc(StringTo.humpToLine(column));
+        }
+        Result result = new Result();
+        try{
+            IPage<OrderPhysicalDistributionModel> pageList = orderPhysicalDistributionService.listWork(page, queryWrapper, orderPhysicalDistributionVO);
+            result.setResult(pageList);
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
 
-    public Result<?> acceptCourier(String orderPhysicalDistributionId, String courierCode){
+
+    @ApiOperation(value="快递员接单", notes="快递员接单")
+    @GetMapping(value = "/acceptCourier")
+    public Result<?> acceptCourier(@RequestParam(value = "orderPhysicalDistributionId", required = true) String orderPhysicalDistributionId,
+                                   @RequestParam(value = "courierCode", required = true) String courierCode){
         Result result = new Result();
         try {
-
+            orderPhysicalDistributionService.acceptCourier(orderPhysicalDistributionId, courierCode);
+            result.succcess("接单成功");
         }catch (Exception e){
             result.error(e.getMessage());
             log.error(e.getMessage(), e);
@@ -77,4 +114,5 @@ public class OrderPhysicalDistributionHandle {
 
         return result;
     }
+
 }

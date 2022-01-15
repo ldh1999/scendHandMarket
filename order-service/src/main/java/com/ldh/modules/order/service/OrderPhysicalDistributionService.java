@@ -18,4 +18,7 @@ public interface OrderPhysicalDistributionService extends IService<OrderPhysical
     Page<OrderPhysicalDistributionModel> listAccept(Page page, QueryWrapper queryWrapper, OrderPhysicalDistributionVO orderPhysicalDistributionVO);
 
     void acceptCourier(String orderPhysicalDistributionId, String courierCode);
+
+    Page<OrderPhysicalDistributionModel> listWork(Page page, QueryWrapper queryWrapper, OrderPhysicalDistributionVO orderPhysicalDistributionVO);
+
 }

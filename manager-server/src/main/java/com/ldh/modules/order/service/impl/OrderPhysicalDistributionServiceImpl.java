@@ -29,4 +29,18 @@ public class OrderPhysicalDistributionServiceImpl implements OrderPhysicalDistri
         orderPhysicalDistributionVO.setCourierUsername(sysUserEntity.getUsername());
         return orderPhysicalDistributionClient.acceptList(orderPhysicalDistributionVO, pageNo, pageSize, column, order);
     }
+
+    @Override
+    public Result<?> acceptCourier(String orderPhysicalDistributionId) {
+        SysUserEntity sysUserEntity = (SysUserEntity)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return orderPhysicalDistributionClient.acceptCourier(orderPhysicalDistributionId, sysUserEntity.getUsername());
+    }
+
+    @Override
+    public Result<?> listWork(OrderPhysicalDistributionVO orderPhysicalDistributionVO, Integer pageNo, Integer pageSize, String column, String order) {
+        SysUserEntity sysUserEntity = (SysUserEntity)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        orderPhysicalDistributionVO.setCourierUserId(sysUserEntity.getUserId());
+        orderPhysicalDistributionVO.setCourierUsername(sysUserEntity.getUsername());
+        return orderPhysicalDistributionClient.listWork(orderPhysicalDistributionVO, pageNo, pageSize, column, order );
+    }
 }

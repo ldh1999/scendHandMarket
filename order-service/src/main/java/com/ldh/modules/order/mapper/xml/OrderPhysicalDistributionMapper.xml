@@ -8,8 +8,21 @@
         LEFT JOIN courier c on c.courier_services_company_id = opd.courier_services_company_id
         where 1=1
         and opd.sts = 'wait_courier'
+        <if test="orderPhysicalDistributionVO.orderPhysicalDistributionCode != null and orderPhysicalDistributionVO.orderPhysicalDistributionCode != ''">
+            and opd.order_physical_distribution_code = #{orderPhysicalDistributionVO.orderPhysicalDistributionCode}
+        </if>
         <if test="orderPhysicalDistributionVO.courierUsername != null and orderPhysicalDistributionVO.courierUsername != ''">
             and c.courier_code = #{orderPhysicalDistributionVO.courierUsername}
         </if>
+        ${queryWrapper.customSqlSegment}
+    </select>
+
+    <select id="listWork" resultType="com.ldh.modules.order.model.OrderPhysicalDistributionModel">
+        select opd.*
+        from order_physical_distribution opd
+        LEFT JOIN courier c on c.courier_id = opd.courier_id
+        where 1=1
+        and c.courier_code = #{orderPhysicalDistributionVO.courierUsername}
+        ${queryWrapper.customSqlSegment}
     </select>
 </mapper>

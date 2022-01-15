@@ -47,4 +47,9 @@ public class OrderPhysicalDistributionServiceImpl extends ServiceImpl<OrderPhysi
                 .setSts(OrderPhysicalEnum.sending.getOrderPhysical());
         this.updateById(orderPhysicalDistribution);
     }
+
+    @Override
+    public Page<OrderPhysicalDistributionModel> listWork(Page page, QueryWrapper queryWrapper, OrderPhysicalDistributionVO orderPhysicalDistributionVO) {
+        return orderPhysicalDistributionMapper.listWork(page, queryWrapper, orderPhysicalDistributionVO);
+    }
 }
