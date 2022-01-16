@@ -7,12 +7,15 @@ import com.ldh.inventoryService.client.MerchantClient;
 import com.ldh.inventoryService.model.InventoryModel;
 import com.ldh.inventoryService.model.MerchantModel;
 import com.ldh.inventoryService.pojo.Inventory;
+import com.ldh.modules.informationMaintenance.entity.PhysicalDistribution;
+import com.ldh.modules.informationMaintenance.service.IPhysicalDistributionService;
 import com.ldh.modules.order.entity.OrderInformation;
 import com.ldh.modules.order.entity.OrderPhysicalDistribution;
 import com.ldh.modules.order.mapper.OrderInformationMapper;
 import com.ldh.modules.order.model.OrderInformationDetailModel;
 import com.ldh.modules.order.model.OrderInformationModel;
 import com.ldh.modules.order.model.OrderMerchantInformationModel;
+import com.ldh.modules.order.model.PhysicalDetailModel;
 import com.ldh.modules.order.service.OrderInformationService;
 import com.ldh.modules.order.service.OrderPhysicalDistributionService;
 import com.ldh.modules.order.vo.SendInventoryVO;
@@ -65,6 +68,9 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
 
     @Autowired
     private OrderPhysicalDistributionService orderPhysicalDistributionService;
+
+    @Autowired
+    private IPhysicalDistributionService physicalDistributionService;
 
     @Override
     public Page<OrderInformationModel> list(Page page, QueryWrapper queryWrapper, OrderInformation orderInformation) throws Exception {
@@ -127,7 +133,9 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
 
         Page<OrderInformationModel> page1 = orderInformationMapper.list(page, queryWrapper, orderInformation);
         List<OrderInformationModel> orderInformationModels = page1.getRecords();
-
+        if (orderInformationModels.isEmpty()){
+            return page1;
+        }
 
         //请求体
         StringBuilder stringBuilder = new StringBuilder();
@@ -311,5 +319,25 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
                 .setOrderId(id)
                 .setSts("2");
         this.updateById(orderInformation);
+    }
+
+
+    @Override
+    @Transactional
+    public PhysicalDetailModel getPhysicalDetail(String orderId) {
+
+        PhysicalDetailModel physicalDetailModel = orderInformationMapper.getPhyDetail(orderId);
+        List<PhysicalDistribution> list = physicalDistributionService.getByOrderPhysicalId(physicalDetailModel.getOrderPhysicalDistributionId());
+        if (list != null && !list.isEmpty()){
+            List<PhysicalDetailModel.Phy> list1 = list.stream().map(e->{
+                PhysicalDetailModel.Phy phy = physicalDetailModel.getPhyC();
+                phy.setCreateTime(e.getCreateTime());
+                phy.setNowPositionName(e.getNowPositionName());
+                phy.setNextPositionName(e.getNextPositionName());
+                return phy;
+            }).collect(Collectors.toList());
+            physicalDetailModel.setPhyList(list1);
+        }
+        return physicalDetailModel;
     }
 }

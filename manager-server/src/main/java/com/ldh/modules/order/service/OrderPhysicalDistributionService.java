@@ -13,4 +13,7 @@ public interface OrderPhysicalDistributionService {
 
     @GetMapping(value = "/listWork")
     Result<?> listWork(OrderPhysicalDistributionVO orderPhysicalDistributionVO, Integer pageNo, Integer pageSize, String column, String order);
+
+    Result<?> rightSended(@RequestParam(name = "orderPhysicalDistributionId" , required = true) String orderPhysicalDistributionId);
+
 }

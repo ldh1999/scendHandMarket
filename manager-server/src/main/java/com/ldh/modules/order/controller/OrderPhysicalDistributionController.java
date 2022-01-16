@@ -66,4 +66,16 @@ public class OrderPhysicalDistributionController {
                                 @RequestParam(name="order", required = false) String order){
         return orderPhysicalDistributionService.listWork(orderPhysicalDistributionVO, pageNo, pageSize, column, order);
     }
+
+    /**
+     * 订单送达
+     * @param orderPhysicalDistributionId
+     * @return
+     */
+    @PreAuthorize("hasAuthority('courier')")
+    @ApiOperation(value="快递员工作台-订单送达", notes="快递员工作台-订单送达")
+    @GetMapping(value = "/rightSended")
+    Result<?> rightSended(@RequestParam(name = "orderPhysicalDistributionId" , required = true)String orderPhysicalDistributionId){
+        return orderPhysicalDistributionService.rightSended(orderPhysicalDistributionId);
+    }
 }

@@ -8,6 +8,8 @@ import com.ldh.modules.informationMaintenance.entity.PhysicalDistribution;
 import com.ldh.modules.informationMaintenance.model.CourierModel;
 import com.ldh.modules.informationMaintenance.model.PhysicalDistributionModel;
 
+import java.util.List;
+
 /**
  * @Description: 物流信息
  * @Author: jeecg-boot
@@ -19,4 +21,7 @@ public interface IPhysicalDistributionService extends IService<PhysicalDistribut
     Page<PhysicalDistributionModel> list(Page page, QueryWrapper queryWrapper, PhysicalDistribution physicalDistribution);
 
     PhysicalDistribution getNowPositionBuOrderPhyId(String orderPhysicalDistributionId);
+
+    List<PhysicalDistribution> getByOrderPhysicalId(String id);
+
 }

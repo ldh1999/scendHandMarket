@@ -20,4 +20,23 @@
       </if>
       ${queryWrapper.customSqlSegment}
     </select>
+
+    <select id="getPhyDetail" resultType="com.ldh.modules.order.model.PhysicalDetailModel">
+        select oi.order_id as 'orderId',
+               opd.order_physical_distribution_id as 'orderPhysicalDistributionId',
+               opd.start_position_detail as 'startPositionName',
+               opd.end_position_detail as 'endPositionName',
+               oi.sts as 'orderSts',
+               opd.sts as 'PhySts',
+               c.courier_phone as 'courierPhone',
+               c.courier_name as 'courierName',
+               csc.courier_services_company_name as 'courierServicesName'
+        from order_information oi
+        LEFT JOIN order_physical_distribution opd on opd.order_id = oi.order_id
+        LEFT JOIN courier c on opd.courier_id = c.courier_id
+        LEFT JOIN courier_services_company csc on csc.courier_services_company_id = c.courier_services_company_id
+        where 1=1
+        and oi.order_id = #{orderId}
+
+    </select>
 </mapper>

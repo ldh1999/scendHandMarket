@@ -50,4 +50,9 @@ public class PhysicalDistributionServiceImpl extends ServiceImpl<PhysicalDistrib
         }
         return physicalDistribution;
     }
+
+    @Override
+    public List<PhysicalDistribution> getByOrderPhysicalId(String id) {
+        return physicalDistributionMapper.getByOrderPhysicalId(id);
+    }
 }

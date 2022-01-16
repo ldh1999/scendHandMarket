@@ -37,4 +37,8 @@ public interface OrderPhysicalDistributionClient {
                               @RequestParam(name="column", required = false) String column,
                               @RequestParam(name="order", required = false) String order);
 
+    @GetMapping(value = "rightSended")
+    Result<?> rightSended(@RequestParam(name = "orderPhysicalDistributionId" , required = true) String orderPhysicalDistributionId);
+
+
 }

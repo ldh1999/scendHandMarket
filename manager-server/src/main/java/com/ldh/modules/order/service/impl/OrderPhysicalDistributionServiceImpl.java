@@ -43,4 +43,9 @@ public class OrderPhysicalDistributionServiceImpl implements OrderPhysicalDistri
         orderPhysicalDistributionVO.setCourierUsername(sysUserEntity.getUsername());
         return orderPhysicalDistributionClient.listWork(orderPhysicalDistributionVO, pageNo, pageSize, column, order );
     }
+
+    @Override
+    public Result<?> rightSended(String orderPhysicalDistributionId) {
+        return orderPhysicalDistributionClient.rightSended(orderPhysicalDistributionId);
+    }
 }

@@ -11,4 +11,12 @@
         </if>
         ${queryWrapper.customSqlSegment}
     </select>
+
+    <select id="getByOrderPhysicalId" resultType="com.ldh.modules.informationMaintenance.entity.PhysicalDistribution">
+        select *
+        from physical_distribution pd
+        where 1=1
+        and pd.order_physical_distribution_id = #{id}
+        order by create_time asc
+    </select>
 </mapper>

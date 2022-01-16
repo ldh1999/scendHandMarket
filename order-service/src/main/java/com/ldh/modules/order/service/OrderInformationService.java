@@ -7,6 +7,7 @@ import com.ldh.modules.order.entity.OrderInformation;
 import com.ldh.modules.order.model.OrderInformationDetailModel;
 import com.ldh.modules.order.model.OrderInformationModel;
 import com.ldh.modules.order.model.OrderMerchantInformationModel;
+import com.ldh.modules.order.model.PhysicalDetailModel;
 import com.ldh.modules.order.vo.SendInventoryVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,4 +34,7 @@ public interface OrderInformationService extends IService<OrderInformation> {
 
     /** 订单结束（确认收货） */
     void orderEnd(String id);
+
+    /** 根据订单id获取物流信息 */
+    PhysicalDetailModel getPhysicalDetail(String orderId);
 }

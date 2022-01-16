@@ -9,6 +9,8 @@ import com.ldh.modules.informationMaintenance.model.PhysicalDistributionModel;
 import com.ldh.modules.informationMaintenance.service.IPhysicalDistributionService;
 import com.ldh.modules.order.entity.OrderPhysicalDistribution;
 import com.ldh.modules.order.model.OrderPhysicalDistributionModel;
+import com.ldh.modules.order.service.OrderInformationService;
+import com.ldh.modules.order.service.OrderPhysicalDistributionService;
 import com.ldh.modules.order.vo.OrderPhysicalDistributionVO;
 import common.Result;
 import common.StringTo;
@@ -26,6 +28,9 @@ public class PhysicalDistributionHandle {
 
     @Autowired
     private IPhysicalDistributionService physicalDistributionService;
+
+    @Autowired
+    private OrderPhysicalDistributionService orderPhysicalDistributionService;
 
     /**
      * 快递员物流list
@@ -80,6 +85,7 @@ public class PhysicalDistributionHandle {
         }
         return result;
     }
+
 
     /**
      *获取物流最新位置

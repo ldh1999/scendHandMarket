@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.order.entity.OrderInformation;
 import com.ldh.modules.order.model.OrderInformationModel;
+import com.ldh.modules.order.model.PhysicalDetailModel;
 import com.ldh.modules.order.service.OrderInformationService;
 import com.ldh.util.RedisSessionUtil;
 import common.Result;
@@ -90,6 +91,25 @@ public class OrderClientController {
         Result result = new Result();
         try {
             orderInformationService.orderEnd(id);
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * 根据订单id获取物流信息
+     * @param id
+     * @return
+     */
+    @ApiOperation(value="根据订单id获取物流信息", notes="根据订单id获取物流信息")
+    @GetMapping(value = "/getPhysicalDetail")
+    public Result<PhysicalDetailModel> getPhysicalDetail(@RequestParam(value = "orderId", required = true) String id){
+        Result result = new Result();
+        try {
+            result.setResult(orderInformationService.getPhysicalDetail(id));
             result.setSuccess(true);
         }catch (Exception e){
             log.error(e.getMessage(), e);

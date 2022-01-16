@@ -21,4 +21,6 @@ public interface OrderPhysicalDistributionService extends IService<OrderPhysical
 
     Page<OrderPhysicalDistributionModel> listWork(Page page, QueryWrapper queryWrapper, OrderPhysicalDistributionVO orderPhysicalDistributionVO);
 
+    /**快递员确认送达 */
+    void rightSended(String orderPhysicalDistributionId);
 }

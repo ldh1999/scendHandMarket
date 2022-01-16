@@ -16,10 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Executable;
 
@@ -113,6 +110,26 @@ public class OrderPhysicalDistributionHandle {
         }
 
         return result;
+    }
+
+    /**
+     * 快递员确认送达
+     * @param orderPhysicalDistributionId
+     * @return
+     */
+    @ApiOperation(value="快递员确认送达", notes="快递员确认送达")
+    @GetMapping(value = "rightSended")
+    public Result<?> rightSended(@RequestParam(name = "orderPhysicalDistributionId" , required = true) String orderPhysicalDistributionId){
+        Result result = new Result();
+        try {
+            orderPhysicalDistributionService.rightSended(orderPhysicalDistributionId);
+            result.succcess("操作成功");
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+
     }
 
 }

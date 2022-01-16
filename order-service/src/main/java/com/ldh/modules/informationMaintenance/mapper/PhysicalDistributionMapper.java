@@ -21,4 +21,5 @@ public interface PhysicalDistributionMapper extends BaseMapper<PhysicalDistribut
 
     Page<PhysicalDistributionModel> list(Page page, QueryWrapper queryWrapper, @Param("physicalDistribution") PhysicalDistribution physicalDistribution);
 
+    List<PhysicalDistribution> getByOrderPhysicalId(String id);
 }
