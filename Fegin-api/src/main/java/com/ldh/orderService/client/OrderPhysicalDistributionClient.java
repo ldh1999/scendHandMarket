@@ -40,5 +40,8 @@ public interface OrderPhysicalDistributionClient {
     @GetMapping(value = "rightSended")
     Result<?> rightSended(@RequestParam(name = "orderPhysicalDistributionId" , required = true) String orderPhysicalDistributionId);
 
-
+    /** 根据状态查询该快递员的订单信息 */
+    @GetMapping(value = "countOrderByObj")
+    Result<?> countOrderByObj(@RequestParam(name = "courierCode",required = true) String courierCode,
+                              @RequestParam(name = "sts",required = false) String sts);
 }

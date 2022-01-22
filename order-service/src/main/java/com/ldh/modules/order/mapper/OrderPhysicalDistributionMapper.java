@@ -25,4 +25,12 @@ public interface OrderPhysicalDistributionMapper extends BaseMapper<OrderPhysica
     Page<OrderPhysicalDistributionModel> listAccept(Page page, QueryWrapper queryWrapper, @Param("orderPhysicalDistributionVO") OrderPhysicalDistributionVO orderPhysicalDistribution);
 
     Page<OrderPhysicalDistributionModel> listWork(Page page, QueryWrapper queryWrapper, @Param("orderPhysicalDistributionVO") OrderPhysicalDistributionVO orderPhysicalDistribution);
+
+    /**
+     * 根据状态查询该快递员的订单信息
+     * @param object
+     * @param courierCode
+     * @return
+     */
+    Integer countOrderByObj(String object, String courierCode);
 }

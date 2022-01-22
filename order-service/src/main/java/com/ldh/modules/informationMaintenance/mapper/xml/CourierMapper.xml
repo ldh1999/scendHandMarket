@@ -25,4 +25,12 @@
     <select id="getByCode" resultType="com.ldh.modules.informationMaintenance.entity.Courier">
         select * from courier where courier_code = #{code}
     </select>
+
+    <select id="getAllByCode" resultType="com.ldh.modules.informationMaintenance.model.CourierModel">
+        select c.*,
+               csc.courier_services_company_name as 'courierServicesCompanyName'
+        from courier c
+        LEFT JOIN courier_services_company csc on c.courier_services_company_id = csc.courier_services_company_id
+        where c.courier_code = #{code}
+    </select>
 </mapper>

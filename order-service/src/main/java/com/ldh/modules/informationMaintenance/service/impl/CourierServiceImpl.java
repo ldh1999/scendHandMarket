@@ -61,4 +61,9 @@ public class CourierServiceImpl extends ServiceImpl<CourierMapper, Courier> impl
     public Courier getByCode(String code) {
         return courierMapper.getByCode(code);
     }
+
+    @Override
+    public CourierModel getAllByCode(String code) {
+        return courierMapper.getAllByCode(code);
+    }
 }

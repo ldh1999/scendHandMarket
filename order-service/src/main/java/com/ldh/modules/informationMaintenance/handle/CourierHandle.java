@@ -116,4 +116,24 @@ public class CourierHandle {
         }
         return result;
     }
+
+    /**
+     * 根据快递员编码查信息
+     *
+     * @param code 快递员编码
+     * @return
+     */
+    @ApiOperation(value="快递员-根据快递员编码查信息", notes="快递员-根据快递员编码查信息")
+    @GetMapping(value = "/queryAllByCode")
+    public Result<?> queryAllByCode(@RequestParam("code")String code) {
+        Result result = new Result();
+        try {
+            result.setResult(courierService.getAllByCode(code));
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
 }

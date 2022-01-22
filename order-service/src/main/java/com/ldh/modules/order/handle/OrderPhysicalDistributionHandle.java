@@ -129,7 +129,26 @@ public class OrderPhysicalDistributionHandle {
             result.error(e.getMessage());
         }
         return result;
+    }
 
+    /**
+     * 根据状态查询该快递员的订单信息
+     * @param
+     * @return
+     */
+    @ApiOperation(value="根据状态查询该快递员的订单信息", notes="根据状态查询该快递员的订单信息")
+    @GetMapping(value = "countOrderByObj")
+    public Result<?> countOrderByObj(@RequestParam(name = "courierCode",required = true) String courierCode,
+                                     @RequestParam(name = "sts",required = false) String sts){
+        Result result = new Result();
+        try {
+            result.setResult(orderPhysicalDistributionService.countOrderByObj(sts, courierCode));
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
     }
 
 }

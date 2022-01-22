@@ -51,4 +51,9 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
     public List<MerchantModel> selectByIds(String[] ids) {
         return merchantMapper.selectByIds(ids);
     }
+
+    @Override
+    public Integer getMerchantCountByObject(String obj) {
+        return merchantMapper.getMerchantCountByObject(obj);
+    }
 }

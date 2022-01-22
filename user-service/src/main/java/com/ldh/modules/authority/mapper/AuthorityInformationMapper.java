@@ -20,4 +20,6 @@ public interface AuthorityInformationMapper extends BaseMapper<AuthorityInformat
     AuthorityInformationModel findByUserName(String username);
 
     List<AuthorityInformationModel> selectByIds(@Param("ids") String[] ids);
+
+    Integer getUserCountByObject(String obj);
 }

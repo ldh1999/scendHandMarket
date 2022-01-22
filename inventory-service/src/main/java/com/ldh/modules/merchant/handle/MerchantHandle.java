@@ -95,5 +95,17 @@ public class MerchantHandle {
         return result;
     }
 
+    /**
+     * 根据条件获取商家数量
+     *
+     * @param obj
+     * @return
+     */
+    @ApiOperation(value = "订单信息表-根据条件获取商家数量", notes = "订单信息表-根据条件获取商家数量")
+    @GetMapping(value = "/getOrderCountByObject")
+    public Result<?> getMerchantCountByObject(@RequestParam(name = "id", required = false) String obj) {
+        return Result.OK(merchantService.getMerchantCountByObject(obj));
+    }
+
 
 }

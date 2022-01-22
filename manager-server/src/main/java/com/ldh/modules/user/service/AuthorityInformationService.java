@@ -14,4 +14,6 @@ public interface AuthorityInformationService {
     Result<?> deleteById(String id);
 
     Result<?> selectById(String id);
+
+
 }

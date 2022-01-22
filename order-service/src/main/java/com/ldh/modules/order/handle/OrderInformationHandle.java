@@ -124,4 +124,15 @@ public class OrderInformationHandle {
         return result;
     }
 
+    /**
+     * 根据条件获取order数量
+     *
+     * @param obj
+     * @return
+     */
+    @ApiOperation(value = "订单信息表-根据条件获取order数量", notes = "订单信息表-根据条件获取order数量")
+    @GetMapping(value = "/getOrderCountByObject")
+    public Result<?> getOrderCountByObject(@RequestParam(name = "id", required = false) String obj) {
+        return Result.OK(orderInformationService.getOrderCountByObject(obj));
+    }
 }

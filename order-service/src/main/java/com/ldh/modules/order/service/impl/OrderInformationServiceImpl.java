@@ -37,6 +37,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -196,9 +197,19 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
             });
         }
 
+        //待支付 4； 等待取货 6 ； 5 拒绝接单；
+        //做个小排序
+        List<OrderInformationModel> orderWait = orderInformationModels.stream().filter(e->"4".equals(e.getSts())).collect(Collectors.toList());
+        List<OrderInformationModel> orderWaitAccept = orderInformationModels.stream().filter(e->"6".equals(e.getSts())).collect(Collectors.toList());
+
+        List<OrderInformationModel> list = new ArrayList<>();
+        list.addAll(orderWait);
+        list.addAll(orderWaitAccept);
+        list.addAll(orderInformationModels);
 
 
-        page1.setRecords(orderInformationModels);
+        list = list.stream().distinct().collect(Collectors.toList());
+        page1.setRecords(list);
         return page1;
     }
 
@@ -339,5 +350,10 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
             physicalDetailModel.setPhyList(list1);
         }
         return physicalDetailModel;
+    }
+
+    @Override
+    public Integer getOrderCountByObject(String obj) {
+        return orderInformationMapper.getOrderCountByObject(obj);
     }
 }

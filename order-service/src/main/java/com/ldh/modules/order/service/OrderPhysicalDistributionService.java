@@ -23,4 +23,12 @@ public interface OrderPhysicalDistributionService extends IService<OrderPhysical
 
     /**快递员确认送达 */
     void rightSended(String orderPhysicalDistributionId);
+
+    /**
+     * 根据状态查询该快递员的订单信息
+     * @param object
+     * @param courierCode
+     * @return
+     */
+    Integer countOrderByObj(String object, String courierCode);
 }

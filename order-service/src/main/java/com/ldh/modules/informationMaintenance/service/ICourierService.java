@@ -22,5 +22,5 @@ public interface ICourierService extends IService<Courier> {
 
     Courier getByCode(String code);
 
-
+    CourierModel getAllByCode(String code);
 }

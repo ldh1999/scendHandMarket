@@ -2,6 +2,7 @@ package com.ldh.modules.order.service;
 
 import com.ldh.orderService.pojo.Courier;
 import common.Result;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @Description: 快递员
@@ -44,4 +45,6 @@ public interface CourierService{
      * @return
      */
     Result<?> delete(String id);
+
+    Result<?> queryAllById(String code);
 }

@@ -42,4 +42,7 @@ public interface AuthorityClient {
     /** 用户管理删除 */
     @RequestMapping(path = "/deleteById", method = RequestMethod.DELETE)
     Result<?> deleteById(@RequestParam(value = "id", required = true)String id);
+
+    @RequestMapping(value = "/getUserCountByObject", method = RequestMethod.GET)
+    Result<?> getUserCountByObject(@RequestParam(name = "obj", required = false) String obj);
 }

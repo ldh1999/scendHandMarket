@@ -25,4 +25,7 @@ public interface OrderInformationClient {
 
     @GetMapping(value = "/queryByIdDetail")
     Result<OrderInformationDetailModel> queryByIdDetail(@RequestParam(name = "id", required = true) String id);
+
+    @GetMapping(value = "/getOrderCountByObject")
+    Result<?> getOrderCountByObject(@RequestParam(name = "id", required = false) String obj);
 }

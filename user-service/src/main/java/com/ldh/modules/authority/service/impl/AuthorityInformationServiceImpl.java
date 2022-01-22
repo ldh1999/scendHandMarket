@@ -112,4 +112,9 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
         this.save(authorityInformation);
 
     }
+
+    @Override
+    public Integer getUserCountByObject(String obj) {
+        return authorityInformationMapper.getUserCountByObject(obj);
+    }
 }

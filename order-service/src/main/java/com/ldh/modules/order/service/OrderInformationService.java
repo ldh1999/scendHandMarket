@@ -37,4 +37,7 @@ public interface OrderInformationService extends IService<OrderInformation> {
 
     /** 根据订单id获取物流信息 */
     PhysicalDetailModel getPhysicalDetail(String orderId);
+
+    /** 根据条件获取order数量 */
+    Integer getOrderCountByObject(String obj);
 }

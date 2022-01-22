@@ -32,4 +32,9 @@ public class CourierServiceImpl implements CourierService {
     public Result<?> delete(String id) {
         return courierClient.delete(id);
     }
+
+    @Override
+    public Result<?> queryAllById(String code) {
+        return courierClient.queryAllByCode(code);
+    }
 }

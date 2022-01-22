@@ -6,7 +6,6 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 @Data
-@Accessors(chain = true)
 public class CourierModel extends Courier implements Serializable {
 
     /** 快递公司名称 */

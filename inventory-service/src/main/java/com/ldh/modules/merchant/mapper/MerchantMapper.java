@@ -21,4 +21,6 @@ public interface MerchantMapper extends BaseMapper<Merchant> {
     MerchantModel selectByUserId(String userId);
 
     List<MerchantModel> selectByIds(@Param("ids") String[] ids);
+
+    Integer getMerchantCountByObject(String obj);
 }

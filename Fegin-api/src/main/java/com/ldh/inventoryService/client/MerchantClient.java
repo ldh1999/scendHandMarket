@@ -6,10 +6,7 @@ import common.Result;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,4 +28,8 @@ public interface MerchantClient {
     /** 商家审批管理修改 */
     @RequestMapping(path = "/updateById", method = RequestMethod.POST)
     Result<?> updateById(@RequestBody Merchant merchant);
+
+    /** 根据条件获取Merchant数量 */
+    @GetMapping(value = "/getOrderCountByObject")
+    Result<?> getMerchantCountByObject(@RequestParam(name = "id", required = false) String obj);
 }

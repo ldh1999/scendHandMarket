@@ -18,6 +18,6 @@ public interface MerchantService extends IService<Merchant> {
 
     List<MerchantModel> selectByIds(String[] ids);
 
-
+    Integer getMerchantCountByObject(String obj);
 
 }

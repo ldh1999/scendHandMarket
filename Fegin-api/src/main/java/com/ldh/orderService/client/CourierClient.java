@@ -56,4 +56,7 @@ public interface CourierClient {
     @DeleteMapping(value = "/delete")
     Result<?> delete(@RequestParam(name="id",required=true) String id);
 
+    @GetMapping(value = "/queryAllByCode")
+    Result<?> queryAllByCode(@RequestParam("code")String code);
+
 }

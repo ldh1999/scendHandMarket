@@ -77,4 +77,9 @@ public class OrderPhysicalDistributionServiceImpl extends ServiceImpl<OrderPhysi
         orderInformationService.updateById(orderInformation);
         this.updateById(orderPhysicalDistribution);
     }
+
+    @Override
+    public Integer countOrderByObj(String object, String courierCode) {
+        return orderPhysicalDistributionMapper.countOrderByObj(object, courierCode);
+    }
 }

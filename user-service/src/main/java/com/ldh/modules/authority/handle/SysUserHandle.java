@@ -148,7 +148,24 @@ public class SysUserHandle {
             result.error("操作失败");
         }
         return result;
+    }
 
+    /**
+     * 根据obj获取用户数量
+     * @param obj
+     * @return
+     */
+    @RequestMapping(value = "/getUserCountByObject", method = RequestMethod.GET)
+    public Result<?> getUserCountByObject(@RequestParam(name = "obj", required = false) String obj){
+        Result<Integer> result = new Result();
+        try {
+            result.setResult(authorityInformationService.getUserCountByObject(obj));
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error(e.getMessage());
+        }
+        return result;
     }
 
 }

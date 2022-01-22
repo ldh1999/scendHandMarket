@@ -28,4 +28,6 @@ public interface AuthorityInformationService extends IService<AuthorityInformati
     void deleteAnyOneById(String id);
 
     void registerCourier(AuthorityInformation authorityInformation);
+
+    Integer getUserCountByObject(String obj);
 }

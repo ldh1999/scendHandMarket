@@ -37,6 +37,25 @@
         LEFT JOIN courier_services_company csc on csc.courier_services_company_id = c.courier_services_company_id
         where 1=1
         and oi.order_id = #{orderId}
+    </select>
+
+    <select id="getOrderCountByObject" resultType="integer">
+        select count(*)
+        from order_information
+        where 1=1
+        <if test="obj != null and obj == 'day'">
+            and TIMESTAMPDIFF(DAY,create_time,NOW()) = 0
+        </if>
+        <if test="obj != null and obj == 'week'">
+            and TIMESTAMPDIFF(WEEK,create_time,NOW()) = 0
+        </if>
+        <if test="obj != null and obj == 'month'">
+            and TIMESTAMPDIFF(MONTH,create_time,NOW()) = 0
+        </if>
+        <if test="obj != null and obj == 'year'">
+            and TIMESTAMPDIFF(YEAR,create_time,NOW()) = 0
+        </if>
 
     </select>
+
 </mapper>

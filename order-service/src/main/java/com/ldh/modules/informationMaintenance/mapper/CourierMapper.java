@@ -23,5 +23,7 @@ public interface CourierMapper extends BaseMapper<Courier> {
 
     Courier getByCode(String code);
 
+    CourierModel getAllByCode(String code);
+
 
 }

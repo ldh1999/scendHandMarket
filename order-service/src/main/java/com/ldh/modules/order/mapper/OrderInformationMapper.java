@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -24,4 +25,6 @@ public interface OrderInformationMapper extends BaseMapper<OrderInformation> {
     Page<OrderInformationModel> list(Page page, QueryWrapper queryWrapper,@Param("orderInformation") OrderInformation orderInformation);
 
     PhysicalDetailModel getPhyDetail(String orderId);
+
+    Integer getOrderCountByObject(String obj);
 }

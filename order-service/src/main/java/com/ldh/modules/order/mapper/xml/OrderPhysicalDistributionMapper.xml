@@ -25,4 +25,15 @@
         and c.courier_code = #{orderPhysicalDistributionVO.courierUsername}
         ${queryWrapper.customSqlSegment}
     </select>
+
+    <select id="countOrderByObj" resultType="integer">
+        select count(0)
+        from order_physical_distribution opd
+        LEFT JOIN courier c on c.courier_id = opd.courier_id
+        where 1=1
+        and c.courier_code = #{courierCode}
+        <if test="object!= null and object != ''">
+            and opd.sts = #{object}
+        </if>
+    </select>
 </mapper>
