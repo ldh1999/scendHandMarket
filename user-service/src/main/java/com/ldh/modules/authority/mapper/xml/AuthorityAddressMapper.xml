@@ -8,6 +8,7 @@
         from authority_address aa
         where 1=1
         and aa.authority_id = #{authorityAddress.authorityId}
+        and aa.sts != '-1'
         order by aa.create_time desc
     </select>
 
@@ -17,6 +18,7 @@
                concat('收件人： ',aa.address_name,' 联系电话： ',aa.address_phone,' 收货地址： ',aa.address_site) as 'value'
         from authority_address aa
         where 1=1
-        and aa.authority_id = #{id}
+          and aa.sts != '-1'
+          and aa.authority_id = #{id}
     </select>
 </mapper>

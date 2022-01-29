@@ -10,7 +10,6 @@ import com.ldh.modules.sys.model.SysHorseLampModel;
 import com.ldh.modules.sys.model.SysHorseLampVO;
 import com.ldh.modules.sys.service.SysHorseLampService;
 import com.ldh.mq.UploadImageMQ;
-import common.JsonCastFile;
 import common.Result;
 import common.StringTo;
 import io.swagger.annotations.Api;

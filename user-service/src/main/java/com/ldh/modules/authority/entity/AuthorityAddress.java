@@ -38,6 +38,10 @@ public class AuthorityAddress implements Serializable{
 	/**通讯人地址*/
     @ApiModelProperty(value = "通讯人地址")
 	private String addressSite;
+
+	/**地址经纬度*/
+	@ApiModelProperty(value = "地址经纬度")
+	private String addressLocation;
 	/**通讯人手机号*/
     @ApiModelProperty(value = "通讯人手机号")
 	private String addressPhone;

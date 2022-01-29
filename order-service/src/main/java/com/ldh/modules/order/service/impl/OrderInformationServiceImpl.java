@@ -207,8 +207,18 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
         list.addAll(orderWaitAccept);
         list.addAll(orderInformationModels);
 
+        Set<String> haveId = new HashSet<>();
+        //去个重
+        Iterator<OrderInformationModel> informationModelIterator = list.iterator();
+        while (informationModelIterator.hasNext()){
+            OrderInformationModel temp = informationModelIterator.next();
+            if (haveId.contains(temp.getOrderId())){
+                informationModelIterator.remove();
+            }else {
+                haveId.add(temp.getOrderId());
+            }
+        }
 
-        list = list.stream().distinct().collect(Collectors.toList());
         page1.setRecords(list);
         return page1;
     }
@@ -317,6 +327,7 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
         OrderPhysicalDistribution orderPhysicalDistribution = new OrderPhysicalDistribution();
         BeanUtils.copyProperties(sendInventoryVO, orderPhysicalDistribution);
         orderPhysicalDistribution
+
                 .setSts("wait_courier")
                 .setOrderPhysicalDistributionCode(UUID.randomUUID().toString());
         orderPhysicalDistributionService.save(orderPhysicalDistribution);
@@ -343,6 +354,8 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
             List<PhysicalDetailModel.Phy> list1 = list.stream().map(e->{
                 PhysicalDetailModel.Phy phy = physicalDetailModel.getPhyC();
                 phy.setCreateTime(e.getCreateTime());
+                phy.setNowPositionId(e.getNowPositionId());
+                phy.setNextPositionId(e.getNextPositionId());
                 phy.setNowPositionName(e.getNowPositionName());
                 phy.setNextPositionName(e.getNextPositionName());
                 return phy;

@@ -41,6 +41,9 @@ public class OrderPhysicalDistribution implements Serializable{
 	/**发货人手机号*/
     @ApiModelProperty(value = "发货人手机号")
 	private String startPhone;
+	/**发货人地址经纬度*/
+	@ApiModelProperty(value = "发货人地址经纬度")
+	private String startPositionLocation;
 	/**发货人详细地址*/
     @ApiModelProperty(value = "发货人详细地址")
 	private String startPositionDetail;
@@ -50,6 +53,9 @@ public class OrderPhysicalDistribution implements Serializable{
 	/**收件人手机号*/
     @ApiModelProperty(value = "收件人手机号")
 	private String endPhone;
+	/**收货人地址经纬度*/
+	@ApiModelProperty(value = "收货人地址经纬度")
+	private String endPositionLocation;
 	/**收件人详细地址*/
     @ApiModelProperty(value = "收件人详细地址")
 	private String endPositionDetail;

@@ -44,9 +44,14 @@ public class PhysicalDistributionServiceImpl extends ServiceImpl<PhysicalDistrib
         List<PhysicalDistribution> list = this.list(queryWrapper);
         if (list.isEmpty()){
             OrderPhysicalDistribution orderPhysicalDistribution = orderPhysicalDistributionService.getById(orderPhysicalDistributionId);
+            physicalDistribution.setNowPositionId(orderPhysicalDistribution.getStartPositionLocation());
             physicalDistribution.setNowPositionName(orderPhysicalDistribution.getStartPositionDetail());
         }else {
-            physicalDistribution = list.get(0);
+            //由于前台使用这个接口的地方存在二义性，所以最新的下一站的位置更新为当前位置，
+            PhysicalDistribution physicalDistributionTemp = list.get(0);
+            physicalDistribution
+                    .setNowPositionId(physicalDistributionTemp.getNextPositionId())
+                    .setNowPositionName(physicalDistributionTemp.getNextPositionName());
         }
         return physicalDistribution;
     }

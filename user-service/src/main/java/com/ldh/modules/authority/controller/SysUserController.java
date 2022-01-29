@@ -35,7 +35,7 @@ public class SysUserController {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @ApiOperation(value = "管理员登录", notes = "管理员登录")
+   /* @ApiOperation(value = "管理员登录", notes = "管理员登录")
     @RequestMapping(path = "/loginManager",method = RequestMethod.GET)
     Result<?> loginManager(@RequestParam(name = "userName",required = true)String username,
                     @RequestParam(name = "passWord",required = true)String password,
@@ -64,7 +64,7 @@ public class SysUserController {
             log.error(e.getMessage());
         }
         return result;
-    }
+    }*/
 
 
     @ApiOperation(value = "普通用户登录", notes = "普通用户登录")

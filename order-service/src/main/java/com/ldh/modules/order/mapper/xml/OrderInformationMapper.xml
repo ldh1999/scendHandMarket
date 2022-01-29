@@ -30,7 +30,9 @@
                opd.sts as 'PhySts',
                c.courier_phone as 'courierPhone',
                c.courier_name as 'courierName',
-               csc.courier_services_company_name as 'courierServicesName'
+               csc.courier_services_company_name as 'courierServicesName',
+               opd.start_position_location ,
+               opd.end_position_location
         from order_information oi
         LEFT JOIN order_physical_distribution opd on opd.order_id = oi.order_id
         LEFT JOIN courier c on opd.courier_id = c.courier_id

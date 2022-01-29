@@ -19,6 +19,10 @@ public class PhysicalDetailModel implements Serializable {
 
     private String endPositionName;
 
+    private String startPositionLocation;
+
+    private String endPositionLocation;
+
     private String orderSts;
 
     private String courierServicesName;
@@ -35,6 +39,8 @@ public class PhysicalDetailModel implements Serializable {
     public class Phy{
         private String nowPositionName;
         private String nextPositionName;
+        private String nowPositionId;
+        private String nextPositionId;
         private Date createTime;
     }
 

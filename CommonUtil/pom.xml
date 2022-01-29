@@ -12,9 +12,8 @@
     <artifactId>CommonUtil</artifactId>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.3.9.RELEASE</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
         </dependency>
     </dependencies>
 </project>

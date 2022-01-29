@@ -122,7 +122,11 @@ public class AuthorityAddressController{
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		Result<?> result = new Result<>();
 		try {
-			authorityAddressService.removeById(id);
+			AuthorityAddress authorityAddress = new AuthorityAddress();
+			authorityAddress
+					.setAddressId(id)
+					.setSts("-1");
+			authorityAddressService.updateById(authorityAddress);
 			result.succcess("删除成功");
 		}catch (Exception e){
 			log.error(e.getMessage());
