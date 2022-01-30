@@ -8,6 +8,18 @@
       where 1=1
       and ic.inventory_id = #{inventoryId}
       and ic.father_id = #{fatherId}
+      and ic.sts != '-1'
       order by ic.create_time desc
     </select>
+
+    <select id="list" resultType="com.ldh.modules.inventory.model.InventoryCommentModel">
+        select ic.*
+        FROM inventory_comment ic
+        where 1=1
+        and ic.sts != '-1'
+        <if test="inventoryComment.content != null and inventoryComment.content != ''">
+            and ic.content = #{inventoryComment.content}
+        </if>
+    </select>
+
 </mapper>

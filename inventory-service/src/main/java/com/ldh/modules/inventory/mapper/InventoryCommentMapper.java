@@ -8,6 +8,7 @@ import com.ldh.modules.inventory.entity.InventoryComment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ldh.modules.inventory.model.InventoryCommentModel;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @Description: 商品评论
@@ -19,4 +20,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface InventoryCommentMapper extends BaseMapper<InventoryComment> {
 
     IPage<InventoryCommentModel> getCommentList(Page page, QueryWrapper queryWrapper, String inventoryId, String fatherId);
+
+    IPage<InventoryCommentModel> list(Page page, QueryWrapper queryWrapper,@Param("inventoryComment") InventoryComment inventoryComment);
 }

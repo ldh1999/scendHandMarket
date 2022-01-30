@@ -111,6 +111,7 @@ public class SysUserController {
                 result.error("该用户名已被占用");
                 return result;
             }
+
             authorityInformationService.register(authorityInformation);
             result.succcess("注册成功");
         }catch (Exception e){

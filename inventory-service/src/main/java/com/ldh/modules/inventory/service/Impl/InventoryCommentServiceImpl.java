@@ -22,6 +22,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import sun.misc.Request;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -125,5 +126,10 @@ public class InventoryCommentServiceImpl extends ServiceImpl<InventoryCommentMap
         iPage.setRecords(list);
 
         return iPage;
+    }
+
+    @Override
+    public IPage<InventoryCommentModel> list(Page page, QueryWrapper queryWrapper, InventoryComment inventoryComment) {
+        return inventoryCommentMapper.list(page, queryWrapper, inventoryComment);
     }
 }

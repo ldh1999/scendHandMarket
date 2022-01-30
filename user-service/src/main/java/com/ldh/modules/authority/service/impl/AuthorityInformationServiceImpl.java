@@ -12,12 +12,15 @@ import com.ldh.modules.authority.mapper.SysRoleMapper;
 import com.ldh.modules.authority.model.AuthorityInformationModel;
 import com.ldh.modules.authority.service.AuthorityInformationService;
 import com.ldh.modules.authority.service.AuthorityRoleService;
+import constant.DefaultPath;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.MethodOrderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +63,7 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
     }
 
     @Override
+    @Transactional
     public void register(AuthorityInformation authorityInformation) {
         Random random = new Random();
         String userId = UUID.randomUUID().toString();
@@ -69,10 +73,10 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
         }
         String roleId = sysRoleMapper.selectByRoleNo("user").getId();
         authorityInformation.setAuthorityId(userId);
+        authorityInformation.setImgPath(DefaultPath.DEFAULT_USER_IMG);
         AuthorityRoleInformation authorityRoleInformation= new AuthorityRoleInformation();
         authorityRoleInformation.setAuthorityId(userId);
         authorityRoleInformation.setSysRoleId(roleId);
-
         this.save(authorityInformation);
         authorityRoleMapper.insert(authorityRoleInformation);
     }
@@ -83,7 +87,12 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
 
     @Override
     public List<AuthorityInformationModel> selectByIds(String[] ids) {
-        return authorityInformationMapper.selectByIds(ids);
+        List<AuthorityInformationModel> list = authorityInformationMapper.selectByIds(ids);
+        list.forEach(e->{
+            e.setImgPath(this.getNowUrl()+e.getImgPath());
+
+        });
+        return list;
     }
 
     @Override
@@ -116,5 +125,10 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
     @Override
     public Integer getUserCountByObject(String obj) {
         return authorityInformationMapper.getUserCountByObject(obj);
+    }
+
+    private String getNowUrl(){
+        HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
+        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
     }
 }

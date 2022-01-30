@@ -1,16 +1,15 @@
-package com.ldh.modules.inventory.entity;
+package com.ldh.inventoryService.pojo;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @Description: 商品评论
@@ -19,14 +18,12 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @Version: V1.0
  */
 @Data
-@TableName("inventory_comment")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="inventory_comment对象", description="商品评论")
 public class InventoryComment implements Serializable{
     
 	/**id*/
-	@TableId(type = IdType.UUID)
     @ApiModelProperty(value = "id")
 	private String inventoryCommentId;
 	/**编码*/
@@ -51,13 +48,11 @@ public class InventoryComment implements Serializable{
     @ApiModelProperty(value = "创建人")
 	private String createBy;
 	/**创建时间*/
-	@TableField(fill = FieldFill.INSERT)
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "创建时间")
 	private Date createTime;
 	/**修改时间*/
-	@TableField(fill = FieldFill.UPDATE)
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "修改时间")
