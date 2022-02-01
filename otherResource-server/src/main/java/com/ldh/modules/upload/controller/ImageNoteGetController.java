@@ -37,10 +37,6 @@ public class ImageNoteGetController {
                 throw new Exception("");
             }
             List<ImageNoteModel> list = imageNoteService.getByObjectIdAndImgGroup(imageGetVO);
-            final String url = this.getNowUrl(request);
-            list.stream().forEach(e->{
-                e.setImgPath(url+e.getImgPath());
-            });
             result.setResult(list);
             result.setSuccess(true);
         }catch (Exception e){
@@ -57,12 +53,6 @@ public class ImageNoteGetController {
         Result<List<?>> result = new Result<>();
         try{
             List<ImageNoteModel> list = imageNoteService.getByObjectIdAndImgGroupList(imageListGetVO);
-            final String url = this.getNowUrl(request);
-            list.stream().forEach(e->{
-                if (!StringUtils.isEmpty(e.getImgPath())){
-                    e.setImgPath(url+e.getImgPath());
-                }
-            });
             result.setResult(list);
         }catch (Exception e){
             log.error(e.getMessage(), e);
@@ -70,8 +60,5 @@ public class ImageNoteGetController {
         return result;
     }
 
-    private String getNowUrl(ServletRequest request){
-        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
-    }
 
 }

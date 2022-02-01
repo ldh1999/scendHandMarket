@@ -8,6 +8,7 @@ import com.ldh.modules.authority.entity.AuthorityInformation;
 import com.ldh.modules.authority.model.AuthorityInformationModel;
 import com.ldh.modules.authority.service.AuthorityInformationService;
 import com.ldh.modules.authority.service.AuthorityRoleService;
+import com.ldh.modules.authority.service.CosImageService;
 import common.Result;
 import common.StringTo;
 import constant.UploadFileConstant;
@@ -36,6 +37,9 @@ public class AuthorityInformationController {
 
     @Autowired
     private AuthorityRoleService authorityRoleService;
+
+    @Autowired
+    private CosImageService cosImageService;
 
     @ApiOperation(value="用户管理列表", notes="用户管理列表")
     @RequestMapping(path = "/list", method = RequestMethod.GET)
@@ -129,34 +133,16 @@ public class AuthorityInformationController {
     @ApiOperation(value="头像更新", notes="头像更新")
     @RequestMapping(path = "upload", method = RequestMethod.POST)
     public Result<?> uploadImage(@RequestParam(value = "file") MultipartFile file,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response,
                                  @RequestParam(name = "id") String id
     ){
         Result<String> result = new Result<>();
-        String fileName = file.getOriginalFilename();
-        String fileType = file.getContentType();
-        Random random = new Random();
-        String randomString = String.valueOf(random.nextInt());
-        String fileSaveName = randomString.substring(1,randomString.length());
-        String filePathName = fileSaveName+fileName;
-        String savePath = FilePath.IMAGE_SAVE_PATH+ UploadFileConstant.USER_HAND_IMAGE +"/"+filePathName;
-        String saveDbPath = FilePath.IMAGE_SHOW_PATH+UploadFileConstant.USER_HAND_IMAGE+"/"+filePathName;
-        if (!fileType.substring(0,fileType.indexOf("/")).equals("image")){
-            result.error("请上传图片");
-            return result;
-        }
         try{
-            File file1 = new File(savePath);
-            if (!file1.isDirectory()){
-                file1.mkdirs();
-            }
-            file.transferTo(file1);
+            String saveDbPath = cosImageService.uploadImage(file);
             AuthorityInformation authorityInformation = new AuthorityInformation();
             authorityInformation.setAuthorityId(id);
             authorityInformation.setImgPath(saveDbPath);
             authorityInformationService.updateById(authorityInformation);
-            result.setResult(this.getNowUrl(request)+saveDbPath);
+            result.setResult(saveDbPath);
             result.setMessage("上传成功");
             result.setSuccess(true);
         }catch (Exception e){
@@ -165,9 +151,5 @@ public class AuthorityInformationController {
             result.error("上传失败");
         }
         return result;
-    }
-
-    private String getNowUrl(ServletRequest request){
-        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
     }
 }

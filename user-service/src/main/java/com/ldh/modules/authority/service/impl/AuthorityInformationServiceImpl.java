@@ -56,9 +56,6 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
     public AuthorityInformationModel findByUserName(String username, HttpServletRequest request) {
 
         AuthorityInformationModel authorityInformationModel = authorityInformationMapper.findByUserName(username);
-        if (authorityInformationModel != null && !StringUtils.isEmpty(authorityInformationModel.getImgPath())){
-            authorityInformationModel.setImgPath(this.getNowUrl(request)+authorityInformationModel.getImgPath());
-        }
         return authorityInformationModel;
     }
 
@@ -81,17 +78,9 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
         authorityRoleMapper.insert(authorityRoleInformation);
     }
 
-    private String getNowUrl(ServletRequest request){
-        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
-    }
-
     @Override
     public List<AuthorityInformationModel> selectByIds(String[] ids) {
         List<AuthorityInformationModel> list = authorityInformationMapper.selectByIds(ids);
-        list.forEach(e->{
-            e.setImgPath(this.getNowUrl()+e.getImgPath());
-
-        });
         return list;
     }
 
@@ -125,10 +114,5 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
     @Override
     public Integer getUserCountByObject(String obj) {
         return authorityInformationMapper.getUserCountByObject(obj);
-    }
-
-    private String getNowUrl(){
-        HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
-        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
     }
 }

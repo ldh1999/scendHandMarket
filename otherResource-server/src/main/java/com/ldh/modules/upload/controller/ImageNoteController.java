@@ -6,6 +6,7 @@ import com.ldh.modules.upload.model.FileNoteVO;
 import com.ldh.modules.upload.model.ImageGetVO;
 import com.ldh.modules.upload.model.ImageNoteModel;
 import com.ldh.modules.upload.model.ImageNoteVO;
+import com.ldh.modules.upload.service.CosImageService;
 import com.ldh.modules.upload.service.ImageNoteService;
 import com.ldh.otherResourceService.client.ImageNoteClient;
 import common.InitUploadModel;
@@ -39,7 +40,16 @@ public class ImageNoteController {
     @Autowired
     private ImageNoteService imageNoteService;
 
-    @ApiOperation(value="图片上传", notes="图片上传")
+    @Autowired
+    private CosImageService cosImageService;
+
+    /**
+     * 只适用于windows服务器！！！！
+     * @param
+     * @param request
+     * @return
+     */
+   /* @ApiOperation(value="图片上传", notes="图片上传")
     @RequestMapping(path = "upload", method = RequestMethod.POST)
     public Result<?> uploadImage(@RequestParam(value = "file") MultipartFile file,
                                  HttpServletRequest request,
@@ -85,7 +95,33 @@ public class ImageNoteController {
             result.error("上传失败");
         }
         return result;
+    }*/
+
+    @ApiOperation(value="图片上传", notes="图片上传")
+    @RequestMapping(path = "upload", method = RequestMethod.POST)
+    public Result<?> uploadImage(@RequestParam(value = "file") MultipartFile file,
+                                 @RequestParam(name = "imageGroup") String imageGroup,
+                                 @RequestParam(name = "objectId") String objectId,
+                                 @RequestParam(name = "sort",required = false) Integer sort
+    ){
+        Result<String> result = new Result<>();
+        try{
+            String saveDbPath = cosImageService.uploadImage(file);
+            ImageNote imageNote = new ImageNote();
+            imageNote.setImgGroup(imageGroup)
+                    .setImgName(file.getOriginalFilename())
+                    .setImgPath(saveDbPath)
+                    .setObjectId(objectId)
+                    .setSort(sort);
+            imageNoteService.save(imageNote);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("上传失败");
+        }
+        return result;
     }
+
+
 
 
     @ApiOperation(value="ant图片展示", notes="ant图片展示")
@@ -97,10 +133,6 @@ public class ImageNoteController {
             imageNote.setObjectId(imageNoteVO.getObjectId())
                     .setImgGroup(imageNoteVO.getImageGroup());
             List<InitUploadModel> list = imageNoteService.getListByGroupAndObjectId(imageNote);
-            String url =  this.getNowUrl(request);
-            list.stream().forEach(e->{
-                e.setUrl(url+e.getUrl());
-            });
             result.setResult(list);
             result.succcess("");
         }catch (Exception e){
@@ -128,18 +160,13 @@ public class ImageNoteController {
     @Deprecated
     @ApiOperation(value="根据object和type获取", notes="根据object和type获取")
     @RequestMapping(path = "getByObjectIdAndImgGroup", method = RequestMethod.GET)
-    public Result<?> getByObjectIdAndImgGroup(ImageGetVO imageGetVO,
-                                              ServletRequest request){
+    public Result<?> getByObjectIdAndImgGroup(ImageGetVO imageGetVO){
         Result<List<ImageNoteModel>> result = new Result();
         try{
             if (!imageGetVO.isNotNull()){
                 throw new Exception("");
             }
             List<ImageNoteModel> list = imageNoteService.getByObjectIdAndImgGroup(imageGetVO);
-            final String url = this.getNowUrl(request);
-            list.stream().forEach(e->{
-                e.setImgPath(url+e.getImgPath());
-            });
             result.setResult(list);
             result.setSuccess(true);
         }catch (Exception e){
@@ -147,11 +174,6 @@ public class ImageNoteController {
             result.error(e.getMessage());
         }
         return result;
-    }
-
-
-    private String getNowUrl(ServletRequest request){
-        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
     }
 
 }

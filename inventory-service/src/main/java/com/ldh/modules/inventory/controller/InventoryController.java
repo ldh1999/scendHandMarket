@@ -291,9 +291,6 @@ public class InventoryController {
         Result<InventoryClientModel> result = new Result<>();
         try{
             InventoryClientModel inventoryClientModel = inventoryService.getByIdAll(id);
-            if (inventoryClientModel.getMerchantImgPath() != null){
-                inventoryClientModel.setMerchantImgPath(this.getNowUrl(request)+inventoryClientModel.getMerchantImgPath());
-            }
             result.setResult(inventoryClientModel);
             result.setSuccess(true);
         }catch (Exception e){
@@ -301,9 +298,6 @@ public class InventoryController {
             result.error(e.getMessage());
         }
         return result;
-    }
-    private String getNowUrl(ServletRequest request){
-        return request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
     }
 
 }
