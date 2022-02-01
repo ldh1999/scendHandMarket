@@ -129,7 +129,52 @@ public class InventoryCommentServiceImpl extends ServiceImpl<InventoryCommentMap
     }
 
     @Override
-    public IPage<InventoryCommentModel> list(Page page, QueryWrapper queryWrapper, InventoryComment inventoryComment) {
-        return inventoryCommentMapper.list(page, queryWrapper, inventoryComment);
+    public IPage<InventoryCommentModel> list(Page page, QueryWrapper queryWrapper, InventoryComment inventoryComment) throws Exception {
+
+        IPage<InventoryCommentModel> iPage = inventoryCommentMapper.list(page, queryWrapper, inventoryComment);
+        List<InventoryCommentModel> list = iPage.getRecords();
+        if (list.isEmpty()){
+            return iPage;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        list.stream().forEach(e -> {
+            if (!StringUtils.isEmpty(e.getReplayUserId())) {
+                stringBuilder.append(e.getReplayUserId());
+                stringBuilder.append(",");
+            }
+            stringBuilder.append(e.getCreateBy());
+            stringBuilder.append(",");
+        });
+
+        Result<List<AuthorityInformationModel>> result = authorityClient.selectByIds(stringBuilder.toString());
+        Map<String ,AuthorityInformationModel> userMap = null;
+        if (result.isSuccess()){
+            List<AuthorityInformationModel> list1 = result.getResult();
+            userMap = list1.stream().collect(Collectors.toMap(AuthorityInformationModel::getAuthorityId, r->r));
+        }else {
+            throw new Exception("Fegin error");
+        }
+        for (InventoryCommentModel inventoryCommentModel : list) {
+            if (userMap.containsKey(inventoryCommentModel.getCreateBy())){
+                AuthorityInformationModel temp = userMap.get(inventoryCommentModel.getCreateBy());
+                inventoryCommentModel
+                        .setCreateByName(temp.getAuthorityName())
+                        .setCreateByUserName(temp.getAuthorityUsername());
+            }
+            if (userMap.containsKey(inventoryCommentModel.getReplayUserId())){
+                AuthorityInformationModel temp = userMap.get(inventoryCommentModel.getReplayUserId());
+                inventoryCommentModel
+                        .setRUserName(temp.getAuthorityUsername())
+                        .setReplayUserName(temp.getAuthorityName());
+            }else{
+                inventoryCommentModel
+                        .setRUserName("无")
+                        .setReplayUserName("无");
+            }
+        }
+        iPage.setRecords(list);
+
+
+        return iPage;
     }
 }

@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: prod
   application:
     name: inventoryservice
   cloud:
@@ -10,3 +10,4 @@ spring:
       #server-addr: 8848
       config:
         file-extension: yaml
+        server-addr: 101.201.121.55:8848

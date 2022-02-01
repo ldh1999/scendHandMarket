@@ -2,6 +2,7 @@ package com.ldh.modules.inventory.service;
 
 import com.ldh.inventoryService.pojo.InventoryComment;
 import common.Result;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public interface InventoryCommentService {

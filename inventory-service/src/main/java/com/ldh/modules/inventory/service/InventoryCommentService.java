@@ -21,6 +21,6 @@ public interface InventoryCommentService extends IService<InventoryComment> {
 
     IPage<InventoryCommentModel> getCommentList(Page page, QueryWrapper queryWrapper, String inventoryId, String fatherId) throws Exception;
 
-    IPage<InventoryCommentModel> list(Page page, QueryWrapper queryWrapper,InventoryComment inventoryComment);
+    IPage<InventoryCommentModel> list(Page page, QueryWrapper queryWrapper,InventoryComment inventoryComment) throws Exception;
 
 }

@@ -11,9 +11,9 @@
 
     <artifactId>CommonUtil</artifactId>
     <dependencies>
-        <dependency>
+   <!--     <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-dependencies</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 </project>

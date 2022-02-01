@@ -14,6 +14,14 @@ public class InventoryCommentModel extends InventoryComment implements Serializa
 
     private String createImgPath;
 
+    /** 这个是昵称 */
     private String replayUserName;
 
+    private String inventoryCode;
+
+    /** usernamee */
+    private String createByUserName;
+
+    /** 回复人username */
+    private String rUserName;
 }
