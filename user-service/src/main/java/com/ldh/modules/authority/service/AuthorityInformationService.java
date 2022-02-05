@@ -27,6 +27,10 @@ public interface AuthorityInformationService extends IService<AuthorityInformati
 
     void deleteAnyOneById(String id);
 
+    /**
+     * 快递员注册
+     * @param authorityInformation
+     */
     void registerCourier(AuthorityInformation authorityInformation);
 
     Integer getUserCountByObject(String obj);

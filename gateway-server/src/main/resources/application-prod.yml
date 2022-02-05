@@ -4,8 +4,13 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 101.201.121.55:8848
+        #server-addr: 101.201.121.55:8848
+        discovery:
+          cluster-name: TJ
     gateway:
+      discovery:
+        locator:
+          enabled: true   # 开启服务发现让gateway可以发现注册中心的服务，解析微服务名称为主机名和端口，实现动态路由
       routes:
         - id: user-service
           uri: lb://userservice
@@ -28,4 +33,16 @@ spring:
           uri: lb://managerservice
           predicates:
             - Header=gateway, managerService
-
+      # 处理跨域请求
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedHeaders: "*"
+            allowedOrigins: "*"
+            allowCredentials: true
+            allowedMethods:
+              - GET
+              - POST
+              - DELETE
+              - PUT
+              - OPTION

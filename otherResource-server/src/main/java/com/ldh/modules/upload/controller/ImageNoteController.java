@@ -143,12 +143,14 @@ public class ImageNoteController {
     }
 
 
-    @ApiOperation(value="引用删除", notes="引用删除")
+    @ApiOperation(value="删除", notes="删除")
     @RequestMapping(path = "deletePById", method = RequestMethod.GET)
     public Result<?> deleteById(@RequestParam(name = "uid", required = true)String uid){
         Result<List<?>> result = new Result<>();
         try{
+            ImageNote imageNote = imageNoteService.getById(uid);
             imageNoteService.removeById(uid);
+            cosImageService.deleteByPath(imageNote.getImgPath());
             result.succcess("删除成功");
         }catch (Exception e){
             log.error(e.getMessage(),e);

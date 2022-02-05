@@ -9,4 +9,4 @@ spring:
         cluster-name: TJ
       config:
         file-extension: yaml
-        server-addr: 101.201.121.55:8848
+        #server-addr: 101.201.121.55:8848

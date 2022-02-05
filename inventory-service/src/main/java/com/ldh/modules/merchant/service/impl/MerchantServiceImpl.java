@@ -26,6 +26,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
     @Override
     public IPage<MerchantModel> list(Page page, QueryWrapper queryWrapper, Merchant merchant) {
 
+        //TODO 这个接口调用待优化
         IPage<MerchantModel> iPage = merchantMapper.list(page, queryWrapper, merchant);
         List<MerchantModel> list = iPage.getRecords();
         list.stream().forEach(e->{

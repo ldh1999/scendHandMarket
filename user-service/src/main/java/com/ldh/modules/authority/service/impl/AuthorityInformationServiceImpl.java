@@ -101,6 +101,7 @@ public class AuthorityInformationServiceImpl extends ServiceImpl<AuthorityInform
 
         AuthorityRoleInformation authorityRoleInformation= new AuthorityRoleInformation();
         authorityRoleInformation.setAuthorityId(userId);
+        authorityInformation.setImgPath(DefaultPath.DEFAULT_USER_IMG);
         authorityRoleInformation.setSysRoleId(roleUserId);
         authorityRoleMapper.insert(authorityRoleInformation);
 

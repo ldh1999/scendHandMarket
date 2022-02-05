@@ -12,4 +12,6 @@ public interface CosImageService {
      * @throws IOException
      */
     String uploadImage(MultipartFile file) throws Exception;
+
+    void deleteByPath(String path);
 }

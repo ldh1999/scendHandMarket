@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.inventory.entity.Inventory;
 import com.ldh.modules.inventory.model.*;
-import com.ldh.modules.merchant.entity.Merchant;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,5 +31,6 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
                                                                QueryWrapper queryWrapper,
                                                                @Param("categoryId") String categoryId);
 
+    List<AutoSearchResponse> getSearchLimit(@Param("str") String str, @Param("num") Integer num);
 
 }

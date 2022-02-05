@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ldh.inventoryService.client.InventoryClient;
 import com.ldh.modules.inventory.entity.Inventory;
 import com.ldh.modules.inventory.model.*;
-import com.ldh.modules.merchant.entity.Merchant;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -33,4 +31,6 @@ public interface InventoryService extends IService<Inventory> {
     IPage<InventoryCategoryClientModel> listToClientByCategory(Page page,
                                                                QueryWrapper queryWrapper,
                                                                @Param("categoryId") String categoryId);
+
+    List<AutoSearchResponse> autoSearch(String str);
 }

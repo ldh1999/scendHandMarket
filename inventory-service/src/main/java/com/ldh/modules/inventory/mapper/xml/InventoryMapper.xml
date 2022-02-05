@@ -4,7 +4,7 @@
 
     <select id="list" resultType="com.ldh.modules.inventory.model.InventoryModel">
         select i.*,
-               m.merchant_name
+        m.merchant_name
         from inventory i
         LEFT JOIN merchant m on i.merchant_id = m.merchant_id
         where 1=1
@@ -16,12 +16,15 @@
 
     <select id="listToClient" resultType="com.ldh.modules.inventory.model.InventoryClientModel">
         select distinct i.*,
-               i.id as 'key',
-               i.inventory_name as 'title',
-               i.inventory_information as 'content',
-               group_concat(ica.inventory_category_id) as 'inventoryCategory'
+        m.merchant_name as 'merchantName',
+        m.img_path as 'merchantImgPath',
+        i.id as 'key',
+        i.inventory_name as 'title',
+        i.inventory_information as 'content',
+        group_concat(ica.inventory_category_id) as 'inventoryCategory'
         from inventory i
         LEFT JOIN inventory_category_associate ica on ica.inventory_id = i.id
+        LEFT JOIN merchant m on i.merchant_id = m.merchant_id
         where 1=1
         <if test="inventory.merchantId != null and inventory.merchantId != ''">
             and i.merchant_id = #{inventory.merchantId}
@@ -36,18 +39,18 @@
         select i.*,
                m.merchant_name as 'merchantName'
         from inventory i
-        LEFT JOIN merchant m on i.merchant_id = m.merchant_id
-        where 1=1
-        and m.sts = '2'
+                 LEFT JOIN merchant m on i.merchant_id = m.merchant_id
+        where 1 = 1
+          and m.sts = '2'
     </select>
 
     <select id="selectByIdAll" resultType="com.ldh.modules.inventory.model.InventoryClientModel">
         select i.*,
                m.merchant_name as 'merchantName',
-               m.img_path as 'merchantImgPath'
+               m.img_path      as 'merchantImgPath'
         from inventory i
-        LEFT JOIN merchant m on i.merchant_id = m.merchant_id
-        where 1=1
+                 LEFT JOIN merchant m on i.merchant_id = m.merchant_id
+        where 1 = 1
           and i.id = #{id}
     </select>
 
@@ -64,18 +67,32 @@
     <select id="listToClientByMerchant" resultType="com.ldh.modules.inventory.model.InventoryMerchantModel">
         select i.*
         from inventory i
-        where 1=1
+        where 1 = 1
           and i.merchant_id = #{inventory.merchantId}
     </select>
 
     <select id="listToClientByCategory" resultType="com.ldh.modules.inventory.model.InventoryCategoryClientModel">
-        SELECT
-            i.*
-        FROM
-            inventory i
-                LEFT JOIN inventory_category_associate ica on ica.inventory_id = i.id
-                LEFT JOIN inventory_category ic on ic.id = ica.inventory_category_id
-        WHERE 1=1
+        SELECT i.*
+        FROM inventory i
+                 LEFT JOIN inventory_category_associate ica on ica.inventory_id = i.id
+                 LEFT JOIN inventory_category ic on ic.id = ica.inventory_category_id
+        WHERE 1 = 1
           AND ic.id = #{categoryId}
+    </select>
+
+    <select id="getSearchLimit" resultType="com.ldh.modules.inventory.model.AutoSearchResponse">
+        select i.inventory_name as 'responseEntity'
+        from inventory i
+        where 1=1
+        <choose>
+            <when test="str != null and str != ''">
+                and i.inventory_name like concat('%',#{str},'%')
+                limit 0,#{num}
+            </when>
+            <otherwise>
+                order by rand()
+                limit  #{num}
+            </otherwise>
+        </choose>
     </select>
 </mapper>

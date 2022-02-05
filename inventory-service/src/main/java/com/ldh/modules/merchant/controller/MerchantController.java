@@ -129,6 +129,8 @@ public class MerchantController {
     ){
         Result<String> result = new Result<>();
         try{
+            Merchant temp = merchantService.getById(id);
+            cosImageService.deleteByPath(temp.getImgPath());
             String saveDbPath = cosImageService.uploadImage(file);
             Merchant merchant = new Merchant();
             merchant.setMerchantId(id);

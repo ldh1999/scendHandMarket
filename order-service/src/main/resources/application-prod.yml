@@ -9,7 +9,13 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 101.201.121.55:8848
+        #server-addr: 101.201.121.55:8848
+  rabbitmq:
+    host: 101.201.121.55 # rabbitMQ的ip地址
+    port: 5672 # 端口
+    username: admin
+    password: 123456
+    virtual-host: /
   session:
     store-type: redis
   datasource:

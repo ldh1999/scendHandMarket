@@ -5,6 +5,9 @@
         select m.*
         from merchant m
         where 1=1
+        <if test="merchant.merchantName!= null and merchant.merchantName != ''">
+            and m.merchant_name like concat('%',#{merchant.merchantName},'%')
+        </if>
           <if test="merchant.sts!=null and merchant.sts!=''">
               and m.sts = #{merchant.sts}
           </if>

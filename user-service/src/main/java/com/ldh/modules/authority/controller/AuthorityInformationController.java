@@ -137,6 +137,8 @@ public class AuthorityInformationController {
     ){
         Result<String> result = new Result<>();
         try{
+            AuthorityInformation temp = authorityInformationService.getById(id);
+            cosImageService.deleteByPath(temp.getImgPath());
             String saveDbPath = cosImageService.uploadImage(file);
             AuthorityInformation authorityInformation = new AuthorityInformation();
             authorityInformation.setAuthorityId(id);

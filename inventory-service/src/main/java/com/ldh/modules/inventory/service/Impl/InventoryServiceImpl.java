@@ -1,29 +1,28 @@
 package com.ldh.modules.inventory.service.Impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ldh.inventoryService.client.InventoryClient;
 import com.ldh.modules.inventory.entity.Inventory;
 import com.ldh.modules.inventory.mapper.InventoryCategoryAssociateMapper;
 import com.ldh.modules.inventory.mapper.InventoryMapper;
 import com.ldh.modules.inventory.model.*;
 import com.ldh.modules.inventory.service.InventoryService;
 import com.ldh.inventoryService.client.MerchantClient;
-import com.ldh.modules.merchant.entity.Merchant;
 import com.ldh.otherResourceService.client.ImageNoteGetClient;
 import com.ldh.otherResourceService.model.ImageGetVO;
+import com.ldh.otherResourceService.model.ImageListGetVO;
 import com.ldh.otherResourceService.model.ImageNoteModel;
 import common.Result;
 import constant.UploadFileConstant;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory> implements InventoryService {
@@ -53,7 +52,51 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     @Override
     public IPage<InventoryClientModel> listToClient(Page page, QueryWrapper queryWrapper, Inventory inventory) {
-        return inventoryMapper.listToClient(page, queryWrapper, inventory);
+        IPage<InventoryClientModel> page1 = inventoryMapper.listToClient(page, queryWrapper, inventory);
+        List<InventoryClientModel> list = page1.getRecords();
+        List<String> idList = new LinkedList<>();
+        //构建请求参数
+        list.stream().forEach(e->{
+            idList.add(e.getId());
+        });
+        ImageListGetVO imageListGetVO = new ImageListGetVO();
+        imageListGetVO
+                .setImgGroup(UploadFileConstant.INVENTORY_STATUE)
+                .setObjectId(idList);
+        Result<List<ImageNoteModel>> feginResult = imageNoteGetClient.getByObjectIdAndImgGroupList(imageListGetVO);
+        //获取请求返回list
+        List<ImageNoteModel> imageNoteModels = feginResult.getResult();
+        if (imageNoteModels == null){
+            return page1;
+        }
+        //构建针对id的对象map
+        Map<String, List<ImageNoteModel>> map = new HashMap<>();
+        imageNoteModels.stream().forEach(e->{
+            if (!map.containsKey(e.getObjectId())){
+                List<ImageNoteModel> list1 = new LinkedList<>();
+                list1.add(e);
+                map.put(e.getObjectId(),list1);
+            }else {
+                map.get(e.getObjectId()).add(e);
+            }
+        });
+        //将排序值最小的图片加入到list的firstimg中
+        list.stream().forEach(e->{
+            List<ImageNoteModel> modelList =  map.get(e.getId());
+            if (modelList != null){
+                int min = 0;
+                int current = 0;
+                for (ImageNoteModel model : modelList){
+                    if (model.getSort() < min){
+                        current = min;
+                    }
+                    current++;
+                }
+                e.setFirstImagePath(modelList.get(min).getImgPath());
+            }
+        });
+        page1.setRecords(list);
+        return page1;
     }
 
     @Override
@@ -98,5 +141,10 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Override
     public IPage<InventoryCategoryClientModel> listToClientByCategory(Page page, QueryWrapper queryWrapper, String categoryId) {
         return inventoryMapper.listToClientByCategory(page, queryWrapper, categoryId);
+    }
+
+    @Override
+    public List<AutoSearchResponse> autoSearch(String str) {
+        return inventoryMapper.getSearchLimit(str,10);
     }
 }
