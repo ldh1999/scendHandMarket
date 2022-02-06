@@ -20,4 +20,7 @@ public interface InventoryCategoryMapper extends BaseMapper<InventoryCategory> {
     List<OptionModel> getAllOption();
     
     List<InventoryCategoryModel> getAllCategory();
+
+    String getCategoryIdsByInventoryId(String inventoryId);
+
 }

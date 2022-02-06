@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ldh.modules.shop.mapper.ShopPreferencesTypeMapper">
+
+    <select id="countByUserAndType" resultType="integer">
+        select count(0)
+        from shop_preferences_type spt
+        where 1 = 1
+          and spt.inventory_type_id = #{typeId}
+          and spt.user_id = #{userId}
+    </select>
+
+    <update id="updateValueAdd">
+        update shop_preferences_type spt
+        set spt.preferences_value = spt.preferences_value + #{num}
+        where 1 = 1
+        and spt.inventory_type_id in
+            <foreach collection="typeIds" open="(" close=")" separator="," item="item">
+                #{item}
+            </foreach>
+        and spt.user_id = #{userId}
+    </update>
+
+    <select id="getPreferenceList" resultType="com.ldh.modules.shop.model.ShopPreferencesTypeModel">
+        select spt.*
+        from shop_preferences_type spt
+        where 1=1
+        and  spt.user_id = #{userId}
+        order by spt.preferences_value desc
+    </select>
+
+    <update id="updateValue">
+        update shop_preferences_type spt
+        set spt.preferences_value = #{num}
+        where 1 = 1
+        and spt.inventory_type_id in
+        <foreach collection="typeIds" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+        and spt.user_id = #{userId}
+    </update>
+</mapper>

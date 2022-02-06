@@ -47,9 +47,11 @@
     <select id="selectByIdAll" resultType="com.ldh.modules.inventory.model.InventoryClientModel">
         select i.*,
                m.merchant_name as 'merchantName',
-               m.img_path      as 'merchantImgPath'
+               m.img_path      as 'merchantImgPath',
+               group_concat(ica.inventory_category_id) as 'inventoryCategory'
         from inventory i
                  LEFT JOIN merchant m on i.merchant_id = m.merchant_id
+                 LEFT JOIN inventory_category_associate ica on ica.inventory_id = i.id
         where 1 = 1
           and i.id = #{id}
     </select>

@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * @Description: 物流信息
- * @Author: jeecg-boot
+ * @Author: ldh
  * @Date:   2022-01-11
  * @Version: V1.0
  */

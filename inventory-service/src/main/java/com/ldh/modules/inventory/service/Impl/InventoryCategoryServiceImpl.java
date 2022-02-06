@@ -111,4 +111,8 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
         return (Map<String, InventoryCategoryModel>) redisTemplate.opsForValue().get("allInventoryCategoryList");
     }
 
+    @Override
+    public String getCategoryIdsByInventoryId(String inventoryId) {
+        return inventoryCategoryMapper.getCategoryIdsByInventoryId(inventoryId);
+    }
 }

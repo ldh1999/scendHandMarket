@@ -8,7 +8,7 @@ import com.ldh.modules.informationMaintenance.model.CourierModel;
 
 /**
  * @Description: 快递员
- * @Author: jeecg-boot
+ * @Author: ldh
  * @Date:   2022-01-11
  * @Version: V1.0
  */

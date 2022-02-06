@@ -1,26 +1,31 @@
 package com.ldh.modules.inventory.controller;
 
 
+import User.AuthorityInformation;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ldh.constant.ShopPreferencesChange;
 import com.ldh.modules.inventory.entity.Inventory;
 import com.ldh.modules.inventory.entity.InventoryCategoryAssociate;
 import com.ldh.modules.inventory.model.*;
 import com.ldh.modules.inventory.service.InventoryCategoryAssociateService;
 import com.ldh.modules.inventory.service.InventoryCategoryService;
 import com.ldh.modules.inventory.service.InventoryService;
+import com.ldh.modules.shop.service.ShopPreferencesTypeService;
 import com.ldh.otherResourceService.client.ImageNoteClient;
 import com.ldh.otherResourceService.client.ImageNoteGetClient;
 import com.ldh.otherResourceService.model.FileNoteVO;
 import com.ldh.otherResourceService.model.ImageListGetVO;
 import com.ldh.otherResourceService.model.ImageNoteModel;
 import com.ldh.otherResourceService.model.ImageNoteVO;
+import com.ldh.util.RedisSessionUtil;
 import com.sun.corba.se.spi.ior.ObjectKey;
 import common.InitUploadModel;
 import common.Result;
 import common.StringTo;
 import constant.UploadFileConstant;
+import constant.UserOperationConstant;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,8 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,6 +57,15 @@ public class InventoryController {
 
     @Autowired
     private ImageNoteGetClient imageNoteGetClient;
+
+    @Autowired
+    private ShopPreferencesTypeService shopPreferencesTypeService;
+
+    @Autowired
+    private HttpServletRequest request;
+
+    @Autowired
+    private ShopPreferencesChange shopPreferencesChange;
 
 
     @ApiOperation(value = "商品列表", notes = "商品列表")
@@ -291,6 +307,11 @@ public class InventoryController {
         Result<InventoryClientModel> result = new Result<>();
         try{
             InventoryClientModel inventoryClientModel = inventoryService.getByIdAll(id);
+            //记录偏好
+            shopPreferencesTypeService.increasesValue(
+                    inventoryClientModel.getInventoryCategory().split(","),
+                    shopPreferencesChange.getLook(),
+                    this.getUserId());
             result.setResult(inventoryClientModel);
             result.setSuccess(true);
         }catch (Exception e){
@@ -298,6 +319,12 @@ public class InventoryController {
             result.error(e.getMessage());
         }
         return result;
+    }
+
+    private String getUserId(){
+        HttpSession session = request.getSession();
+        AuthorityInformation authorityInformation = (AuthorityInformation) RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
+        return authorityInformation.getAuthorityId();
     }
 
 }

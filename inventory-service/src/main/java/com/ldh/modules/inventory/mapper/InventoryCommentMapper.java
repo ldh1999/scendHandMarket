@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * @Description: 商品评论
- * @Author: jeecg-boot
+ * @Author: ldh
  * @Date:   2022-01-29
  * @Version: V1.0
  */

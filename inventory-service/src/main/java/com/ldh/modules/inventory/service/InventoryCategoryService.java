@@ -26,4 +26,6 @@ public interface InventoryCategoryService extends IService<InventoryCategory> {
 
     Map<String, InventoryCategoryModel> getAllCategoryToRedis();
 
+    String getCategoryIdsByInventoryId(String inventoryId);
+
 }

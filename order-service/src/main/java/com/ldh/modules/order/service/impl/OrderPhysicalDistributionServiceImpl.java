@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * @Description: 订单物流
  * @Author: ldh
- * @Date:   2022-01-08
+ * @Date: 2022-01-08
  * @Version: V1.0
  */
 @Service
@@ -64,16 +64,16 @@ public class OrderPhysicalDistributionServiceImpl extends ServiceImpl<OrderPhysi
     @Transactional
     public void rightSended(String orderPhysicalDistributionId) {
         OrderPhysicalDistribution orderPhysicalDistribution = new OrderPhysicalDistribution();
+        //更改物流状态
         orderPhysicalDistribution
                 .setOrderPhysicalDistributionId(orderPhysicalDistributionId)
                 .setSts(OrderPhysicalEnum.sended.getOrderPhysical());
         OrderPhysicalDistribution orderPhysicalDistribution1 = this.getById(orderPhysicalDistributionId);
-
+        //更改订单状态
         OrderInformation orderInformation = new OrderInformation();
         orderInformation
                 .setOrderId(orderPhysicalDistribution1.getOrderId())
                 .setSts(OrderEnum.wait_accept_inventory.getOrder());
-
         orderInformationService.updateById(orderInformation);
         this.updateById(orderPhysicalDistribution);
     }

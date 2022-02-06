@@ -26,4 +26,12 @@
         where 1=1
     </select>
 
+    <select id="getCategoryIdsByInventoryId" resultType="string">
+        select group_concat(ica.inventory_category_id)
+        from inventory_category_associate ica
+        where 1=1
+        and ica.inventory_id = #{inventoryId}
+        group by ica.inventory_id
+    </select>
+
 </mapper>

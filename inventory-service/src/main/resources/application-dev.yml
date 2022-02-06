@@ -51,6 +51,10 @@ ribbon:
       -userservice
       -otherResourceservice
 
+preferences:
+  look: 1
+  joinTrolley: 5
+
 
 
 
