@@ -17,7 +17,7 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface InventoryCommentService extends IService<InventoryComment> {
 
-    void sendComment(InventoryComment inventoryComment);
+    void sendComment(InventoryComment inventoryComment) throws Exception;
 
     IPage<InventoryCommentModel> getCommentList(Page page, QueryWrapper queryWrapper, String inventoryId, String fatherId) throws Exception;
 

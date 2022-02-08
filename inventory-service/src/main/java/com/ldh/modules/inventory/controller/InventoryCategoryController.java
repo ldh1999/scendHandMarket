@@ -188,32 +188,34 @@ public class InventoryCategoryController {
             Result<List<ImageNoteModel>> feginResult = imageNoteGetClient.getByObjectIdAndImgGroupList(imageListGetVO);
             //获取请求返回list
             List<ImageNoteModel> imageNoteModels = feginResult.getResult();
-            //构建针对id的对象map
-            Map<String, List<ImageNoteModel>> map = new HashMap<>();
-            imageNoteModels.stream().forEach(e->{
-                if (!map.containsKey(e.getObjectId())){
-                    List<ImageNoteModel> list1 = new LinkedList<>();
-                    list1.add(e);
-                    map.put(e.getObjectId(),list1);
-                }else {
-                    map.get(e.getObjectId()).add(e);
-                }
-            });
-            //将排序值最小的图片加入到list的firstimg中
-            list.stream().forEach(e->{
-                List<ImageNoteModel> modelList =  map.get(e.getId());
-                if (modelList != null){
-                    int min = 0;
-                    int current = 0;
-                    for (ImageNoteModel model : modelList){
-                        if (model.getSort() < min){
-                            current = min;
-                        }
-                        current++;
+            if (imageNoteModels != null){
+                //构建针对id的对象map
+                Map<String, List<ImageNoteModel>> map = new HashMap<>();
+                imageNoteModels.stream().forEach(e->{
+                    if (!map.containsKey(e.getObjectId())){
+                        List<ImageNoteModel> list1 = new LinkedList<>();
+                        list1.add(e);
+                        map.put(e.getObjectId(),list1);
+                    }else {
+                        map.get(e.getObjectId()).add(e);
                     }
-                    e.setImageFirstPath(modelList.get(min).getImgPath());
-                }
-            });
+                });
+                //将排序值最小的图片加入到list的firstimg中
+                list.stream().forEach(e->{
+                    List<ImageNoteModel> modelList =  map.get(e.getId());
+                    if (modelList != null){
+                        int min = 0;
+                        int current = 0;
+                        for (ImageNoteModel model : modelList){
+                            if (model.getSort() < min){
+                                current = min;
+                            }
+                            current++;
+                        }
+                        e.setImageFirstPath(modelList.get(min).getImgPath());
+                    }
+                });
+            }
             iPage.setRecords(list);
             result.setResult(iPage);
             result.setSuccess(true);

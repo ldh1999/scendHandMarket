@@ -47,12 +47,15 @@ public class InventoryCommentServiceImpl extends ServiceImpl<InventoryCommentMap
 
     @Override
     @Transactional
-    public void sendComment(InventoryComment inventoryComment) {
+    public void sendComment(InventoryComment inventoryComment) throws Exception {
         String tempFatherId = inventoryComment.getFatherId();
 
         HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
         HttpSession session = request.getSession();
         AuthorityInformation authorityInformation = (AuthorityInformation) RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
+        if (authorityInformation == null){
+            throw new Exception("您未登录");
+        }
         inventoryComment.setCreateBy(authorityInformation.getAuthorityId());
 //        inventoryComment.setCreateBy("9e1a1066-61ab-4a02-bec4-67a0d95e2745");
         inventoryComment.setInventoryCommentCode(UUID.randomUUID().toString());

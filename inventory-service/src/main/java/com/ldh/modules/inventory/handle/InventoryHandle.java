@@ -60,8 +60,12 @@ public class InventoryHandle {
 
         Result<?> result = new Result<>();
         try {
-            //TODO
-            inventoryService.deleteAnyById(id);
+            //TODO 暂时此接口针对客户端  做伪删除
+//            inventoryService.deleteAnyById(id);
+            Inventory inventory = new Inventory();
+            inventory.setId(id);
+            inventory.setSts("-1");
+            inventoryService.updateById(inventory);
             result.succcess("删除成功");
         } catch (Exception e) {
             log.error(e.getMessage());

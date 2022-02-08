@@ -20,6 +20,8 @@ public interface InventoryService extends IService<Inventory> {
 
     IPage<InventoryRecommendModel> getRecommendList(Page page);
 
+    IPage<InventoryRecommendModel> getRandList(Page page);
+
     InventoryClientModel getByIdAll(String id) throws Exception;
 
     List<Inventory> selectByIds(String[] ids);

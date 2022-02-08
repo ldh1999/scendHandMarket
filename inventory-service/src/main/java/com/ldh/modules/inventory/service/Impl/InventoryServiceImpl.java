@@ -1,5 +1,6 @@
 package com.ldh.modules.inventory.service.Impl;
 
+import User.AuthorityInformation;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,11 +15,14 @@ import com.ldh.otherResourceService.client.ImageNoteGetClient;
 import com.ldh.otherResourceService.model.ImageGetVO;
 import com.ldh.otherResourceService.model.ImageListGetVO;
 import com.ldh.otherResourceService.model.ImageNoteModel;
+import com.ldh.util.RedisSessionUtil;
 import common.Result;
 import constant.UploadFileConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,6 +42,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     @Autowired
     private ImageNoteGetClient imageNoteGetClient;
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     public IPage<InventoryModel> list(Page page, QueryWrapper queryWrapper, Inventory inventory) {
@@ -101,9 +108,24 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     @Override
     public IPage<InventoryRecommendModel> getRecommendList(Page page) {
-        IPage<InventoryRecommendModel> iPage = inventoryMapper.getRecommendList(page);
-        //TODO
+        AuthorityInformation user = this.getUser();
+        IPage<InventoryRecommendModel> iPage = null;
+        //判断是否登录  ，登录的给推荐 ，没登录的给随机
+        if (user != null){
+            iPage = inventoryMapper.getRecommendList(page, user.getAuthorityId());
+            //如果该用户第一次使用本系统没有偏向，也给随机
+            if (iPage.getRecords().size() == 0){
+                iPage = inventoryMapper.getRandInventory(page);
+            }
+        }else {
+            iPage = inventoryMapper.getRandInventory(page);
+        }
         return iPage;
+    }
+
+    @Override
+    public IPage<InventoryRecommendModel> getRandList(Page page) {
+        return inventoryMapper.getRandInventory(page);
     }
 
     @Override
@@ -146,5 +168,11 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Override
     public List<AutoSearchResponse> autoSearch(String str) {
         return inventoryMapper.getSearchLimit(str,10);
+    }
+
+    private AuthorityInformation getUser(){
+        HttpSession session = request.getSession();
+        AuthorityInformation authorityInformation = (AuthorityInformation) RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
+        return authorityInformation;
     }
 }

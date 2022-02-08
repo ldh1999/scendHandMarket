@@ -96,22 +96,29 @@ public class InventoryController {
         return result;
     }
 
-    @ApiOperation(value = "商品推荐", notes = "商品推荐")
+    @ApiOperation(value = "主页商品呈现（暂时 ：推荐/随机）", notes = "主页商品呈现（暂时 ：推荐/随机）")
     @RequestMapping(path = "/listClientToRecommend", method = RequestMethod.GET)
     public Result<?> listClientToRecommend(Inventory inventory,
-                          @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                          @RequestParam(name = "pageSize", defaultValue = "12") Integer pageSize
-                          ) {
+                                           @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                           @RequestParam(name = "pageSize", defaultValue = "12") Integer pageSize,
+                                           @RequestParam(name = "operation", required = false) String operation
+    ) {
         Result<IPage> result = new Result<>();
         Page<Inventory> page = new Page<>(pageNo, pageSize);
-        //TODO
         try {
-            IPage<InventoryRecommendModel> iPage = inventoryService.getRecommendList(page);
+            IPage<InventoryRecommendModel> iPage = null;
+            if ("recommend".equals(operation)){
+                iPage = inventoryService.getRecommendList(page);
+            }else if ("rand".equals(operation)){
+                iPage = inventoryService.getRandList(page);
+            }else {
+                throw new Exception("operation  not find");
+            }
             //获取全部推荐商品
             List<InventoryRecommendModel> list = iPage.getRecords();
             List<String> idList = new LinkedList<>();
             //构建请求参数
-            list.stream().forEach(e->{
+            list.stream().forEach(e -> {
                 idList.add(e.getId());
             });
             ImageListGetVO imageListGetVO = new ImageListGetVO();
@@ -123,23 +130,23 @@ public class InventoryController {
             List<ImageNoteModel> imageNoteModels = feginResult.getResult();
             //构建针对id的对象map
             Map<String, List<ImageNoteModel>> map = new HashMap<>();
-            imageNoteModels.stream().forEach(e->{
-                if (!map.containsKey(e.getObjectId())){
+            imageNoteModels.stream().forEach(e -> {
+                if (!map.containsKey(e.getObjectId())) {
                     List<ImageNoteModel> list1 = new LinkedList<>();
                     list1.add(e);
-                    map.put(e.getObjectId(),list1);
-                }else {
+                    map.put(e.getObjectId(), list1);
+                } else {
                     map.get(e.getObjectId()).add(e);
                 }
             });
             //将排序值最小的图片加入到list的firstimg中
-            list.stream().forEach(e->{
-                List<ImageNoteModel> modelList =  map.get(e.getId());
-                if (modelList != null){
+            list.stream().forEach(e -> {
+                List<ImageNoteModel> modelList = map.get(e.getId());
+                if (modelList != null) {
                     int min = 0;
                     int current = 0;
-                    for (ImageNoteModel model : modelList){
-                        if (model.getSort() < min){
+                    for (ImageNoteModel model : modelList) {
+                        if (model.getSort() < min) {
                             current = min;
                         }
                         current++;
@@ -152,7 +159,7 @@ public class InventoryController {
             result.setSuccess(true);
         } catch (Exception e) {
             log.error(e.getMessage());
-            result.error("error");
+            result.error(e.getMessage());
         }
         return result;
     }
@@ -163,8 +170,12 @@ public class InventoryController {
 
         Result<?> result = new Result<>();
         try {
-            //TODO
-            inventoryService.deleteAnyById(id);
+            //TODO 暂时此接口针对客户端  做伪删除
+//            inventoryService.deleteAnyById(id);
+            Inventory inventory = new Inventory();
+            inventory.setId(id);
+            inventory.setSts("-1");
+            inventoryService.updateById(inventory);
             result.succcess("删除成功");
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -254,8 +265,8 @@ public class InventoryController {
                 if (e.getInventoryCategory() != null) {
                     String[] str = e.getInventoryCategory().split(",");
                     StringBuilder stringBuilder = new StringBuilder();
-                    Arrays.stream(str).forEach(s->{
-                        if (map.containsKey(s)){
+                    Arrays.stream(str).forEach(s -> {
+                        if (map.containsKey(s)) {
                             stringBuilder.append(map.get(s).getCateName());
                             stringBuilder.append(",");
                         }
@@ -267,13 +278,13 @@ public class InventoryController {
                             .setImageGroup(UploadFileConstant.INVENTORY_STATUE)
                             .setObjectId(e.getId());
                     Result resultFegin = imageNoteClient.getFileListByObjectAndGroup(imageNoteVO);
-                    if (resultFegin.isSuccess()){
-                       List<LinkedHashMap> listImage = (List)resultFegin.getResult();
-                       e.setImageListUrl(new LinkedList<>());
-                       listImage.forEach(il->{
-                           Map<String, String> mapStr = il;
-                           e.getImageListUrl().add(mapStr.get("url"));
-                       });
+                    if (resultFegin.isSuccess()) {
+                        List<LinkedHashMap> listImage = (List) resultFegin.getResult();
+                        e.setImageListUrl(new LinkedList<>());
+                        listImage.forEach(il -> {
+                            Map<String, String> mapStr = il;
+                            e.getImageListUrl().add(mapStr.get("url"));
+                        });
                     }
                 }
             });
@@ -289,12 +300,12 @@ public class InventoryController {
 
     @ApiOperation(value = "根据id查商品", notes = "根据id查商品")
     @RequestMapping(path = "/selectById", method = RequestMethod.GET)
-    public Result<?> selectById(@RequestParam(name = "id")String id) {
+    public Result<?> selectById(@RequestParam(name = "id") String id) {
         Result<Inventory> result = new Result<>();
-        try{
+        try {
             result.setResult(inventoryService.getById(id));
             result.setSuccess(true);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
             result.error(e.getMessage());
         }
@@ -303,27 +314,32 @@ public class InventoryController {
 
     @ApiOperation(value = "根据id查商品(客户端)", notes = "根据id查商品(客户端)")
     @RequestMapping(path = "/selectByIdClient", method = RequestMethod.GET)
-    public Result<?> selectByIdClient(@RequestParam(name = "id")String id,ServletRequest request) {
+    public Result<?> selectByIdClient(@RequestParam(name = "id") String id, ServletRequest request) {
         Result<InventoryClientModel> result = new Result<>();
-        try{
+        try {
             InventoryClientModel inventoryClientModel = inventoryService.getByIdAll(id);
             //记录偏好
-            shopPreferencesTypeService.increasesValue(
-                    inventoryClientModel.getInventoryCategory().split(","),
-                    shopPreferencesChange.getLook(),
-                    this.getUserId());
+            if(this.getUserId()!= null){
+                shopPreferencesTypeService.increasesValue(
+                        inventoryClientModel.getInventoryCategory().split(","),
+                        shopPreferencesChange.getLook(),
+                        this.getUserId());
+            }
             result.setResult(inventoryClientModel);
             result.setSuccess(true);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
             result.error(e.getMessage());
         }
         return result;
     }
 
-    private String getUserId(){
+
+    private String getUserId() {
         HttpSession session = request.getSession();
         AuthorityInformation authorityInformation = (AuthorityInformation) RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
+        if (authorityInformation == null)
+            return null;
         return authorityInformation.getAuthorityId();
     }
 

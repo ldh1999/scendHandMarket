@@ -77,6 +77,9 @@ public class ShopTrolleyController {
         HttpSession session = request.getSession();
         try{
             AuthorityInformation authorityInformation = (AuthorityInformation) RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
+            if (authorityInformation == null){
+                throw new Exception("您未登录");
+            }
             shopTrolley.setAuthorityId(authorityInformation.getAuthorityId());
             if (shopTrolleyService.countByUserIdAndInventoryId(authorityInformation.getAuthorityId(),shopTrolley.getInventoryId())>0){
                 ShopTrolleyClientModel shopTrolleyClientModel = shopTrolleyService.selectByUserIdAndInventoryId(shopTrolley);

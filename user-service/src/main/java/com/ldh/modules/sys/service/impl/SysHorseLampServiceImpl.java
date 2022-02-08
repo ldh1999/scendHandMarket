@@ -65,17 +65,21 @@ public class SysHorseLampServiceImpl extends ServiceImpl<SysHorseLampMapper, Sys
             //指向商家
             if (e.getHorseType().equals("marchant_choose")){
                 Result<MerchantModel> result = merchantClient.selectById(e.getObjectId());
-                if (result.isSuccess()){
+                if (result.isSuccess() && result.getResult()!=null){
                     MerchantModel merchantModel = result.getResult();
                     e.setObjectName(merchantModel.getMerchantName());
+                }else {
+                    e.setObjectName("对象已被删除或损坏");
                 }
             }
             //指向商品
             if (e.getHorseType().equals("inventory_choose")){
                 Result<Inventory> result = inventoryClient.getById(e.getObjectId());
-                if (result.isSuccess()){
+                if (result.isSuccess()&& result.getResult() != null){
                     Inventory inventory = result.getResult();
                     e.setObjectName(inventory.getInventoryName());
+                }else {
+                    e.setObjectName("对象已被删除或损坏");
                 }
             }
             ImageGetVO imageGetVO = new ImageGetVO();

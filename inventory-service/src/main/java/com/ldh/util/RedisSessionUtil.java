@@ -6,6 +6,9 @@ import java.util.Map;
 
 public class RedisSessionUtil {
     public static Object sessionAttributeToEntity(Object sessionAttribute, Class entityClass){
+        if (sessionAttribute == null){
+            return null;
+        }
         Map map = (Map) sessionAttribute;
         if (map.containsKey("@type")){
             map.remove("@type");

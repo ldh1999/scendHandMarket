@@ -17,7 +17,7 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
 
     IPage<InventoryClientModel> listToClient(Page page, QueryWrapper queryWrapper, @Param("inventory") Inventory inventory);
 
-    IPage<InventoryRecommendModel> getRecommendList(Page page);
+    IPage<InventoryRecommendModel> getRecommendList(Page page, String userId);
 
     InventoryClientModel selectByIdAll(String id);
 
@@ -32,5 +32,7 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
                                                                @Param("categoryId") String categoryId);
 
     List<AutoSearchResponse> getSearchLimit(@Param("str") String str, @Param("num") Integer num);
+
+    IPage<InventoryRecommendModel> getRandInventory(Page page);
 
 }

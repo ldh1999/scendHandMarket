@@ -27,6 +27,13 @@ public class ShopPreferencesTypeServiceImpl extends ServiceImpl<ShopPreferencesT
     @Override
     @Transactional
     public void increasesValue(String[] typeIds, Float num, String userId) {
+        //取相对较小的偏向值，如果没有则为0
+        Float min = 0f;
+        List<ShopPreferencesTypeModel> listMin = this.getPreferenceList(userId);
+        if (!listMin.isEmpty()){
+            min = listMin.get(listMin.size()-1).getPreferencesValue();
+        }
+        //用户第一次访问该偏向，偏向值取相对较小值
         List<ShopPreferencesType> list = new LinkedList<>();
         for (String typeId : typeIds) {
             if (shopPreferencesTypeMapper.countByUserAndType(userId, typeId) <= 0){
@@ -34,7 +41,7 @@ public class ShopPreferencesTypeServiceImpl extends ServiceImpl<ShopPreferencesT
                 shopPreferencesType
                         .setUserId(userId)
                         .setInventoryTypeId(typeId)
-                        .setPreferencesValue(0f);
+                        .setPreferencesValue(min);
                 list.add(shopPreferencesType);
             }
         }

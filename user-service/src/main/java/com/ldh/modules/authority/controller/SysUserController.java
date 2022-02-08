@@ -168,4 +168,20 @@ public class SysUserController {
         }
         return result;
     }
+
+    @ApiOperation(value = "注销当前登陆人", notes = "注销当前登陆人")
+    @RequestMapping(path = "/logoutNowUser",method = RequestMethod.GET)
+    public Result<?> logoutNowUser(HttpServletRequest request){
+        Result<?> result = new Result<>();
+        HttpSession session = request.getSession();
+        try{
+            session.removeAttribute("user");
+            result.succcess("注销成功");
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
+
 }

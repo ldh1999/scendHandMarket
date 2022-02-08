@@ -16,4 +16,7 @@ public class InventoryRecommendModel extends Inventory implements Serializable {
     /** 商家名称 */
     private String merchantName;
 
+    /** 该商品的偏向值 */
+    private String preferencesSum;
+
 }
