@@ -21,7 +21,8 @@
         i.id as 'key',
         i.inventory_name as 'title',
         i.inventory_information as 'content',
-        group_concat(ica.inventory_category_id) as 'inventoryCategory'
+        group_concat(ica.inventory_category_id) as 'inventoryCategory',
+        group_concat(ica.inventory_category_father_id) as 'inventoryCategoryFather'
         from inventory i
         LEFT JOIN inventory_category_associate ica on ica.inventory_id = i.id
         LEFT JOIN merchant m on i.merchant_id = m.merchant_id
@@ -43,8 +44,7 @@
         FROM inventory i
                  LEFT JOIN merchant m ON i.merchant_id = m.merchant_id
                  LEFT JOIN inventory_category_associate ica on ica.inventory_id = i.id
-                 LEFT JOIN inventory_category ic on ic.id = ica.inventory_category_id
-                 LEFT JOIN shop_preferences_type spt on spt.inventory_type_id = ic.id
+                 LEFT JOIN shop_preferences_type spt on spt.inventory_type_id = ica.inventory_category_father_id
         WHERE 1 = 1
           AND i.sts != '-1'
           AND m.sts = '2'
@@ -57,7 +57,8 @@
         select i.*,
                m.merchant_name                         as 'merchantName',
                m.img_path                              as 'merchantImgPath',
-               group_concat(ica.inventory_category_id) as 'inventoryCategory'
+               group_concat(ica.inventory_category_id) as 'inventoryCategory',
+               group_concat(ica.inventory_category_father_id) as 'inventoryCategoryFather'
         from inventory i
                  LEFT JOIN merchant m on i.merchant_id = m.merchant_id
                  LEFT JOIN inventory_category_associate ica on ica.inventory_id = i.id

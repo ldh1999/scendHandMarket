@@ -23,6 +23,9 @@ public class InventoryCategoryAssociate implements Serializable {
     /** 商品类别id */
     private String inventoryCategoryId;
 
+    /** 商品类别大类id */
+    private String inventoryCategoryFatherId;
+
     private String sts;
 
     private String remark;

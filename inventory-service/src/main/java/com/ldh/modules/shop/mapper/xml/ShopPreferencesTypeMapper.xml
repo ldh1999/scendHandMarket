@@ -15,17 +15,17 @@
         set spt.preferences_value = spt.preferences_value + #{num}
         where 1 = 1
         and spt.inventory_type_id in
-            <foreach collection="typeIds" open="(" close=")" separator="," item="item">
-                #{item}
-            </foreach>
+        <foreach collection="typeIds" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
         and spt.user_id = #{userId}
     </update>
 
     <select id="getPreferenceList" resultType="com.ldh.modules.shop.model.ShopPreferencesTypeModel">
         select spt.*
         from shop_preferences_type spt
-        where 1=1
-        and  spt.user_id = #{userId}
+        where 1 = 1
+          and spt.user_id = #{userId}
         order by spt.preferences_value desc
     </select>
 
@@ -39,4 +39,11 @@
         </foreach>
         and spt.user_id = #{userId}
     </update>
+
+    <delete id="deleteByTypeId">
+        delete
+        from shop_preferences_type
+        where 1 = 1
+          and inventory_type_id = #{typeId}
+    </delete>
 </mapper>

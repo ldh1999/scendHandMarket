@@ -20,6 +20,9 @@ public class InventoryCategory implements Serializable {
     @TableId(type = IdType.UUID)
     private String id;
 
+    /** 商品类别大类id */
+    private String fatherId;
+
     private String cateName;
     private String sts;
 

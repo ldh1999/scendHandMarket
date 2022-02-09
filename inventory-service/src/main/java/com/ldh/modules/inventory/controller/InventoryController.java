@@ -30,6 +30,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
@@ -195,12 +196,12 @@ public class InventoryController {
         try {
             inventory.setInventoryCode(UUID.randomUUID().toString());
             inventoryService.save(inventory);
-            Arrays.stream(category).forEach(e -> {
+            /*Arrays.stream(category).forEach(e -> {
                 InventoryCategoryAssociate inventoryCategoryAssociate = new InventoryCategoryAssociate();
                 inventoryCategoryAssociate.setInventoryCategoryId(e).
                         setInventoryId(inventoryVO.getId());
                 inventoryCategoryAssociateService.save(inventoryCategoryAssociate);
-            });
+            });*/
             result.succcess("添加成功");
             result.setResult(inventory);
         } catch (Exception e) {
@@ -220,7 +221,7 @@ public class InventoryController {
         Inventory inventory = inventoryVO;
         try {
             inventoryService.updateById(inventory);
-            List<InventoryCategoryAssociateModel> list = inventoryCategoryAssociateService.getByInventoryId(inventory.getId());
+            /*List<InventoryCategoryAssociateModel> list = inventoryCategoryAssociateService.getByInventoryId(inventory.getId());
             Map mapNew = Arrays.stream(category).collect(Collectors.toMap(String::toString, r -> r));
             list.stream().forEach(e -> {
                 if (!mapNew.containsKey(e.getInventoryCategoryId())) {
@@ -238,7 +239,7 @@ public class InventoryController {
                             .setInventoryId(inventory.getId());
                     inventoryCategoryAssociateService.save(inventoryCategoryAssociate);
                 }
-            });
+            });*/
             result.succcess("修改成功");
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -272,21 +273,34 @@ public class InventoryController {
                         }
                     });
                     e.setInventoryCategoryName(stringBuilder.toString());
-
-                    ImageNoteVO imageNoteVO = new ImageNoteVO();
-                    imageNoteVO
-                            .setImageGroup(UploadFileConstant.INVENTORY_STATUE)
-                            .setObjectId(e.getId());
-                    Result resultFegin = imageNoteClient.getFileListByObjectAndGroup(imageNoteVO);
-                    if (resultFegin.isSuccess()) {
-                        List<LinkedHashMap> listImage = (List) resultFegin.getResult();
-                        e.setImageListUrl(new LinkedList<>());
-                        listImage.forEach(il -> {
-                            Map<String, String> mapStr = il;
-                            e.getImageListUrl().add(mapStr.get("url"));
-                        });
-                    }
                 }
+
+                if (e.getInventoryCategoryFather() != null) {
+                    String[] str = e.getInventoryCategoryFather().split(",");
+                    StringBuilder stringBuilder = new StringBuilder();
+                    Arrays.stream(str).forEach(s -> {
+                        if (map.containsKey(s)) {
+                            stringBuilder.append(map.get(s).getCateName());
+                            stringBuilder.append(",");
+                        }
+                    });
+                    e.setInventoryCategoryFatherName(stringBuilder.toString());
+                }
+
+                ImageNoteVO imageNoteVO = new ImageNoteVO();
+                imageNoteVO
+                        .setImageGroup(UploadFileConstant.INVENTORY_STATUE)
+                        .setObjectId(e.getId());
+                Result resultFegin = imageNoteClient.getFileListByObjectAndGroup(imageNoteVO);
+                if (resultFegin.isSuccess()) {
+                    List<LinkedHashMap> listImage = (List) resultFegin.getResult();
+                    e.setImageListUrl(new LinkedList<>());
+                    listImage.forEach(il -> {
+                        Map<String, String> mapStr = il;
+                        e.getImageListUrl().add(mapStr.get("url"));
+                    });
+                }
+
             });
             iPage.setRecords(list);
             result.setResult(iPage);
@@ -319,9 +333,9 @@ public class InventoryController {
         try {
             InventoryClientModel inventoryClientModel = inventoryService.getByIdAll(id);
             //记录偏好
-            if(this.getUserId()!= null){
+            if(this.getUserId()!= null && !StringUtils.isEmpty(inventoryClientModel.getInventoryCategoryFather())){
                 shopPreferencesTypeService.increasesValue(
-                        inventoryClientModel.getInventoryCategory().split(","),
+                        inventoryClientModel.getInventoryCategoryFather().split(","),
                         shopPreferencesChange.getLook(),
                         this.getUserId());
             }

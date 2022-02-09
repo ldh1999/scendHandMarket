@@ -8,4 +8,6 @@ import java.io.Serializable;
 @Data
 public class InventoryCategoryAssociateModel extends InventoryCategoryAssociate implements Serializable {
     private String cateName;
+
+    private String fatherCateName;
 }

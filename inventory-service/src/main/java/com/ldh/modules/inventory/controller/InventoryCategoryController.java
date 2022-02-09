@@ -7,8 +7,6 @@ import com.ldh.modules.inventory.entity.Inventory;
 import com.ldh.modules.inventory.entity.InventoryCategory;
 import com.ldh.modules.inventory.model.InventoryCategoryClientModel;
 import com.ldh.modules.inventory.model.InventoryCategoryModel;
-import com.ldh.modules.inventory.model.InventoryRecommendModel;
-import com.ldh.modules.inventory.service.InventoryCategoryAssociateService;
 import com.ldh.modules.inventory.service.InventoryCategoryService;
 import com.ldh.modules.inventory.service.InventoryService;
 import com.ldh.otherResourceService.client.ImageNoteGetClient;
@@ -55,10 +53,12 @@ public class InventoryCategoryController {
         Result<IPage> result = new Result<>();
         Page<InventoryCategory> page = new Page<>(pageNo, pageSize);
         QueryWrapper queryWrapper = new QueryWrapper();
-        if(order.equals("desc")){
-            queryWrapper.orderByDesc(StringTo.humpToLine(column));
-        }else{
-            queryWrapper.orderByAsc(StringTo.humpToLine(column));
+        if (order != null){
+            if(order.equals("desc")){
+                queryWrapper.orderByDesc(StringTo.humpToLine(column));
+            }else{
+                queryWrapper.orderByAsc(StringTo.humpToLine(column));
+            }
         }
         try{
             IPage<InventoryCategoryModel> iPage = inventoryCategoryService.list(page, queryWrapper, inventoryCategory);
@@ -135,7 +135,7 @@ public class InventoryCategoryController {
         return result;
     }
 
-    @ApiOperation(value="获取所有商品分类", notes="获取所有商品分类")
+    @ApiOperation(value="获取所有商品分类(大类)", notes="获取所有商品分类(大类)")
     @RequestMapping(path = "/getAllOption", method = RequestMethod.GET)
     public Result<List<OptionModel>> getAllOption(){
         Result<List<OptionModel>> result = new Result<>();
@@ -148,6 +148,21 @@ public class InventoryCategoryController {
         }
         return result;
     }
+
+    @ApiOperation(value="根据大类id获取商品分类(小类)", notes="根据大类id获取商品分类(小类)")
+    @RequestMapping(path = "/getOptionByFatherId", method = RequestMethod.GET)
+    public Result<List<OptionModel>> getOptionByFatherId(@RequestParam("fatherId") String fatherId){
+        Result<List<OptionModel>> result = new Result<>();
+        try{
+            result.setResult(inventoryCategoryService.getOptionByFatherId(fatherId));
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("error");
+        }
+        return result;
+    }
+
 
     @ApiOperation(value="根据id获取该分类信息", notes="根据id获取该分类信息")
     @RequestMapping(path = "/selectById", method = RequestMethod.GET)
@@ -225,7 +240,5 @@ public class InventoryCategoryController {
         }
         return result;
     }
-
-
 
 }

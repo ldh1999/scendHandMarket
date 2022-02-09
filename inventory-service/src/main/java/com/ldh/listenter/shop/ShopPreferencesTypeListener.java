@@ -38,7 +38,7 @@ public class ShopPreferencesTypeListener {
         String inventoryId = map.get("inventoryId");
         String userId = map.get("userId");
         String operation = map.get("operation");
-        String type = inventoryCategoryService.getCategoryIdsByInventoryId(inventoryId);
+        String type = inventoryCategoryService.getFatherCategoryIdsByInventoryId(inventoryId);
         String[] typeIds = type.split(",");
         switch (operation) {
             case UserOperationConstant.LOOK:

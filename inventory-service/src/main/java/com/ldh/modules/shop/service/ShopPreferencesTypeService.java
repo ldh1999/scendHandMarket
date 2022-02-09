@@ -22,4 +22,12 @@ public interface ShopPreferencesTypeService extends IService<ShopPreferencesType
      */
     void setMedianToTypeId(String[] typeIds, String userId);
 
+    /**
+     * 如果商品类型删除的话，该类型的偏好栏则消失
+     * @param typeId
+     * @return
+     */
+    Integer deleteByTypeId(String typeId);
+
+
 }

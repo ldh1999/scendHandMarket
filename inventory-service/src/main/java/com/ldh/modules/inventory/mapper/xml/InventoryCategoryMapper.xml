@@ -6,6 +6,9 @@
         select ic.*
         from inventory_category ic
         where 1=1
+        <if test="inventoryCategory.fatherId != null and inventoryCategory.fatherId != ''">
+            and ic.father_id = #{inventoryCategory.fatherId}
+        </if>
         <if test="inventoryCategory.cateName != null and inventoryCategory.cateName != ''">
             and ic.cate_name like concat('%',#{inventoryCategory.cateName},'%')
         </if>
@@ -13,25 +16,56 @@
     </select>
 
     <select id="getAllOption" resultType="common.OptionModel">
-      select ic.id as 'key',
-             ic.id as 'title',
-             ic.cate_name as 'value'
-      from inventory_category ic
-      where 1=1
+        select ic.id as 'key',
+        ic.id as 'title',
+        ic.cate_name as 'value'
+        from inventory_category ic
+        where 1=1
+        <choose>
+            <when test="fatherId != null and fatherId != ''">
+                and ic.father_id = #{fatherId}
+            </when>
+            <otherwise>
+                and ic.father_id = '-1'
+            </otherwise>
+        </choose>
     </select>
-    
+
+    <select id="getOptionByFatherId" resultType="common.OptionModel">
+        select ic.id        as 'key',
+               ic.id        as 'title',
+               ic.cate_name as 'value'
+        from inventory_category ic
+        where 1 = 1
+          and ic.father_id = #{fatherId}
+    </select>
+
     <select id="getAllCategory" resultType="com.ldh.modules.inventory.model.InventoryCategoryModel">
         select ic.*
         from inventory_category ic
-        where 1=1
+        where 1 = 1
     </select>
 
-    <select id="getCategoryIdsByInventoryId" resultType="string">
-        select group_concat(ica.inventory_category_id)
+    <select id="getFatherCategoryIdsByInventoryId" resultType="string">
+        select group_concat(ica.inventory_category_father_id)
         from inventory_category_associate ica
-        where 1=1
-        and ica.inventory_id = #{inventoryId}
+        where 1 = 1
+          and ica.inventory_id = #{inventoryId}
         group by ica.inventory_id
     </select>
 
+    <select id="getAllOptionSF" resultType="common.OptionModel">
+        select ic.id        as 'key',
+               ic.id        as 'title',
+               ic.cate_name as 'value'
+        from inventory_category ic
+        where 1 = 1
+    </select>
+
+    <delete id="deleteByFatherId">
+        delete
+        from inventory_category
+        where 1=1
+        and father_id = #{fatherId}
+    </delete>
 </mapper>

@@ -66,7 +66,12 @@ public class ShopPreferencesTypeServiceImpl extends ServiceImpl<ShopPreferencesT
         shopPreferencesTypeMapper.updateValue(userId, typeIds, min);
     }
 
-/*    private AuthorityInformation getUser(){
+    @Override
+    public Integer deleteByTypeId(String typeId) {
+        return shopPreferencesTypeMapper.deleteByTypeId(typeId);
+    }
+
+    /*    private AuthorityInformation getUser(){
         HttpSession session = request.getSession();
         AuthorityInformation authorityInformation = (AuthorityInformation) RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
         return authorityInformation;

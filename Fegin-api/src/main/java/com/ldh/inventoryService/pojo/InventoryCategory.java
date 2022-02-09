@@ -15,6 +15,9 @@ public class InventoryCategory implements Serializable {
     /** 商品类别id */
     private String id;
 
+    /** 商品类别大类id */
+    private String fatherId;
+
     private String cateName;
     private String sts;
 

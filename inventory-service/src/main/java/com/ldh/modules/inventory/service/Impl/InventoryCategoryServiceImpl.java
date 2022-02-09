@@ -4,13 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ldh.modules.inventory.entity.Inventory;
 import com.ldh.modules.inventory.entity.InventoryCategory;
 import com.ldh.modules.inventory.mapper.InventoryCategoryAssociateMapper;
 import com.ldh.modules.inventory.mapper.InventoryCategoryMapper;
-import com.ldh.modules.inventory.model.InventoryCategoryClientModel;
 import com.ldh.modules.inventory.model.InventoryCategoryModel;
 import com.ldh.modules.inventory.service.InventoryCategoryService;
+import com.ldh.modules.shop.service.ShopPreferencesTypeService;
 import com.ldh.userService.client.AuthorityClient;
 import com.ldh.userService.model.AuthorityInformationModel;
 import common.OptionModel;
@@ -18,8 +17,8 @@ import common.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,6 +37,9 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
 
     @Autowired
     private AuthorityClient authorityClient;
+
+    @Autowired
+    private ShopPreferencesTypeService shopPreferencesTypeService;
 
     @Override
     public IPage<InventoryCategoryModel> list(Page page, QueryWrapper queryWrapper, InventoryCategory inventoryCategory) throws Exception {
@@ -58,7 +60,7 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
         if (result.isSuccess()){
             List<AuthorityInformationModel> authorityInformationModelLis = result.getResult();
             Map<String, String> map = authorityInformationModelLis.stream()
-                    .collect(Collectors.toMap(AuthorityInformationModel::getAuthorityId,AuthorityInformationModel::getAuthorityName));
+                    .collect(Collectors.toMap(AuthorityInformationModel::getAuthorityId,AuthorityInformationModel::getRealName));
             list.forEach(e->{
                 if (map.containsKey(e.getCreateBy())){
                     e.setCreateRealName(map.get(e.getCreateBy()));
@@ -73,17 +75,28 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
     }
 
     @Override
+    @Transactional
     public void deleteAnyById(String id) {
+        //删自己
         this.removeById(id);
-        inventoryCategoryAssociateMapper.deleteByCategoryId(id);
+        //如果我是父级则把子集删了 （如果不是反也删个寂寞）
+        inventoryCategoryMapper.deleteByFatherId(id);
 
+        inventoryCategoryAssociateMapper.deleteByCategoryId(id);
+        inventoryCategoryAssociateMapper.deleteByCategoryFatherId(id);
+
+        shopPreferencesTypeService.deleteByTypeId(id);
     }
 
     @Override
     public List<OptionModel> getAllOption() {
-        return inventoryCategoryMapper.getAllOption();
+        return inventoryCategoryMapper.getAllOption(null);
     }
 
+    @Override
+    public List<OptionModel> getOptionByFatherId(String fatherId) {
+        return inventoryCategoryMapper.getOptionByFatherId(fatherId);
+    }
 
     @Override
     public boolean setAllCategoryToRedis() {
@@ -112,7 +125,12 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
     }
 
     @Override
-    public String getCategoryIdsByInventoryId(String inventoryId) {
-        return inventoryCategoryMapper.getCategoryIdsByInventoryId(inventoryId);
+    public String getFatherCategoryIdsByInventoryId(String inventoryId) {
+        return inventoryCategoryMapper.getFatherCategoryIdsByInventoryId(inventoryId);
+    }
+
+    @Override
+    public List<OptionModel> getAllOptionByFatherId(String fatherId) {
+        return inventoryCategoryMapper.getAllOption(fatherId);
     }
 }

@@ -1,15 +1,12 @@
 package com.ldh.modules.inventory.handle;
 
-import User.AuthorityInformation;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.inventory.entity.InventoryCategory;
 import com.ldh.modules.inventory.model.InventoryCategoryModel;
 import com.ldh.modules.inventory.service.InventoryCategoryService;
-import com.ldh.modules.inventory.service.InventoryService;
-import com.ldh.otherResourceService.client.ImageNoteGetClient;
-import com.ldh.util.RedisSessionUtil;
 import common.Result;
 import common.StringTo;
 import io.swagger.annotations.ApiOperation;
@@ -17,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @RestController
 @Slf4j

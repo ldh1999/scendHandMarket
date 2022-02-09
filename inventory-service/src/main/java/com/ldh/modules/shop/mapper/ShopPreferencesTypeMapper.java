@@ -25,5 +25,6 @@ public interface ShopPreferencesTypeMapper extends BaseMapper<ShopPreferencesTyp
 
     void updateValue(String userId, String[] typeIds,Float num);
 
+    Integer deleteByTypeId(String typeId);
 
 }

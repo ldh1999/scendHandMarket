@@ -18,6 +18,8 @@ public interface InventoryCategoryAssociateMapper extends BaseMapper<InventoryCa
 
     Integer deleteByCategoryId(String categoryId);
 
+    Integer deleteByCategoryFatherId(String categoryFatherId);
+
     Integer deleteByInventoryId(String inventoryId);
 
     List<InventoryCategoryAssociateModel> getByInventoryId(String id);

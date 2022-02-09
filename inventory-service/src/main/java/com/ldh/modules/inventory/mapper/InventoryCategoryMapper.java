@@ -17,10 +17,15 @@ public interface InventoryCategoryMapper extends BaseMapper<InventoryCategory> {
 
     IPage<InventoryCategoryModel> list(Page page, QueryWrapper queryWrapper, @Param("inventoryCategory") InventoryCategory inventoryCategory);
 
-    List<OptionModel> getAllOption();
+    List<OptionModel> getAllOption(String fatherId);
+
+    List<OptionModel> getOptionByFatherId(String fatherId);
     
     List<InventoryCategoryModel> getAllCategory();
 
-    String getCategoryIdsByInventoryId(String inventoryId);
+    String getFatherCategoryIdsByInventoryId(String inventoryId);
 
+    List<OptionModel> getAllOptionSF();
+
+    Integer deleteByFatherId(String fatherId);
 }

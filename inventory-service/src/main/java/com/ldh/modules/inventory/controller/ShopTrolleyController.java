@@ -19,6 +19,7 @@ import common.StringTo;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -90,11 +91,13 @@ public class ShopTrolleyController {
             }
 
             //记录偏好
-            String categorys = inventoryCategoryService.getCategoryIdsByInventoryId(shopTrolley.getInventoryId());
-            shopPreferencesTypeService.increasesValue(
-                    categorys.split(","),
-                    shopPreferencesChange.getJoinTrolley(),
-                    authorityInformation.getAuthorityId());
+            String categorys = inventoryCategoryService.getFatherCategoryIdsByInventoryId(shopTrolley.getInventoryId());
+            if (!StringUtils.isEmpty(categorys)){
+                shopPreferencesTypeService.increasesValue(
+                        categorys.split(","),
+                        shopPreferencesChange.getJoinTrolley(),
+                        authorityInformation.getAuthorityId());
+            }
 
             result.succcess("添加成功");
             result.setResult(shopTrolley);
