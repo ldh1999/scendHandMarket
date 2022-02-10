@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.inventory.entity.Inventory;
+import com.ldh.modules.inventory.entity.InventoryCategory;
 import com.ldh.modules.inventory.model.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -29,9 +30,11 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
 
     IPage<InventoryCategoryClientModel> listToClientByCategory(Page page,
                                                                QueryWrapper queryWrapper,
-                                                               @Param("categoryId") String categoryId);
+                                                               @Param("inventoryCategory") InventoryCategory inventoryCategory);
 
     List<AutoSearchResponse> getSearchLimit(@Param("str") String str, @Param("num") Integer num);
+
+
 
     IPage<InventoryRecommendModel> getRandInventory(Page page);
 

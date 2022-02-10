@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.inventory.entity.InventoryCategory;
 import com.ldh.modules.inventory.mapper.InventoryCategoryAssociateMapper;
 import com.ldh.modules.inventory.mapper.InventoryCategoryMapper;
+import com.ldh.modules.inventory.model.InventoryCategoryClientFirstModel;
 import com.ldh.modules.inventory.model.InventoryCategoryModel;
 import com.ldh.modules.inventory.service.InventoryCategoryService;
 import com.ldh.modules.shop.service.ShopPreferencesTypeService;
@@ -19,8 +20,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -132,5 +132,51 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
     @Override
     public List<OptionModel> getAllOptionByFatherId(String fatherId) {
         return inventoryCategoryMapper.getAllOption(fatherId);
+    }
+
+
+    @Override
+    public InventoryCategoryClientFirstModel getAllCategoryClient() {
+        InventoryCategoryClientFirstModel inventoryCategoryClientFirstModel = new InventoryCategoryClientFirstModel();
+        Map<String, InventoryCategoryModel> map = this.getAllCategoryToRedis();
+        //获取所有类
+        List<InventoryCategoryModel> list = (List)Arrays.asList( map.values().toArray());
+        //获取所有大类
+        List<InventoryCategoryModel> listFather = list.stream().filter(e->"-1".equals(e.getFatherId())).collect(Collectors.toList());
+
+        inventoryCategoryClientFirstModel.setCategoryAll(list);
+
+
+        //构建大类id->小类对象
+        Map<String, List> stringListMap = new HashMap<>();
+        listFather.forEach(e->{
+            stringListMap.put(e.getId(), new LinkedList<>());
+        });
+        list.forEach(e->{
+            if (stringListMap.containsKey(e.getFatherId())){
+                stringListMap.get(e.getFatherId()).add(e);
+            }
+        });
+        inventoryCategoryClientFirstModel.setCategoryMap(stringListMap);
+
+        //排个序
+        listFather.forEach(e->{
+            if (stringListMap.containsKey(e.getId())){
+                e.setSonNum(stringListMap.get(e.getId()).size());
+            }
+        });
+        listFather.sort(Comparator.comparing(InventoryCategoryModel::getSonNum).reversed());
+        inventoryCategoryClientFirstModel.setCategoryFather(listFather);
+
+        return inventoryCategoryClientFirstModel;
+    }
+
+    @Override
+    public InventoryCategoryModel getAllById(String id) {
+        InventoryCategoryModel inventoryCategoryModel = inventoryCategoryMapper.getAllById(id);
+        if ("-1".equals(inventoryCategoryModel.getFatherId())){
+            inventoryCategoryModel.setFatherName(inventoryCategoryModel.getCateName());
+        }
+        return inventoryCategoryModel;
     }
 }

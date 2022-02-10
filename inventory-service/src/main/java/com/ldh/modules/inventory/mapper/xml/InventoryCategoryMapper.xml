@@ -38,12 +38,14 @@
         from inventory_category ic
         where 1 = 1
           and ic.father_id = #{fatherId}
+          and ic.cate_name != '不限'
     </select>
 
     <select id="getAllCategory" resultType="com.ldh.modules.inventory.model.InventoryCategoryModel">
         select ic.*
         from inventory_category ic
         where 1 = 1
+        and ic.cate_name != '不限'
     </select>
 
     <select id="getFatherCategoryIdsByInventoryId" resultType="string">
@@ -68,4 +70,20 @@
         where 1=1
         and father_id = #{fatherId}
     </delete>
+
+    <select id="countByFatherId" resultType="integer">
+        select count(0)
+        from inventory_category
+        where 1 = 1
+          and father_id = #{categoryId}
+    </select>
+
+    <select id="getAllById" resultType="com.ldh.modules.inventory.model.InventoryCategoryModel">
+        select ic.*,
+               icf.cate_name as 'fatherName'
+        from inventory_category ic
+        LEFT JOIN inventory_category icf on ic.father_id = icf.id
+        where 1=1
+        and ic.id = #{id}
+    </select>
 </mapper>

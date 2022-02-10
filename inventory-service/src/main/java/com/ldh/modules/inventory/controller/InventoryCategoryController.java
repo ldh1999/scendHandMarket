@@ -84,6 +84,12 @@ public class InventoryCategoryController {
                 log.warn("该用户未登录");
             }
             inventoryCategoryService.save(inventoryCategory);
+            //为该大类增加一个默认小类
+            InventoryCategory smallType = new InventoryCategory();
+            smallType.setFatherId(inventoryCategory.getId());
+            smallType.setCateName("不限");
+            smallType.setRemark("千万别删！！！！");
+            inventoryCategoryService.save(smallType);
             inventoryCategoryService.setAllCategoryToRedis();
             result.succcess("增加成功");
         }catch (Exception e){
@@ -179,9 +185,11 @@ public class InventoryCategoryController {
     }
 
 
+
+
     @ApiOperation(value = "分类信息展示", notes = "分类信息展示")
     @RequestMapping(path = "/listClientToCategory", method = RequestMethod.GET)
-    public Result<?> listClientToRecommend(@RequestParam(name = "categoryId", required = true) String categoryId,
+    public Result<?> listClientToRecommend(InventoryCategory inventoryCategory,
                                            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                            @RequestParam(name = "pageSize", defaultValue = "12") Integer pageSize
     ) {
@@ -189,7 +197,7 @@ public class InventoryCategoryController {
         Page<Inventory> page = new Page<>(pageNo, pageSize);
         //TODO
         try {
-            IPage<InventoryCategoryClientModel> iPage = inventoryService.listToClientByCategory(page, null, categoryId);
+            IPage<InventoryCategoryClientModel> iPage = inventoryService.listToClientByCategory(page, null, inventoryCategory);
             List<InventoryCategoryClientModel> list = iPage.getRecords();
             List<String> idList = new LinkedList<>();
             //构建请求参数
@@ -237,6 +245,34 @@ public class InventoryCategoryController {
         } catch (Exception e) {
             log.error(e.getMessage());
             result.error("error");
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "首页商品类别展示", notes = "首页商品类别展示")
+    @RequestMapping(path = "/getAllById", method = RequestMethod.GET)
+    public Result<?> getAllById(@RequestParam(name = "id", required = true)String id){
+        Result result = new Result();
+        try{
+            result.setResult(inventoryCategoryService.getAllById(id));
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "首页商品类别展示", notes = "首页商品类别展示")
+    @RequestMapping(path = "/getAllCategoryClient", method = RequestMethod.GET)
+    public Result<?> getAllCategoryClient(){
+        Result result = new Result();
+        try{
+            result.setResult(inventoryCategoryService.getAllCategoryClient());
+            result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
         }
         return result;
     }

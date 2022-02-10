@@ -55,6 +55,12 @@ public class InventoryCategoryHandle {
         Result<?> result = new Result<>();
         try {
             inventoryCategoryService.save(inventoryCategory);
+            //为该大类增加一个默认小类
+            InventoryCategory smallType = new InventoryCategory();
+            smallType.setFatherId(inventoryCategory.getId());
+            smallType.setCateName("不限");
+            smallType.setRemark("千万别删！！！！");
+            inventoryCategoryService.save(smallType);
             inventoryCategoryService.setAllCategoryToRedis();
             result.succcess("增加成功");
         }catch (Exception e){

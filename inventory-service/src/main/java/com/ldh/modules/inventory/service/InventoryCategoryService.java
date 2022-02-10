@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.modules.inventory.entity.InventoryCategory;
+import com.ldh.modules.inventory.model.InventoryCategoryClientFirstModel;
 import com.ldh.modules.inventory.model.InventoryCategoryModel;
 import common.OptionModel;
 import org.apache.ibatis.annotations.Param;
@@ -29,4 +30,10 @@ public interface InventoryCategoryService extends IService<InventoryCategory> {
     String getFatherCategoryIdsByInventoryId(String inventoryId);
 
     List<OptionModel> getAllOptionByFatherId(String fatherId);
+
+    InventoryCategoryClientFirstModel getAllCategoryClient();
+
+    InventoryCategoryModel getAllById(String id);
+
+
 }

@@ -28,4 +28,8 @@ public interface InventoryCategoryMapper extends BaseMapper<InventoryCategory> {
     List<OptionModel> getAllOptionSF();
 
     Integer deleteByFatherId(String fatherId);
+
+    Integer countByFatherId(String categoryId);
+
+    InventoryCategoryModel getAllById(String id);
 }

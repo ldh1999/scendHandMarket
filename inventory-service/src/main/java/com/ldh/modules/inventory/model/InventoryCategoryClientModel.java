@@ -12,4 +12,6 @@ public class InventoryCategoryClientModel extends Inventory implements Serializa
 
     /** 置顶图片路径 */
     private String imageFirstPath;
+
+    private String fatherName;
 }

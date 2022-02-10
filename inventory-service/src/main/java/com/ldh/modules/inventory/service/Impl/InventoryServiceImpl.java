@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ldh.modules.inventory.entity.Inventory;
+import com.ldh.modules.inventory.entity.InventoryCategory;
 import com.ldh.modules.inventory.mapper.InventoryCategoryAssociateMapper;
 import com.ldh.modules.inventory.mapper.InventoryMapper;
 import com.ldh.modules.inventory.model.*;
@@ -161,8 +162,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     @Override
-    public IPage<InventoryCategoryClientModel> listToClientByCategory(Page page, QueryWrapper queryWrapper, String categoryId) {
-        return inventoryMapper.listToClientByCategory(page, queryWrapper, categoryId);
+    public IPage<InventoryCategoryClientModel> listToClientByCategory(Page page, QueryWrapper queryWrapper, InventoryCategory inventoryCategory) {
+        return inventoryMapper.listToClientByCategory(page, queryWrapper, inventoryCategory);
     }
 
     @Override
@@ -170,9 +171,18 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         return inventoryMapper.getSearchLimit(str,10);
     }
 
+    @Override
+    public IPage<InventoryCategoryClientModel> listToClientByCategoryAllType(Page page, QueryWrapper queryWrapper, String categoryId) {
+
+
+
+        return null;
+    }
+
     private AuthorityInformation getUser(){
         HttpSession session = request.getSession();
         AuthorityInformation authorityInformation = (AuthorityInformation) RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
         return authorityInformation;
     }
+
 }
