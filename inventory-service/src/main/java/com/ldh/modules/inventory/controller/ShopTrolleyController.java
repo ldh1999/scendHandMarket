@@ -59,6 +59,11 @@ public class ShopTrolleyController {
         try{
             HttpSession session = request.getSession();
             AuthorityInformation authorityInformation = (AuthorityInformation) RedisSessionUtil.sessionAttributeToEntity(session.getAttribute("user"), AuthorityInformation.class);
+            if (authorityInformation == null){
+                result.error("登录信息失效，请刷新页面或重新登录");
+                log.warn("登录信息失效，请刷新页面或重新登录");
+                return result;
+            }
             shopTrolley.setAuthorityId(authorityInformation.getAuthorityId());
             IPage<ShopTrolleyClientModel> iPage = shopTrolleyService.listToClient(page, queryWrapper, shopTrolley);
             result.setResult(iPage);

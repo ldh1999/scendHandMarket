@@ -4,9 +4,12 @@
     <select id="listToClient" resultType="com.ldh.modules.inventory.model.ShopTrolleyClientModel">
         select s.*,
                inn.inventory_name as 'inventoryName',
-               inn.inventory_price as 'inventoryPrice'
+               inn.inventory_price as 'inventoryPrice',
+               inn.merchant_id,
+               m.merchant_name
         from shop_trolley s
         LEFT JOIN inventory inn on s.inventory_id = inn.id
+        LEFT JOIN merchant m on inn.merchant_id = m.merchant_id
         where 1=1
         <if test="shopTrolley.authorityId != null and shopTrolley.authorityId != ''">
             and s.authority_id = #{shopTrolley.authorityId}
