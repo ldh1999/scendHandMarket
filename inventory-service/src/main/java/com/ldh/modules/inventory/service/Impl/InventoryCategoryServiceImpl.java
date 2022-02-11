@@ -135,8 +135,14 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
     }
 
 
+
     @Override
     public InventoryCategoryClientFirstModel getAllCategoryClient() {
+
+        if (redisTemplate.hasKey("firstInventoryCategoryListClient")){
+            return (InventoryCategoryClientFirstModel)redisTemplate.opsForValue().get("firstInventoryCategoryListClient");
+        }
+
         InventoryCategoryClientFirstModel inventoryCategoryClientFirstModel = new InventoryCategoryClientFirstModel();
         Map<String, InventoryCategoryModel> map = this.getAllCategoryToRedis();
         //获取所有类
@@ -167,6 +173,7 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
         });
         listFather.sort(Comparator.comparing(InventoryCategoryModel::getSonNum).reversed());
         inventoryCategoryClientFirstModel.setCategoryFather(listFather);
+        redisTemplate.opsForValue().set("firstInventoryCategoryListClient", inventoryCategoryClientFirstModel);
 
         return inventoryCategoryClientFirstModel;
     }
@@ -178,5 +185,10 @@ public class InventoryCategoryServiceImpl extends ServiceImpl<InventoryCategoryM
             inventoryCategoryModel.setFatherName(inventoryCategoryModel.getCateName());
         }
         return inventoryCategoryModel;
+    }
+
+    @Override
+    public void deleteInventoryCategoryListToRedis() {
+        redisTemplate.delete("firstInventoryCategoryListClient");
     }
 }

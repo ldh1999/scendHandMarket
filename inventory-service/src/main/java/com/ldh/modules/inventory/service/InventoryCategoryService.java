@@ -35,5 +35,7 @@ public interface InventoryCategoryService extends IService<InventoryCategory> {
 
     InventoryCategoryModel getAllById(String id);
 
+    void deleteInventoryCategoryListToRedis();
+
 
 }

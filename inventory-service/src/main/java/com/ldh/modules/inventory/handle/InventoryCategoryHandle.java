@@ -62,6 +62,7 @@ public class InventoryCategoryHandle {
             smallType.setRemark("千万别删！！！！");
             inventoryCategoryService.save(smallType);
             inventoryCategoryService.setAllCategoryToRedis();
+            inventoryCategoryService.deleteInventoryCategoryListToRedis();
             result.succcess("增加成功");
         }catch (Exception e){
             e.printStackTrace();
@@ -78,6 +79,7 @@ public class InventoryCategoryHandle {
         try {
             inventoryCategoryService.updateById(inventoryCategory);
             inventoryCategoryService.setAllCategoryToRedis();
+            inventoryCategoryService.deleteInventoryCategoryListToRedis();
             result.succcess("修改成功");
         }catch (Exception e){
             e.printStackTrace();
@@ -96,6 +98,7 @@ public class InventoryCategoryHandle {
             //TODO
             inventoryCategoryService.deleteAnyById(id);
             inventoryCategoryService.setAllCategoryToRedis();
+            inventoryCategoryService.deleteInventoryCategoryListToRedis();
             result.succcess("删除成功");
         }catch (Exception e){
             log.error(e.getMessage());
