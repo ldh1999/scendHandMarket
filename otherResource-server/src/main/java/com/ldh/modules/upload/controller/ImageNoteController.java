@@ -28,6 +28,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -121,7 +123,29 @@ public class ImageNoteController {
         return result;
     }
 
-
+    @ApiOperation(value="图片批量上传", notes="图片批量上传")
+    @RequestMapping(path = "uploadBatch", method = RequestMethod.POST)
+    public Result<?> uploadImageBatch(@RequestParam(value = "files") MultipartFile[] files,
+                                 @RequestParam(name = "imageGroup") String imageGroup,
+                                 @RequestParam(name = "objectId") String objectId){
+        Result<String> result = new Result<>();
+        try{
+            List<ImageNote> imageNoteList = new LinkedList<>();
+            for (MultipartFile file : files) {
+                ImageNote imageNote = new ImageNote();
+                imageNote.setImgGroup(imageGroup)
+                        .setImgName(file.getOriginalFilename())
+                        .setImgPath(cosImageService.uploadImage(file))
+                        .setObjectId(objectId);
+                imageNoteList.add(imageNote);
+            }
+            imageNoteService.saveBatch(imageNoteList);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.error("上传失败");
+        }
+        return result;
+    }
 
 
     @ApiOperation(value="ant图片展示", notes="ant图片展示")

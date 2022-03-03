@@ -9,6 +9,6 @@ public class UploadFileConstant {
     public final static String USER_HAND_IMAGE = "userHandImage";
     /** 店铺头像 */
     public final static String MERCHANT_HAND_IMAGE = "merchantHandImage";
-
-
+    /** 售后申请图片 */
+    public final static String AFTER_SALES_IMAGE = "afterSalesImage";
 }

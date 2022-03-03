@@ -197,14 +197,16 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
             });
         }
 
-        //待支付 4； 等待取货 6 ； 5 拒绝接单；
+        //待支付 4； 等待取货 6 ； 5 拒绝接单；2 结单
         //做个小排序
         List<OrderInformationModel> orderWait = orderInformationModels.stream().filter(e->"4".equals(e.getSts())).collect(Collectors.toList());
         List<OrderInformationModel> orderWaitAccept = orderInformationModels.stream().filter(e->"6".equals(e.getSts())).collect(Collectors.toList());
+        List<OrderInformationModel> orderEnd = orderInformationModels.stream().filter(e->"2".equals(e.getSts())).collect(Collectors.toList());
 
-        List<OrderInformationModel> list = new ArrayList<>();
+        List<OrderInformationModel> list = new LinkedList<>();
         list.addAll(orderWait);
         list.addAll(orderWaitAccept);
+        list.addAll(orderEnd);
         list.addAll(orderInformationModels);
 
         Set<String> haveId = new HashSet<>();

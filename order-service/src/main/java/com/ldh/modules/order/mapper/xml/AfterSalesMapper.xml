@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ldh.modules.order.mapper.AfterSalesMapper">
+
+    <select id="list" resultType="com.ldh.modules.order.model.AfterSalesModel">
+        select as.*
+        from after_sales ass
+        where 1=1
+        <choose>
+            <when test="afterSales.sts != null and afterSales.sts != ''">
+                and ass.sts = #{afterSales.sts}
+            </when>
+            <otherwise>
+                and ass.sts != '-1'
+            </otherwise>
+        </choose>
+        <if test="afterSales.createBy != null and afterSales.createBy != ''">
+            and ass.create_by = #{afterSales.createBy}
+        </if>
+    </select>
+</mapper>

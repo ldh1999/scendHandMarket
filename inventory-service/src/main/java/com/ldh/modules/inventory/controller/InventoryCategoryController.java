@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -157,10 +158,15 @@ public class InventoryCategoryController {
 
     @ApiOperation(value="根据大类id获取商品分类(小类)", notes="根据大类id获取商品分类(小类)")
     @RequestMapping(path = "/getOptionByFatherId", method = RequestMethod.GET)
-    public Result<List<OptionModel>> getOptionByFatherId(@RequestParam("fatherId") String fatherId){
+    public Result<List<OptionModel>> getOptionByFatherId(@RequestParam("fatherId") String fatherId,
+                                                         @RequestParam(name = "show", defaultValue = "0") String show){
         Result<List<OptionModel>> result = new Result<>();
         try{
-            result.setResult(inventoryCategoryService.getOptionByFatherId(fatherId));
+            List<OptionModel> optionModels = inventoryCategoryService.getOptionByFatherId(fatherId);
+            if ("1".equals(show)){
+                optionModels = optionModels.stream().filter(e-> !"不限".equals(e.getValue())).collect(Collectors.toList());
+            }
+            result.setResult(optionModels);
             result.setSuccess(true);
         }catch (Exception e){
             log.error(e.getMessage());
@@ -270,6 +276,31 @@ public class InventoryCategoryController {
         try{
             result.setResult(inventoryCategoryService.getAllCategoryClient());
             result.setSuccess(true);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping(path = "/test", method = RequestMethod.GET)
+    public Result<?> test(){
+        Result result = new Result();
+        try{
+            List<OptionModel> list = inventoryCategoryService.getAllOption();
+            List<String> strings = list.stream().map(e->{
+                return e.getKey();
+            }).collect(Collectors.toList());
+            log.warn(strings.toString());
+            List<InventoryCategory> list1 = new LinkedList<>();
+            strings.forEach(e->{
+                InventoryCategory inventoryCategory = new InventoryCategory();
+                inventoryCategory.setFatherId(e);
+                inventoryCategory.setRemark("千万别删！！！");
+                inventoryCategory.setCateName("不限");
+                list1.add(inventoryCategory);
+            });
+            inventoryCategoryService.saveBatch(list1);
         }catch (Exception e){
             log.error(e.getMessage(), e);
             result.error(e.getMessage());

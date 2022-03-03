@@ -34,6 +34,7 @@ public class OrderInformation implements Serializable{
 		this.orderInventoryNum = orderInformation.orderInventoryNum;
 		this.orderInventoryPrice = orderInformation.orderInventoryPrice;
 		this.orderInventoryPriceSum = orderInformation.orderInventoryPriceSum;
+		this.isAfterSales = orderInformation.isAfterSales;
 		this.createTime = orderInformation.createTime;
 		this.createBy = orderInformation.createBy;
 		this.updateBy = orderInformation.updateBy;
@@ -66,6 +67,9 @@ public class OrderInformation implements Serializable{
 	/**该订单价格*/
     @ApiModelProperty(value = "该订单价格")
 	private Float orderInventoryPriceSum;
+	/**是否售后*/
+	@ApiModelProperty(value = "是否售后")
+	private String isAfterSales;
 	/**创建时间*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")

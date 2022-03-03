@@ -19,6 +19,8 @@ public class OrderInformationModel extends OrderInformation implements Serializa
 
     /** 店铺编码 */
     private String merchantCode;
+    /** 店铺名称 */
+    private String merchantName;
     /** 生成该订单的用户的username */
     private String userName;
     /** 商品编码 */

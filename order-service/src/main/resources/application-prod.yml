@@ -20,9 +20,9 @@ spring:
     store-type: redis
   datasource:
     #url: jdbc:mysql://192.168.233.128:3306/cloud_user_information?useSSL=false
-    url: jdbc:mysql://101.201.121.55/cloud_order?useSSL=false
+    url: jdbc:mysql://101.201.121.55/cloud_order?useSSL=false&useUnicode=yes&characterEncoding=utf8
     username: root
-    password: root
+    password: ldh19991118
     driver-class-name: com.mysql.jdbc.Driver
   redis:
     # Redis数据库索引（默认为0）

@@ -117,4 +117,6 @@ public class OrderClientController {
         }
         return result;
     }
+
+    public Result<?> order(@RequestParam(value = "orderId", required = true) String id){return null;}
 }

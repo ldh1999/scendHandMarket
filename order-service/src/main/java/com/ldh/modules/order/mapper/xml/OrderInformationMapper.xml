@@ -6,6 +6,9 @@
       select oi.*
       from order_information oi
       where 1=1
+      <if test="orderInformation.isAfterSales != null and orderInformation.isAfterSales != ''">
+          and oi.is_after_sales = #{orderInformation.isAfterSales}
+      </if>
       <if test="orderInformation.createBy != null and orderInformation.createBy != ''">
           and oi.create_by = #{orderInformation.createBy}
       </if>
