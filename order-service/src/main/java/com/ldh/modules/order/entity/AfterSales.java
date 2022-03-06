@@ -29,6 +29,9 @@ public class AfterSales implements Serializable{
 	@TableId(type = IdType.UUID)
     @ApiModelProperty(value = "afterSalesId")
 	private String afterSalesId;
+	/**售后编码*/
+	@ApiModelProperty(value = "售后编码")
+	private String afterSalesNo;
 	/**订单id*/
     @ApiModelProperty(value = "订单id")
 	private String orderId;

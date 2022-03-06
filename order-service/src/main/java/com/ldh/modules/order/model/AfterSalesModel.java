@@ -7,4 +7,8 @@ import java.io.Serializable;
 
 @Data
 public class AfterSalesModel extends AfterSales implements Serializable {
+
+    private String merchantName;
+    private String inventoryName;
+    private String firstImage;
 }

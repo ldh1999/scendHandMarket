@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ldh.modules.order.entity.AfterSales;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ldh.modules.order.model.AfterSalesDetailsModel;
 import com.ldh.modules.order.model.AfterSalesModel;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +20,7 @@ public interface AfterSalesService extends IService<AfterSales> {
 
     Page<AfterSalesModel> list(Page page, QueryWrapper queryWrapper, AfterSales afterSales);
 
+    Page<AfterSalesModel> listMerchant(Page page, QueryWrapper queryWrapper, AfterSales afterSales);
+
+    AfterSalesDetailsModel getAfterSalesDetail(String afterSalesId) throws Exception;
 }

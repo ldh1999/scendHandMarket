@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 /**
  * @Description: 售后
@@ -46,6 +47,7 @@ public class AfterSalesController{
 	public Result<?> add(@RequestBody AfterSales afterSales) {
 		Result result = new Result();
 		try {
+			afterSales.setAfterSalesNo(UUID.randomUUID().toString());
 			afterSalesService.applyAfterSales(afterSales);
 			result.succcess("申请成功");
 			result.setResult(afterSales);
@@ -80,6 +82,7 @@ public class AfterSalesController{
 		 }
 		 return result;
 	 }
+
 
 
 	

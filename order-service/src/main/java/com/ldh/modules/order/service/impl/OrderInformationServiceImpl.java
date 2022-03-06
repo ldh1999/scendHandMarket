@@ -300,11 +300,16 @@ public class OrderInformationServiceImpl extends ServiceImpl<OrderInformationMap
                     .setRecordPhone(merchantModel.getRecordPhone())
                     .setRecordRealName(merchantModel.getRecordRealName());
             //商品详情
-            orderInformationDetailModel
-                    .setInventoryCode(inventory.getInventoryCode())
-                    .setInventoryName(inventory.getInventoryName())
-                    .setInventoryInformation(inventory.getInventoryInformation())
-                    .setInventoryPrice(inventory.getInventoryPrice());
+            if (inventory != null){
+                orderInformationDetailModel
+                        .setInventoryCode(inventory.getInventoryCode())
+                        .setInventoryName(inventory.getInventoryName())
+                        .setInventoryInformation(inventory.getInventoryInformation())
+                        .setInventoryPrice(inventory.getInventoryPrice());
+            }else {
+                orderInformationDetailModel.setInventoryName("该商品已被删除");
+            }
+
             //接收订单人的详情
             orderInformationDetailModel
                     .setUserName(authorityInformationModel.getAuthorityUsername())
