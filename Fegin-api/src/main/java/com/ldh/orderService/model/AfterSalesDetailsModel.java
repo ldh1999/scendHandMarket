@@ -1,6 +1,6 @@
-package com.ldh.modules.order.model;
+package com.ldh.orderService.model;
 
-import com.ldh.modules.order.entity.AfterSales;
+import com.ldh.orderService.pojo.AfterSales;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

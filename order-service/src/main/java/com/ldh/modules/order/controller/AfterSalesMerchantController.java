@@ -9,6 +9,7 @@ import com.ldh.modules.order.entity.OrderInformation;
 import com.ldh.modules.order.model.AfterSalesModel;
 import com.ldh.modules.order.model.OrderInformationModel;
 import com.ldh.modules.order.service.AfterSalesService;
+import com.ldh.modules.order.vo.AfterSalesMerchantDisposeVO;
 import common.Result;
 import common.StringTo;
 import io.swagger.annotations.Api;
@@ -70,6 +71,20 @@ public class AfterSalesMerchantController {
         try {
             result.setResult(afterSalesService.getAfterSalesDetail(afterSalesId));
             result.setSuccess(true);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            result.error(e.getMessage());
+        }
+        return result;
+    }
+
+    @ApiOperation(value="商家售后-获取详情信息", notes="商家售后-获取详情信息")
+    @PostMapping(value = "/dispose")
+    public Result<?> dispose(@RequestBody AfterSalesMerchantDisposeVO afterSalesMerchantDisposeVO) {
+        Result result = new Result();
+        try {
+            afterSalesService.merchantDispose(afterSalesMerchantDisposeVO);
+            result.succcess("操作成功");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             result.error(e.getMessage());

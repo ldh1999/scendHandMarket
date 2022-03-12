@@ -22,5 +22,6 @@
         <if test="afterSales.merchantId != null and afterSales.merchantId != ''">
             and ass.merchant_id = #{afterSales.merchantId}
         </if>
+        ${queryWrapper.customSqlSegment}
     </select>
 </mapper>

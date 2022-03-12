@@ -16,28 +16,30 @@ import com.ldh.modules.order.model.AfterSalesDetailsModel;
 import com.ldh.modules.order.model.AfterSalesModel;
 import com.ldh.modules.order.service.AfterSalesService;
 import com.ldh.modules.order.service.OrderInformationService;
+import com.ldh.modules.order.vo.AfterSalesMerchantDisposeVO;
 import com.ldh.otherResourceService.client.ImageNoteGetClient;
 import com.ldh.otherResourceService.model.ImageGetVO;
 import com.ldh.otherResourceService.model.ImageListGetVO;
 import com.ldh.otherResourceService.model.ImageNoteModel;
+import com.ldh.userService.client.AuthorityAddressClient;
 import com.ldh.userService.client.AuthorityClient;
+import com.ldh.userService.model.AuthorityAddressModel;
 import com.ldh.userService.model.AuthorityInformationModel;
 import com.ldh.util.RedisSessionUtil;
 import common.Result;
 import constant.AfterSalesDisposeEnum;
+import constant.AfterSalesInventoryMode;
 import constant.UploadFileConstant;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.beans.beancontext.BeanContext;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -70,6 +72,9 @@ public class AfterSalesServiceImpl extends ServiceImpl<AfterSalesMapper, AfterSa
 
     @Autowired
     private ImageNoteGetClient imageNoteGetClient;
+
+    @Autowired
+    private AuthorityAddressClient authorityAddressClient;
 
     @Override
     @Transactional
@@ -223,15 +228,19 @@ public class AfterSalesServiceImpl extends ServiceImpl<AfterSalesMapper, AfterSa
         Result<Inventory> inventoryResult = inventoryClient.getById(afterSales.getInventoryId());
         Result<AuthorityInformationModel> authorityInformationResult = authorityClient.selectById(afterSales.getCreateBy());
         Result<List<ImageNoteModel>> imageResult = imageNoteGetClient.getByObjectIdAndImgGroup(imageGetVO);
+        Result<MerchantModel> merchantModelResult = merchantClient.selectById(afterSales.getMerchantId());
 
-        if (!inventoryResult.isSuccess() && !authorityInformationResult.isSuccess() && !imageResult.isSuccess()){
+
+        if (!inventoryResult.isSuccess() && !authorityInformationResult.isSuccess() && !imageResult.isSuccess() && !merchantModelResult.isSuccess()){
             throw new Exception("fegin error");
         }
+
 
         Inventory tempInventory = inventoryResult.getResult();
         AuthorityInformationModel tempAuthorityInformationModel = authorityInformationResult.getResult();
         List<ImageNoteModel> tempImageNoteModelList = imageResult.getResult();
         List<String> imageSrcList = tempImageNoteModelList.stream().map(e -> e.getImgPath()).collect(Collectors.toList());
+        MerchantModel tempMerchantModel = merchantModelResult.getResult();
 
         AfterSalesDetailsModel afterSalesDetailsModel = new AfterSalesDetailsModel();
         BeanUtils.copyProperties(afterSales, afterSalesDetailsModel);
@@ -239,11 +248,73 @@ public class AfterSalesServiceImpl extends ServiceImpl<AfterSalesMapper, AfterSa
                 .setInventoryCode(tempInventory.getInventoryCode())
                 .setInventoryName(tempInventory.getInventoryName())
 
+                .setMerchantCode(tempMerchantModel.getMerchantCode())
+                .setMerchantName(tempMerchantModel.getMerchantName())
+                .setMerchantPhone(tempMerchantModel.getRecordPhone())
+
                 .setUserName(tempAuthorityInformationModel.getAuthorityUsername())
                 .setUserAuthorityName(tempAuthorityInformationModel.getAuthorityName())
                 .setUserPhone(tempAuthorityInformationModel.getPhone())
                 .setReasonImageList(imageSrcList);
 
+        if (!StringUtils.isEmpty(afterSales.getAddressId())){
+            Result<AuthorityAddressModel> addressResult = authorityAddressClient.queryById(afterSales.getAddressId());
+            if (addressResult.isSuccess())
+                afterSalesDetailsModel.setAddressName(addressResult.getResult().getAddressSite());
+        }
+
         return afterSalesDetailsModel;
+    }
+
+
+    @Override
+    @Transactional
+    public void merchantDispose(AfterSalesMerchantDisposeVO afterSalesMerchantDisposeVO) {
+        AfterSales afterSales = new AfterSales();
+        afterSales
+                .setAfterSalesId(afterSalesMerchantDisposeVO.getAfterSalesId())
+                .setMerchantReason(afterSalesMerchantDisposeVO.getMerchantReason());
+        //拒绝
+        if ("reject".equals(afterSalesMerchantDisposeVO.getDispose())){
+            afterSales
+                    .setAfterSalesSts(AfterSalesDisposeEnum.reject.getSts())
+                    .setSts("end");
+            OrderInformation tempOrderInformation = new OrderInformation();
+
+            AfterSales tempAfterSales = this.getById(afterSalesMerchantDisposeVO.getAfterSalesId());
+            tempOrderInformation
+                    .setOrderId(tempAfterSales.getOrderId())
+                    .setIsAfterSales("0");
+            orderInformationService.updateById(tempOrderInformation);
+
+        }else {
+            //退货
+            if (AfterSalesInventoryMode.back.getSts().equals(afterSalesMerchantDisposeVO.getMode())){
+                afterSales
+                        .setAfterSalesSts(AfterSalesDisposeEnum.end.getSts())
+                        .setSts("end");
+            }else {
+                //换货
+                afterSales
+                        .setAfterSalesSts(AfterSalesDisposeEnum.end.getSts())
+                        .setSts("end");
+
+                AfterSales tempAfterSales = this.getById(afterSalesMerchantDisposeVO.getAfterSalesId());
+                OrderInformation tempOrderInformation = orderInformationService.getById(tempAfterSales.getOrderId());
+
+                tempOrderInformation
+                        .setOrderId(null)
+                        .setOrderCode(UUID.randomUUID().toString())
+                        .setSts("1")
+                        .setIsAfterSales("0")
+                        .setAddressId(tempAfterSales.getAddressId())
+                        .setCreateTime(new Date())
+                        .setUpdateTime(null)
+                        .setRemark("此订单为售后订单");
+                orderInformationService.save(tempOrderInformation);
+            }
+        }
+        this.updateById(afterSales);
+
     }
 }

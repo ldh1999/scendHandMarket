@@ -6,6 +6,7 @@ import com.ldh.modules.order.entity.AfterSales;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldh.modules.order.model.AfterSalesDetailsModel;
 import com.ldh.modules.order.model.AfterSalesModel;
+import com.ldh.modules.order.vo.AfterSalesMerchantDisposeVO;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -23,4 +24,6 @@ public interface AfterSalesService extends IService<AfterSales> {
     Page<AfterSalesModel> listMerchant(Page page, QueryWrapper queryWrapper, AfterSales afterSales);
 
     AfterSalesDetailsModel getAfterSalesDetail(String afterSalesId) throws Exception;
+    
+    void merchantDispose(AfterSalesMerchantDisposeVO afterSalesMerchantDisposeVO);
 }
