@@ -30,3 +30,6 @@ spring:
           predicates:
             - Header=gateway, managerService
 
+signN:
+  ls: 1
+  uup: 5

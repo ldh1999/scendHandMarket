@@ -9,6 +9,7 @@ public class Result<T> implements Serializable {
     /**
      * 401：token失效
      * 402: 权限不足
+     * 600: sign认证失败
      */
     private int code;
 

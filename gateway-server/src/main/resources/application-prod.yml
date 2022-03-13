@@ -46,3 +46,7 @@ spring:
               - DELETE
               - PUT
               - OPTION
+
+signN:
+  ls: 10
+  uup: 5
