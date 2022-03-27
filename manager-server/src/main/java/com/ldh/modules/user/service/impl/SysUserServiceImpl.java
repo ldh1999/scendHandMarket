@@ -49,7 +49,7 @@ public class SysUserServiceImpl implements SysUserService {
                 .setOrderSum(orderSum.get())
                 .setUserSum(userSum.get())
                 .setUserWeek(userWeek.get())
-                .setOrderDayPrice(orderDay.get()*100/orderWeek.get());
+                .setOrderDayPrice(orderDay.get()==0?0:orderDay.get()*100/orderWeek.get());
         return managementInformationModel;
     }
 
